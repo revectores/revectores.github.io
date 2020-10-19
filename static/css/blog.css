@@ -1,0 +1,24 @@
+body {
+    padding-left: 6rem;
+    padding-right: 6rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 42rem;
+    display: block;
+
+	color: #444;
+	font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+	line-height: 1.5em;
+	margin: auto;
+	background: #fefefe;
+}
+
+h1 {
+    text-align: center;
+    line-height: 1em;
+}
+
+pre {
+    background-color: #eee;
+    line-height: 1em;
+}
