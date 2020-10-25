@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Qt
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< qt</a></p>
+
+<h1 id="qt">Qt</h1>
+<p><u>This document shows the very fundamental concepts about Qt.</u></p>
+<h3 id="compile-qt-program">1. Compile Qt Program</h3>
+<p><u>Three approaches to compling the Qt Program introduced: manually, CMake, and QMake.</u></p>
+<h5 id="manually-g"># Manually <code>g++</code></h5>
+<p>==TODO: Find out how to build Qt program manually with <code>clang</code>==. Notice that this approach might be difficult since the Qt provides <code>cmake</code> files in the library, which is not usable for the complier itself.</p>
+<h5 id="cmake-approach"># CMake Approach</h5>
+<h5 id="qmake-approach"># QMake Approach</h5>
+<p>Similar to <code>cmake</code>, Qt provides <code>qmake</code> to generate makefile automatically. The extension of description file for <code>qmake</code> is <code>.pro</code>. The basic <code>hello.pro</code> demo is</p>
+<pre class="qmake"><code>QT += widgets
+SOURCES = hello.cpp
+TARGET = hello</code></pre>
+<p>Use <code>qmake -o Makefile hello.pro</code> to generate the <code>Makefile</code>.</p>
+<ul>
+<li>In macOS, <code>make</code> will generate a macOS Application bundle(<code>.app</code> directory), (and an object file as the byproduct), where contains the <code>Mach-O 64-bit executable</code> file in <code>./Contents/MacOS</code>.</li>
+<li>==TODO: Linux Behaviour.==</li>
+<li>==TODO: Windows Behaviour.==</li>
+</ul>
+<p>Further knowledge about <code>qmake</code> and <code>pro</code> file will be introduced in <a href="qmake.md"><code>qmake</code></a>.</p>
+<h3 id="program-demo">2. Program Demo</h3>
+<p><u>Demonstrate the minimal Qt Programs to show how the baisc structure.</u></p>
+<h5 id="minimal-qt-program"># Minimal Qt Program</h5>
+<p>The minimal program of Qt</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;QApplication&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> **argv) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    QApplication app (argc, argv);</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="cf">return</span> app.exec();</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The <code>QApplication</code> object takes the input arguments and launches event loop by invoking <code>app.exec()</code> method. Since no window or event handler is created, the program will just run the infinite loop without any windows and responding.</p>
+<h5 id="minimal-widget"># Minimal Widget</h5>
+<p>The component of Qt’s graphic interface is <strong>widget</strong>. This reflects in the class hierarchy, where all the window objects are inherited from <code>QWidget</code> directly or indirectly. For example, the <code>QPushButton</code> class inherits <code>QAbstractButton</code> and the latter one inherits <code>QWidget</code>.</p>
+<pre class="mermaid"><code>classDiagram
+     QObject &lt;|-- QWidget
+     QWidget &lt;|-- QAbstractButton
+     QAbstractButton &lt;|-- QPushButton
+     QWidget &lt;|-- QComboBox
+     QWidget &lt;|-- QMenu</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;QApplication&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;QPushButton&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> **argv){</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    QApplication app(argc, argv);</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    QPushButton button(<span class="st">&quot;Hello world !&quot;</span>);</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    button.show();</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="cf">return</span> app.exec();</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>}</span></code></pre></div>
+<p>We instantiate the <code>QtWidget</code> <code>QPushButton</code> and <code>show()</code> it, each widget is placed in the indepndent header, as this example shown.</p>
+<h3 id="utility-widget">3. Utility Widget</h3>
+<h5 id="qwidget"># <code>QWidget</code></h5>
+<p>The windows itself is also a widget, named as <code>QWidget</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;QApplication&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;QWidget&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="dt">int</span> main (<span class="dt">int</span> argc, <span class="dt">char</span>* argv[]) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="ex">QApplication</span> app(argc, argv);</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    <span class="ex">QWidget</span> window;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    window.resize(<span class="dv">250</span>, <span class="dv">150</span>);</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>    window.move(<span class="dv">300</span>, <span class="dv">300</span>);</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>    window.setWindowTitle(<span class="st">&quot;Simple example&quot;</span>);</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    window.setToolTip(<span class="st">&quot;QWidget&quot;</span>);</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>    window.show();</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>    <span class="cf">return</span> app.exec();</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Most of the functions of method are self-explain by their names. No further illustration necessary.</p>
+<h5 id="section"></h5>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

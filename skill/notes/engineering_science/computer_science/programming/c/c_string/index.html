@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> C String
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c</a></p>
+
+<h1 id="c-string">C String</h1>
+<h3 id="declaration-initialization">1. Declaration &amp; Initialization</h3>
+<p>C-style string is not an specific type but the array of characters, which means you can initialize it like initializing any other type of array:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">char</span> s[] = {<span class="ch">&#39;H&#39;</span>, <span class="ch">&#39;e&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;o&#39;</span>, <span class="ch">&#39;\0&#39;</span>};</span></code></pre></div>
+<p>Noticed that a typical c string always stopped with <code>\0</code> (which equals to the ascii value 0, so you can directly write a char 0) in the end, which helps the interpreter recognize where the string ends.</p>
+<p>As a short-cut to initialization, we can use the string expression to accomplish the same goal, and the interpreter will add the suffix zero automatically:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">char</span> s[] = <span class="st">&quot;Hello&quot;</span>;</span></code></pre></div>
+<p>Noticed that because of the suffix zero, the length of this char array is not 5 but 6 instead.</p>
+<p>When we create a string in the manual way, the string must be end with a zero rightly otherwise the function and implementment for string will mistakenly considered the string is not ended yet (although it’s already pass the border of charArray):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">char</span> s[] = {<span class="ch">&#39;H&#39;</span>, <span class="ch">&#39;e&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;o&#39;</span>};</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>printf(<span class="st">&quot;%s&quot;</span>, s);</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">/* The behaviour of this in undefined, the interpreter might print every bits after last &#39;o&#39; until &#39;\0&#39; occasionly occurs in the memory. */</span></span></code></pre></div>
+<p>Becaused the string is an array, and an array it not allowed to operate assignment (besides the first initialization, if you considered it as a special assignment).</p>
+<h3 id="useful-function">2. Useful Function</h3>
+<p>Noticed that C-style string is no more than an array, which means all the function applied to the array can be also applied in the string, one thing needs to be care about is still the suffix zero.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">char</span> s[] = <span class="st">&quot;Hello&quot;</span>;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>cout &lt;&lt; <span class="kw">sizeof</span>(s)/<span class="kw">sizeof</span>(s[<span class="dv">0</span>]);  <span class="co">// 6</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">// This count in the final 0. But string function strlen will ignore it:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>cout &lt;&lt; strlen(s);      <span class="co">// 5</span></span></code></pre></div>
+<p>Besides <code>strlen</code>, there’re some other function for string which shown in the following.</p>
+<p><code>strcpy</code> to copy the string into another and <code>strcat</code> implements the concatenation, both avoiding the bad-looking <code>for</code> loop.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">char</span> s1[] = <span class="st">&quot;Hello&quot;</span>; <span class="dt">char</span> s2[<span class="dv">20</span>];</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>strcpy(s2, s1);  <span class="co">// Copying s1 into s2, Now s2 = &quot;Hello&quot;.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">// Notices the assignment-like sequence.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>strcat(s2, s1);  <span class="co">// Now s2 = &quot;HelloHello&quot;</span></span></code></pre></div>
+<p><code>strcmp</code> to compare two string by the dictionary sequent. No, it’s not possible to pass the third parameter to make the comparsion standard user-defined.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">char</span> s1[] = <span class="st">&quot;Hello&quot;</span>; <span class="dt">char</span> s2[] = <span class="st">&quot;Hi&quot;</span>;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>cout &lt;&lt; strcmp(s1, s2);     <span class="co">// -4</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="co">/* This is because &#39;e&#39;-&#39;i&#39; = -4. Which means this function no only gives the comparsion result but quantify it. */</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="dt">char</span> s3[] = <span class="st">&quot;Helloa&quot;</span>;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>cout &lt;&lt; strcmp(s1, s3);     <span class="co">// -97</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="co">/* If two string is the same until one of the string reaches its end, then the function will consider the last 0 as the final one of s1. This mechanism can be checked by deliberately puting a none-zero value to the end of string to see what happened: */</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="dt">char</span> s4[] = {<span class="ch">&#39;H&#39;</span>, <span class="ch">&#39;e&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;l&#39;</span>, <span class="ch">&#39;o&#39;</span>, &#39;\<span class="dv">1</span><span class="er">&#39;</span>};</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>cout &lt;&lt; strcmp(s4, s3);     <span class="co">// -96</span></span></code></pre></div>
+<p><code>strch</code> and <code>strstr</code> provide the searching function, both of them returns a pointer to the first occurance of character/string in the string.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

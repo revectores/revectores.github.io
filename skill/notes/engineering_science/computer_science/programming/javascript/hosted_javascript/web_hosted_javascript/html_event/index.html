@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> HTML Event
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< web_hosted_javascript</a></p>
+
+<h1 id="html-event">HTML Event</h1>
+<h3 id="event-binding">1. Event Binding</h3>
+<p>直接裸露在<code>&lt;script&gt;</code>标签内的js代码会在页面加载到这部分时就立即执行. 然而很多时候某些代码要求需要等待页面产生某些事件(通常是用户进行了某些交互操作, 例如鼠标单击、鼠标移动等等, 或者是页面初始化, 需要等待DOM树完全加载完毕)后再执行, 这时候的解决方法就是将这部分代码所代表的动作与事件绑定在一起. 通常为了便于代码维护, 这些与事件绑定的代码块都会被封装到一个函数中. 在HTML中实现事件绑定有两种主要方式:</p>
+<ol type="1">
+<li>在元素属性中绑定事件. 这种方式将特定事件作为元素的一个属性名, 其属性值设定为相应的动作, 从而实现动作与事件的绑定.</li>
+<li>在JavaScript中设定<strong>事件监听(event listening)</strong>.</li>
+</ol>
+<p>以下详述这两种方式的具体语法.</p>
+<h5 id="bind-by-attribute"># Bind By Attribute</h5>
+<p>等号左边的属性名是事件名, 在元素属性中书写的事件名一般带有前缀<code>on</code>. 并且字母一律小写, 不使用驼峰命名法. 例如单击事件<code>onclick</code>, 按下鼠标<code>onmousedown</code>, 释放鼠标<code>onmouseup</code>等等. 详细的事件列表请参考==TODO: Find Reference.==</p>
+<p>使用属性绑定事件时, 其格式服从属性的一般格式, 即属性名(这里是事件名)不需要用引号封装, 而代码块需要用引号封装(特别要注意写在这里面的引号必须用与封装的引号不同的形式). 当代码比较短并且不需要复用时, 可以像这样直接写在属性值里, 但更一般的情况下则是将其封装成一个函数, 从而把函数体下放到<code>&lt;script&gt;</code>标签中.</p>
+<h5 id="event-listening"># Event Listening</h5>
+<p>使用<a href="document_object_model.md">DOM</a>方法获取节点后, 我们可以通过以下方法为<code>node</code>添加事件监听</p>
+<p><code>[node].addEventListener([event], [callback])</code>.</p>
+<p><strong>事件对象</strong>会被作为第一个参数传入<code>callback</code>中. 但即使回调函数没有定义参数, 在函数中仍然可以通过<code>event</code>变量来访问事件对象. 事件对象有许多属性, 其中最重要的是<code>target</code>属性, 该属性指明了触发事件的是哪一个结点对象.</p>
+<h3 id="html-event-list">2. HTML Event List</h3>
+<h5 id="keyboard-event"># Keyboard Event</h5>
+<p>键盘事件监听键盘的活动状态, 不需要结点对象. 键盘事件包括<code>keydown/keypress/keyup</code>, 其中<code>keydown/keypress</code>监听键的按下, 而<code>keyup</code>监听键的释放.</p>
+<p>键盘事件在游戏中是非常重要的, 假如我们需要持续检测一个键是否被按住(例如表示移动的方向键), 要如何设计代码逻辑呢? 可以这样考虑: 我们建一个flag令其默认值为false, 当触发keydown事件时将其改变为true, 而触发keyup事件时再改回false, 则true就表明该键被按住. 不过在这种设计方案下, 如果要检测的键很多, 并且允许这些键同时按下的话就需要很多的独立boolean值, 因此我们可以考虑建一个空对象, 当任意一个键被按下则在该对象中加入相应的属性, 被释放则将属性删除, 则判定时只需要在对象中查找是否有对应的属性名即可.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>keys<span class="op">=</span>{}</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">addEventListener</span>(<span class="st">&quot;keydown&quot;</span><span class="op">,</span> <span class="kw">function</span>(e){</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    keys[e<span class="op">.</span><span class="at">keyCode</span>] <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>})<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="fu">addEventListener</span>(<span class="st">&quot;keyup&quot;</span><span class="op">,</span> <span class="kw">function</span>(e){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="kw">delete</span> keys[e<span class="op">.</span><span class="at">keyCode</span>]<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>})</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="cf">if</span> (<span class="dv">37</span> <span class="kw">in</span> keys){</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="co">// ...</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="cf">if</span> (<span class="dv">38</span> <span class="kw">in</span> keys){</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    <span class="co">// ...</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>}</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

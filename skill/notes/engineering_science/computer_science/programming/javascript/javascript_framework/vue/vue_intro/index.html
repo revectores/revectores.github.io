@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Vue Basic
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< vue</a></p>
+
+<h1 id="vue-basic">Vue Basic</h1>
+<p>Let’s demonstrate the most simple Vue web application:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;app&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  {{ message }}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">var</span> app <span class="op">=</span> <span class="kw">new</span> <span class="fu">Vue</span>({</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="dt">el</span><span class="op">:</span> <span class="st">&#39;#app&#39;</span><span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="dt">data</span><span class="op">:</span> {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;Hello Vue!&#39;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>  }</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>})</span></code></pre></div>
+<p>Here we create a <code>Vue</code> object and bind it into an <code>app</code> that represented by an <code>div</code> element. That is, the content of that <code>div</code> will be rendered based on the value of property <code>message</code> in JavaScript.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

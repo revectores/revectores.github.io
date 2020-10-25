@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> 
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< process</a></p>
+
+<h1 id="interprocess-communication">Interprocess Communication</h1>
+<p>Some information must be passed among related but individual process, especically when it’s necessary to gurantee the sqeuecne of execution. Hence, we’ll introduce some technique to perform <strong>Interprocess Comunication(IPC)</strong> in this section.</p>
+<h3 id="background">1. Background</h3>
+<h5 id="race-condition"># Race Condition</h5>
+<p>In this section we’ll introduce what is race condition and critical range, arised dued to the time-sharing and scheduling machanism of modern operating systm. We’ll use the example from <strong>spooler directionary</strong>, which is a temporary queue that stores the names of files that need to be printed in an array for all processes in operating system, that is, the memory for this array is <strong>shared</strong> among all running processes.</p>
+<p>The typical usage of this array is described like this: if a process wants to prints file, it must first read the next empty index <code>out</code>, put filename into the empty space, and <code>out++</code>.</p>
+<p><img src="race_condition.png" alt="race_condition" />Now consider two process A and B, process A wants to add a filename into the queue, so it reads the <code>out</code>, which is 7, coincidently (and going to be much more regular as the increasing core numbers), right after this reading is completed, operating system thinks this process runs too much time and transfer CPU time from A to B, B also wants to print file, so it also reads the next empty array index, which is <strong>still</strong> 7, and then put the filename into <code>spooler[7]</code>, and give the CPU back to process A, now, process A <strong>DO NOT</strong> know that <code>spooler[7]</code> has been writen by process B, it continues the task after reading <code>out</code>, that is, overwrite(not intentionally, of course) <code>spooler[7]</code> by new filename, and execute <code>out++</code>.</p>
+<p>Obviously, this result is not what we want when process A and process B runs sequentially strictly. This situation, when the result of processes is determined by different scheduling sequence, usually occurs when two processes shared the same resource(memory, device, etc.) is named <strong>race condition</strong>.</p>
+<h5 id="four-requirements-of-ipc-solutions-for-race-condition"># Four Requirements of IPC solutions for Race Condition</h5>
+<p><img src="critical_region.png" alt="critical_region" />Now we model the codes of the two process, defining the code blocks that using shared resources as <strong>critical region</strong>, then solution of the race condition is: Avoiding any two processes to enter critical region at the same time (for the same resource), called <strong>mutual exclusion</strong>. Four the problem occured in last section, the following graph shows the solution by blocking B when A has already in the critical regio:</p>
+<p>Besides, some conditions are added to restrict the design IPC solutions. Formally we list the four most important conditions as following:</p>
+<ol type="1">
+<li>No two processes may be simultaneously inside their critical regions.</li>
+<li>No assumptions may be made about speeds or the number of CPUs. (Actually, if this is under control, we will not need any algorithm for IPC at all…)</li>
+<li>No process running outside its critical region may block any process.</li>
+<li>No process should have to wait forever to enter its critical region.</li>
+</ol>
+<h3 id="implementation-for-mutual-exclusion">2. Implementation for Mutual Exclusion</h3>
+<h5 id="disabling-interrupts"># Disabling Interrupts</h5>
+<p>The most simple solution for mutual exclusion is disabling any interrupts right after the process entered critical region until exiting. This is a hardware-level solution.</p>
+<p>This solution <strong>does work</strong>, but absolutely not acceptable, for two reason:</p>
+<ul>
+<li>Never trust user process. Its dangerous to give the power of disabling interrupt to user process.</li>
+<li>Disabling only applied for the current CPU core. Other processes are still able to access shared resources by other cores.</li>
+</ul>
+<p>Although, when the operating system process itself needs to take some operations it’s adorable to disabling interrupts for several instructions.</p>
+<h5 id="lock-variable"># Lock Variable</h5>
+<p>We might considering set a <strong>lock variable</strong> to mark whether any process is accessing the shared resource, but this makes the lock variable itself a shared resource, and the operation of it will also arise the same problem as those resource locked.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

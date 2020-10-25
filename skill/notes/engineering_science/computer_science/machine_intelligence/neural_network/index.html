@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> $$
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< machine_intelligence</a></p>
+
+<p><span class="math display">\[
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\sig}{\text{sigmoid}}
+\]</span></p>
+<h1 id="neural-network">Neural Network</h1>
+<h3 id="neural-network-1">1. Neural Network</h3>
+<h5 id="concepts"># Concepts</h5>
+<p>A <strong>neuron</strong> is a node which accepts multiple inputs and generates a single output, the input or output is received from/sent to outside environment or other neurons. A neuron is no more than a <strong>mutivariable function</strong> based on this definition: <span class="math display">\[
+y = h(x_1, x_2, ..., x_n)
+\]</span> In the traditional M-P neuron model, the function form of a neuron is limited to the following form: a function on the linear combination of inputs. <span class="math display">\[
+y =
+f\left(\sum_{i=1}^n\omega_i x_i - \theta\right)
+\]</span> where <span class="math inline">\(f\)</span> is called <strong>Activation Function</strong>, <span class="math inline">\(w_i\)</span> are <strong>Weights</strong>, which demonstrate the relative importance for the inputs, and <span class="math inline">\(\theta\)</span> is <strong>Threshold</strong>. To unify the threshold into weights, constant <span class="math inline">\(\theta\)</span> can be considered as a coefficient of constant input <span class="math inline">\(x_{i+1}=-1\)</span>, which is usually called <strong>Dummy Node</strong>.</p>
+<h5 id="activation-function"># Activation Function</h5>
+Two kinds of activation functions are used in neuron network, <strong>Heaviside Step Function</strong> and the <strong>Sigmoid Function</strong>: $$ (x) = {
+<span class="math display">\[\begin{array}{c l}
+     1,  &amp; x\ge 0 \\
+     0,  &amp; x &lt; 0
+\end{array}\]</span>
+<p>. </p>
+<p>(x) =  $$ Since the simple calculation of heaviside step function, most of the calculated inductive will be demonstrated in this activation function. In the contrary, since the well continuity and other properties of sigmoid function, most of example including prove will consider activation function as this function.</p>
+<h5 id="network-of-neurons"># Network of Neurons</h5>
+<p>The connection of neurons construct the network of neurons.</p>
+<blockquote>
+<p>E.G. Count how many parameters are there in a 10-neuros networks with connection between any two neurons.</p>
+<p>There’re two possible answers depend on weather the graph of neural network is directed.</p>
+<p>For the directed case, any neuron accept inputs from other 9 neurons, and each neuron preserves one threshold, so the answer will be <span class="math inline">\((9+1)\times10 + 10 = 100\)</span>.</p>
+<p>For the undirected case,</p>
+</blockquote>
+<p>Different structures of neural networks fit different kinds of problems.</p>
+<h3 id="perceptron">2. Perceptron</h3>
+<p><strong>Perceptron</strong>, or <strong>Threshold Logic Unit</strong>, defined as the one-layer neural network, which is constructed by two-layer neurons.</p>
+<p>We introduce the construction of neurons, along with detailed explainations for training process in <a href="Construction%20of%20Perceptron">Construction of Perceptron</a> trying to generate basic logic gates.</p>
+<p>Because of the limitation of form of neuron, as one-layer network, perceptron can only be trianed to solve line-seperable problem, for example, the logic <code>and</code>, <code>or</code>, and <code>not</code> are all line-seperable, but not <code>xor</code>, which requires two-layer perceptron to solve.</p>
+<h3 id="classifications-of-nn">3. Classifications of NN</h3>
+<h5 id="feedforward-neural-netwok-fnn"># FeedForward Neural Netwok: FNN</h5>
+<p>FeedForward Neural Netwrok is the most simple type, in which the singal only</p>
+<h5 id="recurrent-neural-network-rnn"># Recurrent Neural Network: RNN</h5>
+<p>pure RNN LSTM</p>
+<h5 id="convolutional-neural-network-cnn"># Convolutional Neural Network: CNN</h5>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

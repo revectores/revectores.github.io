@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> math.h
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c_lib</a></p>
+
+<h1 id="math.h">math.h</h1>
+<p>List of simple formalized function:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Functions in <code>math.h</code></th>
+<th>Functions Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sin(x), cos(x), tan(x)</code></td>
+<td><span class="math inline">\(\sin x, \cos x, \tan x\)</span></td>
+</tr>
+<tr class="even">
+<td><code>asin(x), acos(x), atan(x)</code></td>
+<td><span class="math inline">\(\arcsin x, \arccos x \arctan x\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>sinh(x), cosh(x), tanh(x)</code></td>
+<td><span class="math inline">\(\sinh x, \cosh x, \tanh x\)</span></td>
+</tr>
+<tr class="even">
+<td><code>exp(x), log(x), log10(x)</code></td>
+<td><span class="math inline">\(\text{e}^x, \ln x, \log x\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>pow(x, y)</code></td>
+<td><span class="math inline">\(x^y\)</span></td>
+</tr>
+<tr class="even">
+<td><code>ldexp(x, n)</code></td>
+<td><span class="math inline">\(x \cdot 2^n\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>sqrt(x)</code></td>
+<td><span class="math inline">\(\sqrt{x}\)</span></td>
+</tr>
+<tr class="even">
+<td><code>ceil(x), floor(x)</code></td>
+<td><span class="math inline">\(\lfloor x \rfloor, \lceil x \rceil\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>fabs(x)</code></td>
+<td><span class="math inline">\(|x|\)</span></td>
+</tr>
+<tr class="even">
+<td><code>fmod(x, y)</code></td>
+<td>float remainder of <span class="math inline">\(x/y\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>modf(x, double* ip)</code> splits <code>x</code> into the integral and fraction part, stores in the <code>double* ip</code> and returned respectively. Both parts of with the same sign as <code>x</code>.</li>
+<li></li>
+</ul>
+<p>Notice that almost all of the functions implemented in <code>&lt;math.h&gt;</code> are the float version, the corresponding int version might be found in <code>&lt;stdlib.h&gt;</code>, such as <code>abs(n), mod(n)</code>.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

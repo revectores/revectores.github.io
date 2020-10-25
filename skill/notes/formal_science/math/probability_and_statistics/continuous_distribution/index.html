@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Continuous Distribution
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< probability_and_statistics</a></p>
+
+<h1 id="continuous-distribution">Continuous Distribution</h1>
+<p><span class="math display">\[
+\newcommand{\e}{\text{e}}
+\newcommand{\d}{\text{d}}
+\newcommand{\dx}{\d x}
+\]</span></p>
+<h3 id="normal-distribution">1. Normal Distribution</h3>
+<p>For the random variable with probability density function <span class="math display">\[
+p(x) = \frac{1}{\sqrt{2\pi}\sigma}\exp \left\{ -\frac{(x-\mu)^2}{2\sigma^2} \right\}
+\]</span> where <span class="math inline">\(\mu, \sigma &gt; 0\)</span> are parameters, we define <span class="math inline">\(X\)</span> complies the <strong>normal distribution</strong> <span class="math inline">\(X\sim N(\mu, \sigma^2)\)</span>.</p>
+<blockquote>
+<p><strong>Regularity Checking</strong>.</p>
+<p>Let <span class="math inline">\(\displaystyle x&#39; = \frac{x - \mu}{\sigma}\)</span>, <span class="math display">\[
+F(+\infty) = \int_{-\infty}^{\infty} p(x)\dx
+= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}\sigma}\exp \left\{ -\frac{(x-\mu)^2}{2\sigma^2} \right\}\dx
+= \int_{-\infty}^{\infty} \varphi(x) = \frac{1}{\sqrt{2\pi}}\e^{-\frac{x&#39;^2}{2}}
+\]</span> Let <span class="math inline">\(x&#39; = \sqrt{2t}\)</span>, <span class="math display">\[
+F(+\infty) = 
+\]</span></p>
+</blockquote>
+<p>Specially, when <span class="math inline">\(\mu=0, \sigma=1\)</span>, the normal distribution is called <strong>standard normal distribution</strong>, denoted as <span class="math inline">\(X\sim N(0, 1)\)</span>. The probability density function of standard normal distribution is denoted as <span class="math display">\[
+\varphi(x) = \frac{1}{\sqrt{2\pi}}\e^{-\frac{x^2}{2}}
+\]</span> and its cumulative distribution function denoted as <span class="math inline">\(\Phi(x)\)</span>. Notice that <span class="math inline">\(\varphi(x)\)</span> is even function hence <span class="math inline">\(\Phi(x) + \Phi(-x) = 1\)</span>.</p>
+<p>Any normal distribution <span class="math inline">\(X\sim(\mu, \sigma^2)\)</span> can be converted to the standard form by linear transformation: <span class="math display">\[
+Y = \frac{X-\mu}{\sigma} \sim N(0, 1)
+\]</span></p>
+<blockquote>
+<p><strong>Proof</strong>. The cumulative distribution function of constructed random variable <span class="math inline">\(Y\)</span> is <span class="math display">\[
+F_Y(y) = P \left( \frac{X-\mu}{\sigma} \le y \right)
+= P(X\le \sigma y + \mu)
+= \int_0^{\sigma y + \mu} \frac{1}{\sqrt{2\pi}\sigma}\exp\left\{ -\frac{(x-\mu)^2}{2\sigma^2} \right\}
+\]</span> Let <span class="math inline">\(x = \sigma y + \mu\)</span>, we have <span class="math display">\[
+F_Y(y) = \int_0^{y} \frac{1}{\sqrt{2\pi}\sigma}\e^{-\frac{y^2}{2}}
+\]</span> and the probability density function <span class="math display">\[
+p_Y(y)
+= \frac{\d{F_Y(y)}}{\d y}
+= \frac{\d\left( \displaystyle \int_0^{y} \frac{1}{\sqrt{2\pi}\sigma}\e^{-\frac{y^2}{2}} \right)}{\d y} = \frac{1}{\sqrt{2\pi}\sigma}\e^{-\frac{y^2}{2}} \sim N(0,1)
+\]</span></p>
+</blockquote>
+<p>The most simple form of normal distribution is</p>
+<h3 id="uniform-distribution">2. Uniform Distribution</h3>
+<p>The <strong>uniform distribution</strong> is random variable with probability density function <span class="math display">\[
+p(x) =
+\left\{\begin{array}{ll}
+\cfrac{1}{b-a} &amp; a\le x \le b\\
+0, &amp; x&lt;a, x&gt;b
+\end{array}\right.
+\]</span> denoted as <span class="math inline">\(X\sim U(a, b)\)</span>.</p>
+<h3 id="section">3.</h3>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,198 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> JavaScript Data Type
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< vanilla_javascript</a></p>
+
+<h1 id="javascript-data-type">JavaScript Data Type</h1>
+<h3 id="introduction">1. Introduction</h3>
+<h5 id="classification"># Classification</h5>
+<p>Seven datatypes are included in JavaScript.</p>
+<ul>
+<li>Number, includes integer and float number.</li>
+<li>String.</li>
+<li>Boolean. <code>true</code> or <code>false</code>.</li>
+<li>Object, includes the <code>object</code>(narrowly speaking), <code>array</code>, and <code>function</code>.</li>
+<li><code>undefined</code>.</li>
+<li><code>null</code>.</li>
+<li>Symbol. <code>Symbol</code> data type is a new feature introduced in ECMAScript6, and we’ll introduced in <a href="symbol.md">Symbol</a>.</li>
+</ul>
+<p>Number, string and boolean are considered as the <strong>primitive type</strong>, and object are <strong>complex type</strong>, compounded of the primitive type variables. <code>undefined</code> and <code>null</code> are special data type occured in special cases.</p>
+<p>Notice that <code>function</code> is considered as a type of object in JavaScript, hence it can be assigned to a variable, which contributes to flexibility of this language.</p>
+<h5 id="type-query"># Type Query</h5>
+<p>Three methods are provided in Javascript to query the type of a variable:</p>
+<ul>
+<li><code>typeof</code> operator.</li>
+<li><code>instanceof</code> operator.</li>
+<li><code>Object.prototype.toString</code> method.</li>
+</ul>
+<p>The <code>typeof</code> operator returns the data type of a variable <strong>as a string</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">typeof</span> <span class="dv">123</span>          <span class="co">// &quot;number&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">typeof</span> <span class="st">&quot;123&quot;</span>        <span class="co">// &quot;string&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">typeof</span> <span class="kw">true</span>         <span class="co">// &quot;boolean&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">typeof</span> <span class="kw">typeof</span> <span class="dv">123</span>   <span class="co">// &quot;string&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">function</span> <span class="fu">f</span>(){}<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">typeof</span> f            <span class="co">// &quot;function&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="kw">var</span> f2 <span class="op">=</span> <span class="kw">function</span>(){}<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="kw">typeof</span> f2           <span class="co">// &quot;function&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="kw">typeof</span> <span class="kw">undefined</span><span class="op">;</span>   <span class="co">// &quot;undefined&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="kw">typeof</span> <span class="kw">null</span>         <span class="co">// &quot;object&quot;</span></span></code></pre></div>
+<p>Specially, <code>typeof null == "object"</code>, which is derived by the histroical reason. In the first version of JavaScript only five data types are introduced, <code>null</code> is considered as a special type of object. Nowadays <code>null</code> is defined as a new data type, while the behaviour of <code>typeof null</code> is still kept for the compatibility.</p>
+<p>Now let’s apply <code>typeof</code> to array and object:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>obj <span class="op">=</span> {<span class="dv">1</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">:</span> <span class="dv">3</span>}<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>arr <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">typeof</span> obj<span class="op">;</span>     <span class="co">// &quot;object&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">typeof</span> arr<span class="op">;</span>     <span class="co">// &quot;object&quot;</span></span></code></pre></div>
+<p>Notice that since array is considered as a special object internally, <code>typeof</code> operator will gives the same result as <code>object</code>. To distinguish them, use <code>instanceof</code> instead:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>obj <span class="kw">instanceof</span> <span class="bu">Object</span><span class="op">;</span>      <span class="co">// true</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>obj <span class="kw">instanceof</span> <span class="bu">Array</span><span class="op">;</span>       <span class="co">// false</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>arr <span class="kw">instanceof</span> <span class="bu">Object</span><span class="op">;</span>      <span class="co">// true</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>arr <span class="kw">instanceof</span> <span class="bu">Array</span><span class="op">;</span>       <span class="co">// true</span></span></code></pre></div>
+<p><code>instanceof</code> operator determined whether a variable is an instance object of a class. As mentioned, JavaScript declares number, string, and boolean as the primitive type explicitly, that is, they are not considered as the instance of their “construtor class”:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dv">1</span> <span class="kw">instanceof</span> <span class="bu">Number</span>     <span class="co">// false</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="st">&quot;1&quot;</span> <span class="kw">instanceof</span> <span class="bu">String</span>   <span class="co">// false</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">true</span> <span class="kw">instanceof</span> <span class="bu">Boolean</span> <span class="co">// false</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">new</span> <span class="bu">Number</span>(<span class="dv">1</span>) <span class="kw">instanceof</span> <span class="bu">Number</span>     <span class="co">// true</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="kw">new</span> <span class="bu">String</span>(<span class="dv">1</span>) <span class="kw">instanceof</span> <span class="bu">String</span>     <span class="co">// true</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="kw">new</span> <span class="bu">Boolean</span>(<span class="dv">1</span>) <span class="kw">instanceof</span> <span class="bu">Boolean</span>   <span class="co">// true</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">/* Type conversion takes place automatically here:</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">/ String(1) = String(&quot;1&quot;)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">/ Boolean(1) = Boolean(true) */</span></span></code></pre></div>
+<p>In most of the modern programming language, the type checker is designed as function or method instead of operator, you can refer <a href="https://stackoverflow.com/questions/2449254/what-is-the-instanceof-operator-in-javascript">this question</a> to find the reason why JavaScript design them as the <strong>operator</strong>.</p>
+<h3 id="null-and-undefined">2. Null and Undefined</h3>
+<h5 id="definition"># Definition</h5>
+<p><code>null</code> is considered as “empty”, like the null pointer in C or null object in Java, we usually assigned a value as <code>null</code> explicitly if we want to set it as empty. On the contrary, <code>undefined</code>, as named, represents “undefined”, any variable you try to get value, but has not been defined or assigned, will be assigned to <code>undefined</code> automatically.</p>
+<p>Generally, <code>null</code> is the empty value in program-level, assigned by the programmer actively, while <code>undefined</code> is the empty value in system-level, be assigned by the complier passively. Normally, you should never assign <code>undefined</code> to any variable yourself manually.</p>
+<p>Practically, the value <code>undefined</code> occured in the following cases:</p>
+<ul>
+<li><p>The variable is declared by not assigned.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">var</span> i<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>i<span class="op">;</span>      <span class="co">// undefined</span></span></code></pre></div></li>
+<li><p>Try to achieve the nonexistent property of an object.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>obj <span class="op">=</span> {<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">c</span><span class="op">:</span> <span class="dv">3</span>}<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>obj<span class="op">.</span><span class="at">d</span><span class="op">;</span>  <span class="co">// undefined</span></span></code></pre></div>
+<p>Potential error might hide in this behaviour, altougth getting the nonexistent property returns <code>undefined</code>, which not cause a error, but the object usually constructs hierarchy, in that case, you might try to refer the property of <code>undefined</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>book <span class="op">=</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;Javascript Tutorial&quot;</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="dt">first_author</span><span class="op">:</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>        <span class="dt">first_name</span><span class="op">:</span> <span class="st">&#39;Robert&#39;</span><span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>        <span class="dt">second_name</span><span class="op">:</span> <span class="st">&#39;Lewis&#39;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    }<span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>book<span class="op">.</span><span class="at">second_author</span><span class="op">.</span><span class="at">first_name</span><span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a><span class="co">// TypeError: book.second_author is undefined</span></span></code></pre></div></li>
+<li><p>The parameter of function is not provided.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">function</span> <span class="fu">fun</span>(x){</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>}</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="fu">fun</span>()<span class="op">;</span>  <span class="co">// undefined</span></span></code></pre></div></li>
+<li><p>The returned value of a function without <code>return</code> statement.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">function</span> <span class="fu">fun</span>(x){}</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="fu">fun</span>()<span class="op">;</span>  <span class="co">// undefined</span></span></code></pre></div></li>
+</ul>
+<h5 id="data-conversion"># Data Conversion</h5>
+<p>When the conversion to <code>Number()</code> is called, <code>null</code> acts as <code>0</code>, while <code>undefined</code> acts as <code>NaN</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="bu">Number</span>(<span class="kw">null</span>)        <span class="co">// 0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">null</span> <span class="op">+</span> <span class="dv">1</span>            <span class="co">// 1</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="bu">Number</span>(<span class="kw">undefined</span>)   <span class="co">// NaN</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">undefined</span> <span class="op">+</span> <span class="dv">1</span>       <span class="co">// NaN</span></span></code></pre></div>
+<p>Both of them are considered as <code>false</code> when converted into <code>false</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="bu">Boolean</span>(<span class="kw">null</span>)       <span class="co">// false</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="bu">Boolean</span>(<span class="kw">undefined</span>)  <span class="co">// false</span></span></code></pre></div>
+<h3 id="boolean">3. Boolean</h3>
+<p>A value is regarded as <code>false</code> if and only if its one of <code>false</code>, <code>0</code>, <code>NaN</code>, <code>""</code>, <code>null</code>, <code>undefined</code>.</p>
+<p>Different from most of other languages, the empty object <code>{}</code> or empty array <code>[]</code> in JavaScript, is regarded as <code>true</code>. That is, every object or array is regarded as <code>true</code>, no matter whether its empty.</p>
+<h3 id="number">4. Number</h3>
+<h5 id="all-in-ieee-754"># All in IEEE-754</h5>
+<p>There is no integer in JavaScript, internally:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="dv">1</span> <span class="op">===</span> <span class="fl">1.0</span>   <span class="co">// true</span></span></code></pre></div>
+<p>That is, all the numbers are stored as the 64-bit float point number. As known, <a href="">IEEE 754</a> gurantees that it is impossible to do the float point computation precisely:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">==</span> <span class="fl">0.3</span>    <span class="co">// false</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>           <span class="co">// 0.30000000000000004</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="fl">0.3</span> <span class="op">-</span> <span class="fl">0.2</span>           <span class="co">// 0.09999999999999998</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="fl">0.3</span> <span class="op">/</span> <span class="fl">0.1</span>           <span class="co">// 2.9999999999999996</span></span></code></pre></div>
+<p><a href="https://juejin.im/post/5b90e00e6fb9a05cf9080dff">Here</a> gives the details to get the magic value <code>0.30000000000000004</code> manually.</p>
+<p>To simulate the normal integer computation, JavaScript converts the 64-bit float point value into 32-bit integer first, while this mechanism is only activated for integers.</p>
+<p>Based on <a href="">IEEE 754</a>, there are two zeros: <code>+0</code> and <code>-0</code>, in most cases they behave the same, except when in the denominator:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="dv">1</span><span class="op">/</span>(<span class="op">+</span><span class="dv">0</span>)      <span class="co">// Infinity</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="dv">1</span><span class="op">/</span>(<span class="op">-</span><span class="dv">0</span>)      <span class="co">// -Infinity</span></span></code></pre></div>
+<p>which gives <code>+Infinity</code> and <code>-Infinity</code> respectively.</p>
+<h5 id="number-system"># Number System</h5>
+<p>Number literal for hex <code>0x</code>, bin <code>0b</code> and oct <code>0o</code> is provided:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="bn">0xff</span>        <span class="co">// 255</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="bn">0o377</span>       <span class="co">// 255</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="bn">0b11111111</span>  <span class="co">// 255</span></span></code></pre></div>
+<p>Before ES6, the number with leading <code>0</code> will be regarded as oct, expect <code>8</code> or <code>9</code> is included in the digits:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="dv">099</span>     <span class="co">// 99</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="dv">077</span>     <span class="co">// 63</span></span></code></pre></div>
+<p>This ambiguity may cause problems, hence this representation has been abandoned in ES6 (and the strict mode of ES5).</p>
+<h5 id="infinity"># Infinity</h5>
+<p>Infinity是一个特殊的数, 表示超出了JS的处理范围, 但它仍然属于<code>number</code>类型:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">typeof</span>(<span class="kw">Infinity</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="st">&quot;number&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="co">// We can create Infinity by this:</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">1e+308</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a><span class="fl">1e+308</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">1e+309</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a><span class="kw">Infinity</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span><span class="op">/</span><span class="dv">0</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true"></a><span class="kw">Infinity</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true"></a><span class="co">// We can also directly create an Infinity, it&#39;s fine:</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">Infinity</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true"></a><span class="kw">Infinity</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true"></a><span class="co">// Notice that JavaScript is case-sensitive:</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> infinity</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true"></a><span class="bu">ReferenceError</span><span class="op">:</span> infinity is not defined</span></code></pre></div>
+<p>Infinity可以理解成超出了最大数的表示范围, 我们可以用-Infinity表示超出最小数的表示范围, 像这样:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">-6</span><span class="op">/</span><span class="dv">0</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="op">-</span><span class="kw">Infinity</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a><span class="co">// &quot;-Infinity + Infinity&quot; returns NaN instead of 0.</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">-</span><span class="kw">Infinity</span> <span class="op">+</span> <span class="kw">Infinity</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="kw">NaN</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a><span class="co">// Besides this, almost any operation on Infinify will not change its value:</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">Infinity</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a><span class="kw">Infinity</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">-</span><span class="kw">Infinity</span><span class="op">/</span><span class="dv">3</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a><span class="op">-</span><span class="kw">Infinity</span></span></code></pre></div>
+<h5 id="nan"># NaN</h5>
+<p><code>NaN</code>意为“Not a Number”, 但是事实上它在JS中仍然是<code>number</code>类型的一员. 当我们尝试对数字进行某些不应该进行的操作(但不是溢出错误, 那会导致Infinity)时, 就会收获一个<code>NaN</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">var</span> x <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> <span class="st">&quot;f&quot;</span><span class="op">;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> x</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="kw">NaN</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">NaN</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a><span class="kw">NaN</span></span></code></pre></div>
+<h3 id="string">5. String</h3>
+<p>JavaScript字符串可以使用单引号或双引号括起, 不过在Web客户端环境下建议在JS中使用单引号来标志字符串, 这是因为JS常常需要和HTML进行交互, 而HTML中的属性值通常需要用双引号括起, 使用单引号可以避免嵌套时的麻烦(例如引号使用的不统一或者频繁的转义).</p>
+<p>和大部分语言类似, 如果要在字符串内部使用和两端相同的引号, 就必须使用反斜杠<code>\</code>对其进行转义, 而字符串中原本存在的反斜杠本身也必须被转义. 对常规字符进行转义可以得到具有特殊含义的字符: 例如换行符<code>\n</code>, 回车符<code>\r</code>, unicode化字符<code>\u</code>等等.</p>
+<h3 id="array">6. Array</h3>
+<p>可以通过直接赋值或<code>new Array</code>两种方式创建一个数组</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="kw">let</span> empty_array <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">let</span> arr1 <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a><span class="kw">let</span> arr2 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Array</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

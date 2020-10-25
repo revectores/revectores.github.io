@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Fourier Series
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< series</a></p>
+
+<h1 id="fourier-series">Fourier Series</h1>
+<p><span class="math display">\[
+\newcommand{\euler}{\text{e}}
+\newcommand{\p}{\partial}
+\newcommand{\px}{\p x}
+\newcommand{\py}{\p y}
+\newcommand{\pz}{\p z}
+\newcommand{\pf}{\p f}
+\newcommand{\pu}{\p u}
+\newcommand{\pv}{\p v}
+\newcommand{\pl}{\p \boldsymbol{l}}
+\newcommand{\d}{\text{d}}
+\newcommand{\dt}{\d t}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dr}{\d r}
+\newcommand{\dv}{\d v}
+\newcommand{\dz}{\d z}
+\newcommand{\du}{\d u}
+\newcommand{\ds}{\d s}
+\newcommand{\dS}{\d S}
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dxy}{\dx\dy}
+\newcommand{\dyz}{\dy\dz}
+\newcommand{\dzx}{\dz\dx}
+\]</span></p>
+<h5 id="orthogonality-of-trigonometric-functions"># Orthogonality of Trigonometric Functions</h5>
+<p><span class="math display">\[
+y = A\sin(\omega t + \varphi)
+\]</span></p>
+<p><span class="math display">\[
+y = A_0 + \sum_{n=1}^\infty A_n\sin(n\omega t + \varphi_n)
+= A_n\sin\varphi_n \cos n\omega t + A_n \cos\varphi_n\sin n\omega t
+\]</span></p>
+<p>Let <span class="math inline">\(a_0/2 = A_0, a_n = A_n\sin\varphi_n, b_n = A_n\cos\varphi_n\)</span>, we have the function term series</p>
+<p><span class="math display">\[
+\frac{a_0}{2} + \sum_{k=1}^\infty(a_n\cos nx + b_n\sin nx)
+\]</span></p>
+<p>The trigonometric function list</p>
+<p><span class="math display">\[
+1, \cos x, \sin x, \cos 2x, \sin 2x, \ldots, \cos nx, \sin nx, \ldots
+\]</span></p>
+<p>are <strong>orthogonal</strong> on <span class="math inline">\([-\pi, \pi]\)</span>, that is, the integral of multiplication of any of the two functions equal zero.</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; \int_{-\pi}^\pi \sin{k_1x}\cos{k_2x}\dx = 0 \\
+&amp; \int_{-\pi}^\pi \sin{k_1x}\sin{k_2x}\dx = 0 ~~~~ (k_1\neq k_2)\\
+&amp; \int_{-\pi}^\pi \cos{k_1x}\cos{k_2x}\dx = 0 ~~~~ (k_1\neq k_2)\\
+\end{align}
+\]</span></p>
+<p>These expressions can be easily proved by product-to-sum formula of trigonometric fucntionsq</p>
+<blockquote>
+<p>Proof. <span class="math display">\[
+\begin{align}
+\int_{-\pi}^{\pi}\sin k_1x \cos k_2x
+&amp;= \frac{1}{2}\int_{-\pi}^\pi [\sin(k_1+k_2)x + \sin(k_1-k_2)x]\dx \\
+&amp;= \frac{1}{2} \left.\left[-\frac{\cos(k_1+k_2)x}{k_1+k_2} -\frac{\cos(k_1-k_2)x}{k_1-k_2}\right]\right|_{-\pi}^{\pi} \\
+&amp;= 0
+\end{align}
+\]</span></p>
+</blockquote>
+<p>The other two expressions can be proved similarly.</p>
+<p>On the contrary,</p>
+<h5 id="fourier-series-1"># Fourier Series</h5>
+<p>Assume the function with period <span class="math inline">\(2\pi\)</span> can be expanded into trigonometric series or <strong>Fouries series</strong> <span class="math display">\[
+f(x) = \frac{a_0}{2} + \sum_{k=1}^\infty(a_k\cos kx + b_k\sin kx)
+\]</span> The <strong>Fourier coefficients</strong> <span class="math inline">\(a_k, b_k\)</span> are <span class="math display">\[
+\begin{align}
+&amp; a_n = \frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\cos nx \dx \\
+&amp; b_n = \frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\sin nx \dx
+\end{align}
+\]</span></p>
+<blockquote>
+
+</blockquote>
+<blockquote>
+<p>Example. Expand <span class="math inline">\(f(x)\)</span> with period <span class="math inline">\(2\pi\)</span> into its Fouries series, the expression on <span class="math inline">\([-\pi, \pi]\)</span> is <span class="math display">\[
+f(x) =
+\left\{\begin{array}{ll}\begin{align}
+&amp;-1, ~~~~ &amp;&amp; -\pi \le x \lt 0 \\
+&amp;1, ~~~~ &amp;&amp; 0 \le x \lt \pi 
+\end{align}\end{array}\right.
+\]</span></p>
+</blockquote>
+<p><span class="math display">\[
+a_n = \frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\cos nx \dx
+= 
+\]</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

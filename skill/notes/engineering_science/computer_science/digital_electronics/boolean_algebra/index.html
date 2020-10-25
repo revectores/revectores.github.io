@@ -1,0 +1,133 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> $$
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< digital_electronics</a></p>
+
+<p><span class="math display">\[
+\newcommand{\o}{\overline}
+\newcommand{\oA}{\o A}
+\newcommand{\oB}{\o B}
+\newcommand{\oC}{\o C}
+\newcommand{\dual}{\quad\stackrel{\mathrm{duality}}{\longleftrightarrow}\quad}
+\]</span></p>
+<h1 id="boolean-algebra">Boolean Algebra</h1>
+<h3 id="boolean-function">1. Boolean Function</h3>
+<h5 id="definition-and-representation"># Definition and Representation</h5>
+<p>Input/Output are all boolean type(0/1).</p>
+<p>There’re five representation methods of Boolean Function:</p>
+<ul>
+<li>Truth Table</li>
+<li>Boolean Function Formula</li>
+<li>Logic Graph - Notice the differences between Chinese Standard and International Standard.</li>
+<li><strong>Karnaugh Map</strong></li>
+<li>Hardware Description Language (HDL)</li>
+</ul>
+<p><strong>Reverse Function</strong>: All the output values are the oppsite of the primitive function.</p>
+<h5 id="form-transformation"># Form Transformation</h5>
+<p>Using De morgan’s Law or Duality Principle.</p>
+<p>e.g. Transform the <code>AND-OR</code> expression into <code>OR-AND</code> form. <span class="math display">\[
+\begin{align*}
+&amp; Y  \ \ \ = AB+CD \\
+&amp; Y^* \  = (A+B)(C+D) = AC+BC+AD+BC \\
+&amp; Y^{**} = (A+C)(B+C)(A+D)(B+C)
+\end{align*}
+\]</span></p>
+<h5 id="minimalmaximum-term"># Minimal/Maximum Term</h5>
+<p><strong>Minimal Term</strong>: Each boolean variable (or its oppsite) occurs and only once in this term. e.g. The standard form of three-men votes problem: <span class="math inline">\(f(ABC) = \o ABC + A\o BC + AB\o C + ABC\)</span>.</p>
+<p>The subscript of the minimal term is the value of boolean variables when this term get value <code>1</code>. e.g. <span class="math inline">\(m_3 = \o ABC, \quad m_5 = A\o BC, \quad m_6 = AB\o C, \quad m_7 = ABC\)</span>.</p>
+<p>Using subscript of minimal term, we can compress the expression into <span class="math display">\[
+f(ABC) = \sum m(3,5,6,7)
+\]</span> Properties of Minimal Term:</p>
+<ul>
+<li><strong>There’s one and only one minimal term’s value is 1.</strong></li>
+<li><span class="math inline">\(m_im_j = 0, \quad i\neq j\)</span>.</li>
+<li><span class="math inline">\(\sum_{i=0}^{2^n-1}m_i =1\)</span></li>
+</ul>
+<p>The last two properties are based on the fist property.</p>
+<p>We can also introduce <strong>Maximum Term</strong> correspondently. e.g. <span class="math display">\[
+f^*(ABC) = (A+B+C)(A+B+\o C)(A+\o B+C)(\o A+B+C) = \displaystyle\prod M(0,1,2,4)
+\]</span> Relation between minimal/maximum term: <span class="math inline">\(m_iM_i = 0\)</span>.</p>
+<h5 id="standard-representation"># Standard Representation</h5>
+<p>Sum of Product (SOP) Form: <span class="math display">\[
+f(x_1, \ x_2, \ x_3, \ ..., \ x_n) = 
+\sum_{i=0}^{2^n-1}\alpha_{i}m_i, \quad \alpha \in \{0,1\}.
+\]</span> Product of Sum (POS) Form: <span class="math display">\[
+f(x_1, \ x_2, \ x_3, \ ..., \ x_n) = 
+\prod_{i=0}^{2^n-1}(\alpha_{i}+m_i), \quad \alpha \in \{0,1\}.
+\]</span> Relation between boolean function and its reverse function: <span class="math display">\[
+F = \sum m_i \quad \rightarrow \quad \o F = \prod M_i
+\]</span> Relation between two standard form: <span class="math display">\[
+F = \sum m_i \quad \rightarrow \quad F = \prod M_j, \qquad\qquad j\neq i
+\]</span></p>
+<blockquote>
+<p>The Prove of these two relations relay on the sum property of minimal term.</p>
+</blockquote>
+<h5 id="representation-standardization"># Representation Standardization</h5>
+<p>Multiple the non-minimal-term by something like <span class="math inline">\(A+\o A\)</span>. e.g. <span class="math display">\[
+F(ABC)
+= A+\oB C + A\oC
+= A(B+\oB)(C + \oC) + \oB C(A+ \oA) + A\oC(B+\oB)
+= \ ...
+\]</span> Add the non-maximum-term by something like <span class="math inline">\(A\o A\)</span>.</p>
+<h3 id="boolean-operations-and-properties">2. Boolean Operations and Properties</h3>
+<h5 id="complex-opeartor"># Complex Opeartor</h5>
+<p><span class="math inline">\(\o{AB}, \o{A+B}, A\bigoplus B, A\bigotimes B\)</span></p>
+<p>==TODO: Complete the definition of complex operator, serach wiki and add for more complex operator.==</p>
+<h5 id="distribution-law"># Distribution Law</h5>
+<p><span class="math display">\[
+A(B+C) = AB+AC \quad \leftrightarrow \quad A+BC = (A+B)(A+C)
+\]</span></p>
+<h5 id="de-morgans-law"># De morgan’s Law</h5>
+<p><span class="math inline">\(\o{AB} = \o A + \o B\)</span>, <span class="math inline">\(\o{A+B} = \o A \o B\)</span>. This is quite useful cause it can replace <code>and/or</code> by another kinds of operation. Generalization of De morgan’s law (<strong>Inversion Law</strong>): Change the function expression into its dual, and then get <strong>the inverse of the variables</strong>, you can get the reverse function.</p>
+<h5 id="duality-principle"># Duality Principle</h5>
+<p><strong>Dual expression</strong>: Change logic operator and constant into its dual. e.g. <span class="math inline">\(Y = A\o B + \o CD + 0 \dual \o Y = (\o A + B)(C + \o D)\cdot1\)</span></p>
+<p>If two function equal, the dual of their expressions are still equal. Prov: <span class="math inline">\(F = G \rightarrow \o F = \o G \rightarrow F^* = G^*\)</span>. The Second Arrow is done by</p>
+<p>Ex. <span class="math inline">\((A+D)\o C = A\o C + \o CD + 0 \rightarrow AD+\o C = (A+\o C)(\o C + D) \cdot 1\)</span></p>
+<p>Based on the properties of boolean operations, we could use <code>NAND</code> or <code>NOR</code> to construct all types of boolean function.</p>
+<h3 id="karnaugh-map">3. Karnaugh Map</h3>
+<h5 id="generation"># Generation</h5>
+<p>Notification:</p>
+<ul>
+<li>Enclose 1 to generate SOP representation, and enclose 0 to generate POS representation.</li>
+<li>Enclose <span class="math inline">\(2^n\)</span> grids exactly as large as possible, and don’t miss any grid.</li>
+</ul>
+<h5 id="karnaugh-map-calculation"># Karnaugh Map Calculation</h5>
+<p><span class="math display">\[
+f_1 = \sum\alpha_{1i}m_i, \quad f_2 = \sum\alpha_{2i}m_i \\~\\
+\begin{equation}
+\begin{split}
+f_1 \cdot f_2
+&amp; = \sum\alpha_{1i}m_i \cdot \sum\alpha_{2i}m_i \\
+&amp; = \sum_i\alpha_{1i}\alpha_{2_i}m_i + \sum_{i\neq j}\alpha_{1i}\alpha_{2_j}m_i \\
+&amp; = \sum_i\alpha_{1i}\alpha_{2_i}m_i \\
+\end{split}
+\end{equation}
+\]</span></p>
+<h5 id="simplify-by-the-xor-function"># Simplify by the XOR Function</h5>
+<p>The map of XOR function views like the “chessboard”. the 0 position of <code>XOR</code> function is 0, and the</p>
+<h5 id="process-of-arbitrary-item"># Process of Arbitrary Item</h5>
+<p>The arbitrary item is those input combination that won’t occur or meaningless. Can be enclosed whether or not arbitraray (recommend to make the expression simple).</p>
+<h5 id="multi-output-logic-function"># Multi-output Logic Function</h5>
+<p>Find the common-cover first to make least item occurance among all the results.</p>
+<h5 id="vast-variable4-map"># Vast-Variable(&gt;4) Map</h5>
+<p>We can expressed by multiple 4-variables karnaugh map, e.x. 6-variables need <span class="math inline">\(2^{6-4} = 4\)</span> counts of 4-variables map. The core idea of this approach is to expand <span class="math inline">\(n\)</span> dimension space into the plane.</p>
+<h5 id="mapped-variable"># Mapped-Variable</h5>
+<p>==TODO: contain, prime contain, necessary contain, cover, non-reduncany cover, minimal cover?==</p>
+<p>==TODO: Find out a way to auto-generate Karnaugh Map==</p>
+<p>==TODO:Write a function to auto convert boolean function into the standard representation, and draw the karnaugh map.==</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

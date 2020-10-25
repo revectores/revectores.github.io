@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Fibonacci Sequence
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< sequence</a></p>
+
+<h1 id="fibonacci-sequence">Fibonacci Sequence</h1>
+<h3 id="backgroud-definition">Backgroud &amp; Definition</h3>
+<h5 id="backgroud">Backgroud</h5>
+<h5 id="definition">Definition</h5>
+<p><strong>Fibonacci Sequence</strong> is defined as</p>
+<p><span class="math display">\[
+u_{1} = u_{2} = 1, ~~~~  u_{n} = u_{n-1} + u_{n-2}
+\]</span></p>
+<h5 id="persepctive">Persepctive</h5>
+<p>The fibonacci sequence can be reiterated as the “stairs jumping” problem: suppose there are <span class="math inline">\(n\)</span> stairs and a person(or a monkey) is in the first (numbered as <span class="math inline">\(1\)</span>) floor in the beginning, who can take 1 or jump 2 stair in one step. As a result, the total methods the person come to the <span class="math inline">\(n\)</span>-th stair is exactly <span class="math inline">\(u_{n}\)</span>.</p>
+<p>In the algorithm’s perspective, the fibonacci sequence modeled a typical problem which fits the condition of <strong>dynamic programming</strong>. The stair jumping problem is one of them.</p>
+<h3 id="simple-property">Simple Property</h3>
+<h5 id="sums">Sums</h5>
+<p>Here list four basic sum of fibonacci sequence, which are the sum of the terms, sum of the odd terms, sum of the even terms, and the square sum of terms respectively.</p>
+<ol type="1">
+<li><p><span class="math inline">\(\displaystyle\sum_{i=1}^{n} u_{i} = u_{n+2} - 1\)</span></p></li>
+<li><p><span class="math inline">\(\displaystyle\sum_{i=1}^{n} u_{2i-1} = u_{2n}\)</span></p></li>
+<li><p><span class="math inline">\(\displaystyle\sum_{i=1}^{n} u_{2i} = u_{2n+1} - 1\)</span></p></li>
+<li><p><span class="math inline">\(\displaystyle\sum_{i=1}^{n} u_{i}^2 = u_{n}u_{n+1}\)</span></p></li>
+</ol>
+<p>Since the fibonacci sequence is defined by induction, all of them can be easily proved by induction, which are quite boring to write them down formally. The interesting part is that various sum of fibonacci sequence can be reduced to the latter item in the sequence itself.</p>
+<h5 id="terms-relation">Terms Relation</h5>
+<ol type="1">
+<li><span class="math inline">\(u_{n+m}=u_{n-1}u_{m} + u_{n}u_{m+1}\)</span></li>
+</ol>
+<h3 id="general-term">General Term</h3>
+<h5 id="general-term-format">General Term Format</h5>
+<p>It’s well-known that fibonacci sequence is the typical (and the most simple) <strong>Linear Homogeneous Recurrence Relations with Constant Coefficients</strong>, the general term of it can be retrived by characteristic equation <span class="math inline">\(x^2 = x + 1\)</span>, the two roots, often noted as <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, which are</p>
+<p><span class="math display">\[
+\alpha = \dfrac{1+\sqrt{5}}{2}, ~~~~ \beta = \dfrac{1-\sqrt{5}}{2}
+\]</span></p>
+<p>and the general term of fibonacci sequence is</p>
+<p><span class="math display">\[
+f_n = \dfrac{\alpha^n+\beta^n}{\sqrt{5}} = \dfrac{1}{\sqrt{5}} \left( \dfrac{1+\sqrt{5}}{2} \right)^n + \dfrac{1}{\sqrt{5}} \left( \dfrac{1-\sqrt{5}}{2} \right)^n
+\]</span></p>
+<p>Since they’re both the roots of characteristic equation, we have <span class="math inline">\(\alpha^2 = \alpha + 1\)</span> and <span class="math inline">\(\beta^2 = \beta + 1\)</span>.</p>
+<h5 id="property-of-alpha-beta">Property of <span class="math inline">\(\alpha, \beta\)</span></h5>
+<ol type="1">
+<li><p><span class="math inline">\(\alpha + \beta = 1, ~~~~ \alpha\beta = -1\)</span>.</p></li>
+<li><p><span class="math inline">\(\alpha = \varphi = 1.618...\)</span>, where <span class="math inline">\(\varphi\)</span> is so-called <strong>golden ratio</strong>.</p></li>
+<li><p><span class="math inline">\(u_{n}\)</span> is the closest integer to <span class="math inline">\(\dfrac{\alpha^n}{\sqrt{5}}\)</span>. This is obvious since the <span class="math inline">\(\beta^n\)</span> term approaches 0 as <span class="math inline">\(n\)</span> increase. This property can be also written as the limit form:</p>
+<p><span class="math display">\[
+ \lim_{n\rightarrow\infty} \left| u_{n} - \dfrac{\alpha^n}{\sqrt{5}} \right| = 0
+ \]</span></p>
+<p>This property tells us that the fibonacci sequence grows as fast as sequence <span class="math inline">\(\alpha^n/\sqrt{5}\)</span>, the latter one is a simple geometric sequence, whose value can be evaluate easier.</p></li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

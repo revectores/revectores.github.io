@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Numerical Differentiation
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< numerical_analysis</a></p>
+
+<h1 id="numerical-differentiation">Numerical Differentiation</h1>
+<p><span class="math display">\[
+\newcommand{\d}{\text{d}}
+\newcommand{\dx}{\d x}
+\newcommand{\ddx}{\dfrac{\d}{\d x}}
+\]</span></p>
+<h3 id="differentiation-approximation-by-difference-quotient">1. Differentiation Approximation By Difference Quotient</h3>
+<p>As known, the derivative from right/left/both sides are defined as the limit of forward/backward/central difference quotients: <span class="math display">\[
+\begin{align}
+&amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0+h)-f(x_0)}{h} \\
+&amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0)-f(x_0-h)}{h} \\
+&amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0+h)-f(x_0-h)}{2h}
+\end{align}
+\]</span> respectively, and they are equivalent if the function <span class="math inline">\(f(x)\)</span> is derivative at <span class="math inline">\(x_0\)</span>, hence we just use the difference quotients to approximate those derivatives: <span class="math display">\[
+\begin{align}
+&amp; f&#39;(x_0) \approx \frac{f(x_0+h)-f(x_o)}{h} \\
+&amp; f&#39;(x_0) \approx \frac{f(x_0)-f(x_0-h)}{h} \\
+&amp; f&#39;(x_0) \approx \frac{f(x_0+h)-f(x_0-h)}{2h}
+\end{align}
+\]</span> The truncation error of forward/backward difference is <span class="math display">\[
+R(x) = f&#39;(x_0) - \frac{f(x_0+h)-f(x_0)}{h} = -\frac{h}{2}f&#39;&#39;(\xi) = O(h)
+\]</span></p>
+<blockquote>
+<p><strong>Proof</strong>. The <a href="">Taylor formula</a> gives <span class="math display">\[
+f(x_0 + h) = f(x_0) + hf&#39;(x_0) + \frac{h^2}{2!}f&#39;&#39;(\xi),~~~~\xi\in[x_0, x_0+h]
+\]</span> Hence <span class="math display">\[
+R(x) = f&#39;(x_0) - \frac{f(x_0+h)-f(x_0)}{h} = -\frac{h}{2}f&#39;&#39;(\xi)
+\]</span></p>
+</blockquote>
+<p>and the truncation error of central difference quotient is <span class="math display">\[
+R(x) = f&#39;(x_0) - \frac{f(x_0+h)-f(x_0-h)}{2h} = -\frac{h^2}{6}f&#39;&#39;&#39;(\xi) = O(h^2), ~~~~ \xi\in[x_0-h, x_0+h]
+\]</span></p>
+<blockquote>
+<p><strong>Proof</strong>. The Taylor formula gives <span class="math display">\[
+\begin{align}
+&amp; f(x_0 + h) = f(x_0) + hf&#39;(x_0) + \frac{h^2}{2!}f&#39;&#39;(x_0) + \frac{h^3}{3!}f&#39;&#39;&#39;(\xi_1) \\
+&amp; f(x_0 - h) = f(x_0) - hf&#39;(x_0) + \frac{h^2}{2!}f&#39;&#39;(x_0) - \frac{h^3}{3!}f&#39;&#39;&#39;(\xi_1)
+\end{align}
+\]</span> Substract and devided by <span class="math inline">\(2h\)</span> we get <span class="math display">\[
+\frac{f(x_0+h)-f(x_0-h)}{2h}
+= f&#39;(x_0) + \frac{h^2}{2\cdot3!}f&#39;&#39;&#39;(\xi_1) + \frac{h^2}{2\cdot3!}f&#39;&#39;&#39;(\xi_2)
+\]</span> Hence <span class="math display">\[
+R(x)
+= f&#39;(x_0) - \frac{f(x_0+h)-f(x_0-h)}{2h}
+= -\frac{h^2}{6}f&#39;&#39;&#39;(\xi) = O(h^2),
+~~~~\xi\in[x_0-h, x_0+h]
+\]</span></p>
+</blockquote>
+<h3 id="numerical-differentiation-by-interpolation">2. Numerical Differentiation by Interpolation</h3>
+<p>For the given function values, construct Lagrange intropolation polynomials <span class="math display">\[
+f(x) \approx L_n(x) = \sum_{i=0}^n l_i(x)f(x_i) \\
+\]</span> The derivative <span class="math display">\[
+f&#39;(x) \approx L&#39;_n(x) = \sum_{i=0}^n l&#39;_i(x)f(x_i)
+\]</span></p>
+<p><span class="math display">\[
+R(x) = \ddx \left( \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n(x-x_i) \right)
+\]</span></p>
+<p><span class="math display">\[
+R(x_j) = \prod_{i=0\\i\neq j}^n (x_j-x_i)\frac{f^{(n+1)}(\xi)}{(n+1)!}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+&amp; f&#39;(x_0) = \frac{1}{2h}(-3f(x_0) + 4f(x_1) - f(x_2)) \\
+&amp; f&#39;(x_1) = \frac{1}{2h}(-f(x_0) + f(x_2)) \\
+&amp; f&#39;(x_2) = \frac{1}{2h}(f(x_0) + -f(x_1) + 3f(x_2)) \\
+\end{align}
+\]</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

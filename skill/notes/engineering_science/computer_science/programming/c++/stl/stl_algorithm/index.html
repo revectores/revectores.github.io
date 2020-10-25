@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Algorithm
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< stl</a></p>
+
+<h1 id="algorithm">Algorithm</h1>
+<p>Algorithm library provides a series of packed useful algorithm, which can be basically classified as two types: non-modifying operation and modifying operation. Here we introduce some of them which can be pretty useful in kinds of test and development.</p>
+<p>For the most common function in the library, it loops a container to get some information about it, which usually requires two parameter to express the container: the pointer(iterator) to the first and the one after the last element. This pattern will occur again and again, which seems to be some remain of C style. After the sequence infomation is given, it also often requires some function parameter to be the user-defined standard to check, find, comparation, or anything else. This kind of requirements often occur along with the <strong>Lambda Expression</strong> and <strong>Function Pointer</strong>. Formally, the common parameters construct like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">return_type</span> func_name(InputIterator first, InputIterator last, UnaryPredicate pred)</span></code></pre></div>
+<p>In this document we called the first two elements (if they are the range-specifier of <code>InputIterator</code>) Trivial Parameter (TP) and the others are named as Non-trivial Parameter (NP).</p>
+<h3 id="non-modifying-sequence-operation">1. Non-Modifying Sequence Operation</h3>
+<h5 id="for_each"># <code>for_each</code></h5>
+<p>This is the simplist one, it just like the modern auto for cycle:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">std::</span>vector&lt;<span class="dt">int</span>&gt; A = {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>};</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>for_each(A.begin(), A.end(), [](<span class="dt">int</span> i){cout &lt;&lt; i;});</span></code></pre></div>
+<h5 id="extension-logical-judgement"># Extension Logical Judgement</h5>
+<p>This includes three functions called <code>all_of</code>, <code>any_of</code> and <code>none_of</code> which simply the encapsulation of one <code>for</code> loop.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A = {<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>};</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="dt">bool</span> all_even = all_of(A.begin(), A.end(), [](<span class="dt">int</span> i){<span class="cf">return</span> !(i%<span class="dv">2</span>);});</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">// all_of: return true if all the results is true.</span></span></code></pre></div>
+<h5 id="element-searching"># Element Searching</h5>
+<p>This includes four functions in <code>find</code> family: <code>find</code>, <code>find_first_of</code>, <code>find_if</code> and <code>find_if_not</code>. All of them are trying to find an element which meets some specific condition by going through the <code>InputIterator</code>, but the way of expressing condition is strengthened by the sequence:</p>
+<ol type="1">
+<li><code>find</code> provides function to check simple equivlance. The NP is an element.</li>
+<li><code>find_first_of</code> is able to compare to a range instead of single element. The NPs are another Iterator range.</li>
+<li><code>find_if</code> and <code>find_if_not</code> provides the most powerful function. The NP is a function.</li>
+</ol>
+<p>All of them return a pointer to the finded value, otherwise they return a pointer which pointer to the <code>last</code> of the <code>InputIterator</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A = {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>};</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; B = {<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>};</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="dt">bool</span> is_there_six = find(A.begin(), A.end(), <span class="dv">6</span>) != A.end(); <span class="co">// false</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="dt">int</span> first_B = *find_first_of(A.begin(), A.end(), B.begin(), B.end()); <span class="co">// 2</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="dt">int</span> first_even = *find_if(A.begin, A.end(), [](<span class="dt">int</span> i){<span class="cf">return</span> !(i%<span class="dv">2</span>);}); <span class="co">// 2</span></span></code></pre></div>
+<h5 id="search-subsequence"># Search Subsequence</h5>
+<p><code>search</code> and <code>find_end</code>, both return the first address of the first/last finded subsquence of the main sequence.</p>
+<h5 id="count"># Count</h5>
+<p><code>count</code> and <code>count_if</code> is provided, which are similarly to <code>find</code> and <code>find_if</code>.</p>
+<h5 id="whole-iterator-comparation"># Whole Iterator Comparation</h5>
+<p><code>equal</code> and <code>is_permutation</code>, both TPs and NPs are iterator range.</p>
+<h3 id="modifying-sequence-operation">2. Modifying Sequence Operation</h3>
+<h5 id="whole-iterator-permutation-restruction"># Whole Iterator Permutation Restruction</h5>
+<p>There’re two function to reconstruct the iterator’s array: <code>rotate</code> and <code>reverse</code>. <code>rotate</code> is what the “rotation symmetry” means.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A(<span class="dv">9</span>); iota(A.begin(), A.end(), <span class="dv">1</span>);</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>rotate(A.begin(), A.begin()+<span class="dv">3</span>, A.end());</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">// Notice that its TP is not as the usual sequence.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="cf">for</span>(<span class="kw">auto</span> e:A) cout &lt;&lt; e;        <span class="co">// 456789123</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A(<span class="dv">5</span>); iota(A.begin(), A.end(), <span class="dv">1</span>);</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>reverse(A.begin(), A.end());</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="cf">for</span>(<span class="kw">auto</span> e:A) cout &lt;&lt; e;        <span class="co">// 54321</span></span></code></pre></div>
+<p>These two functions are local operation. Plus, for some modifying functions, there’re corresponding none local operation which with the tail "_copy", fortunely these two function both have the copy correspondent:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A(<span class="dv">9</span>); iota(A.begin(), A.end(), <span class="dv">1</span>);</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; B(A.size())</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>rotate_copy(A.begin(), A.begin()+<span class="dv">3</span>, A.end(), B);  <span class="co">// B={4,5,6,7,8,9,1,2,3}</span></span></code></pre></div>
+<p>Notice that the copy function will not work as “return an iterator” (for container, this is convient, but the concept of iterator is much wider than that, and, actually, the iterator can’t be “returned” otherwise it returned two pointer as you passed to them) to let you assign. The added parameter, which indicating the start address of receiver is required.</p>
+<h5 id="remove-and-replace"># Remove and Replace</h5>
+<p>This two is extremely similar with each other. They are both a family, which conclude</p>
+<p><code>remove</code>, <code>remove_if</code>, <code>remove_copy</code>, <code>remove_copy_if</code></p>
+<p><code>replace</code>, <code>replace_if</code>, <code>replace_copy</code>, <code>replace_copy_if</code></p>
+<p>respectively.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

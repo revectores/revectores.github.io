@@ -1,0 +1,115 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Series Expansion
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< series</a></p>
+
+<h1 id="series-expansion">Series Expansion</h1>
+<p><span class="math display">\[
+\newcommand{\e}{\text{e}}
+\]</span></p>
+<p>Taylor Series for <span class="math inline">\(f(x)\)</span> at <span class="math inline">\(x_0\)</span> <span class="math display">\[
+f(x) = \sum_{n=0}^{\infty}\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n
+=  f(x_0) + f&#39;(x_0)(x-x_0) + \frac{f&#39;&#39;(x_0)}{2!}(x-x_0)^2 + \cdots
+\]</span> when <span class="math inline">\(x_0=0\)</span>, the taylor series is also named as <strong>MacLaurin series</strong>: <span class="math display">\[
+f(x) = \sum_{n=0}^{\infty}\frac{f^{(n)}(0)}{n!}x^n = f(0) + f&#39;(0)x + \frac{f&#39;&#39;(0)}{2!}x^2 + \cdots
+\]</span></p>
+<p>If the function <span class="math inline">\(f(x)\)</span> has infinite level of derivatives, it can be expanded into Taylor series if and only if <span class="math inline">\(\displaystyle \lim_{n\rightarrow\infty} R_n(x)=0\)</span></p>
+<blockquote>
+<p><strong>Proof</strong>. Let <span class="math inline">\(f(x) = S_{n+1}(x) + R_n(x)\)</span> <span class="math display">\[
+\lim_{n\rightarrow\infty} R_n(x) = \lim_{n\rightarrow\infty}[f(x)-S_{n+1}(x)] = 0
+\]</span></p>
+</blockquote>
+<p>If <span class="math inline">\(f(x)\)</span> can be expanded into power series, the expansion is unique, and it’s the same as its MacLaurin series.</p>
+<blockquote>
+<p><strong>Proof</strong>. Assume the <span class="math inline">\(f(x)\)</span> can be expanded into power series <span class="math display">\[
+f(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n + \cdots
+\]</span> Then we have <span class="math display">\[
+\begin{align}
+&amp; f&#39;(x) = a_1 + 2a_2x + \cdots + na_nx^{n-1} + \cdots \\
+&amp; f&#39;&#39;(x) = 2!a_2 + \cdots + n(n-1)a_nx^{n-2} + \cdots \\
+&amp; f^{(n)}(x) = n!a_n
+\end{align}
+\]</span></p>
+</blockquote>
+<p>Two methods to expand a function into power series:</p>
+<ol type="1">
+<li>Applying Taylor series.</li>
+<li>Applying the known function power series expansion.</li>
+</ol>
+<blockquote>
+<p><strong>Example</strong>. Expand <span class="math inline">\(\e^x\)</span> into power series. <span class="math display">\[
+\e^x = 1 + x + \frac{1}{2!}x^2 + \frac{1}{3!}x^3 + \cdots + \frac{1}{n!}x^n + \cdots
+\]</span> To find the radius of convergence, we compute the limit <span class="math display">\[
+\displaystyle \rho = \lim_{n\rightarrow\infty} \frac{n!}{(n+1)!} = \lim_{n\rightarrow\infty} \frac{1}{n+1} = 0
+\]</span> Hence the radius of convergence <span class="math inline">\(R = \infty\)</span>.</p>
+<p>For any number <span class="math inline">\(x\)</span>, the remainder <span class="math display">\[
+\lim_{n\rightarrow\infty} |R_n(x)|
+= \lim_{n\rightarrow\infty}\left|  \frac{\e^\xi}{(x+1)!}x^{n+1} \right|
+&lt; \lim_{n\rightarrow\infty}\e^{|x|} \frac{|x|^{n+1}}{(n+1)!} = 0
+\]</span></p>
+</blockquote>
+<p>Hence <span class="math inline">\(\displaystyle \e^x = 1 + x + \frac{1}{2!}x^2 + \frac{1}{3!}x^3 + \cdots + \frac{1}{n!}x^n + \cdots~~(x\in\mathbb{R})\)</span></p>
+<blockquote>
+<p><strong>Example</strong>. Expand <span class="math inline">\(\sin x\)</span> into power series. <span class="math display">\[
+f^{(n)}(0) =
+\left\{\begin{array}{ll}\begin{align}
+&amp;0, &amp;&amp; n = 2k \\
+&amp;(-1)^k, &amp;&amp; n = 2k+1
+\end{align}\end{array}\right.
+\]</span></p>
+<p><span class="math display">\[
+\sin x
+= \sum_{n=0}^\infty \frac{(-1)^nx^{2n+1}}{(2n+1)!}
+= x - \frac{x^3}{3!} + \frac{x^3}{5!} - \frac{x^7}{7!} + \cdots
+\]</span> The radius of convergence <span class="math inline">\(R = \infty\)</span>. For any <span class="math inline">\(x\)</span>, the remainder <span class="math display">\[
+\lim_{n\rightarrow\infty}  |R_n(x)|
+= \lim_{n\rightarrow\infty} \left| \frac{\sin\left(\xi + (n+1)\dfrac{\pi}{2}\right)}{(n+1)!}  \right|
+&lt; \lim_{n\rightarrow\infty}  \frac{|x|^{n+1}}{(n+1)!} = 0
+\]</span></p>
+</blockquote>
+<p><span class="math display">\[
+(1+x)^m = 1 + mx + \frac{m(m-1)}{2!}x^2 + \cdots + \frac{m(m-1)(m-n+1)}{n!}x^n + \cdots (-1&lt;x&lt;1)
+\]</span> <span class="math inline">\(m = 1/2\)</span>, <span class="math display">\[
+\sqrt{1+x} = 1 + \frac{1}{2}x + \frac{1}{2\times4}x^2 + \frac{1\times3}{2\times4\times6}x^3 + \cdots
+\]</span></p>
+<p><span class="math display">\[
+\frac{1}{\sqrt{1+x}} = 1 + \frac{1}{2}x + \frac{1\times3}{2\times4}x^2 + \cdots
+\]</span></p>
+<p><span class="math display">\[
+\frac{1}{1+x} = 1 -x +x^2 -x^3 +\cdots+(-1)^nx^n +\cdots (-1&lt;x&lt;1)
+\]</span></p>
+<p><span class="math display">\[
+\frac{1}{1-x} = 1 +x +x^2 +x^3 + \cdots
+\]</span></p>
+<p>Applying the known function power series expansion:</p>
+<blockquote>
+<p>Example. Expand <span class="math inline">\(\dfrac{1}{1+x^2}\)</span> <span class="math display">\[
+\frac{1}{1+x^2} =
+\]</span></p>
+</blockquote>
+<blockquote>
+<p>Example. Expand <span class="math inline">\(\ln(1+x)\)</span> into the power series of <span class="math inline">\(x\)</span></p>
+<p><span class="math inline">\(\displaystyle \ln(1+x) = \sum_{n=1}^{\infty}(-1)^n \int_0^x x^n = \sum_{n=1}^{\infty} \frac{(-1)^n}{n+1}x^{n+1}\)</span></p>
+</blockquote>
+<p><span class="math display">\[
+\ln 2 = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots
+\]</span></p>
+<blockquote>
+<p>Example. Expand <span class="math inline">\(\sin x\)</span> into power series of <span class="math inline">\(\left(x-\dfrac{\pi}{4}\right)\)</span>.</p>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

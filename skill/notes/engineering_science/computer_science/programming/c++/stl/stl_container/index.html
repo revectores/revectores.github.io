@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Container
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< stl</a></p>
+
+<h1 id="container">Container</h1>
+<p>Container is a collection of objects of the same type.</p>
+<h3 id="list">1. List</h3>
+<p>The <code>list</code> implememted by standard library is a <strong>double-linked list</strong>. The construction of list is similar with <code>vector</code>, while we’re not able to access element by simply giving the offsets due to the property of linked list. More details of this data structure can be found in <a href="">linear list</a>.</p>
+<p>The funtions of getting the specific pointer <code>begin</code> and <code>end</code> are usable, and we’re able to track the linked chain to get the element:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>list&lt;<span class="dt">int</span>&gt; list1 = {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>};</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>iter = list1.begin();   <span class="co">// iter points to the first element</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>cout &lt;&lt; *(iter++);      <span class="co">// 2</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>cout &lt;&lt; *(next(iter,<span class="dv">2</span>)) <span class="co">// 3</span></span></code></pre></div>
+<p>We exchange the efficiency of random access with the efficiency of restrcution, which includes the operation like <code>insert</code> and <code>erase</code>. Besides, the <code>push_front</code> and <code>pop_front</code> method is supported since first element anymore is allowed to change, instead of a fixed address like the case in <code>vector</code>.</p>
+<h3 id="map">2. Map</h3>
+<p>Similar to dictionary in Python, map is a structure which stores its element as <code>(key-&gt;value)</code>, and we can easily access or set the <code>value</code> by passing the name of key in the <code>[]operator</code>.</p>
+<p>Since there’s key and value in map, we need two data types to initialize it, and use nested brackets to give the initial values if which are required:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>map&lt;<span class="dt">int</span>, <span class="dt">int</span>&gt; map1 = {{<span class="dv">1</span>,<span class="dv">2</span>}, {<span class="dv">2</span>,<span class="dv">3</span>}};</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">// term access:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="bu">std::</span>cout &lt;&lt; map1[<span class="dv">1</span>];   <span class="co">// 2</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co">// term set:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>map1[<span class="dv">3</span>] = <span class="dv">4</span>;            <span class="co">// map1 = {{1,2}, {2,3}, {3,4}}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="co">// It&#39;s allowed to directly create an new key by setting it&#39;s value.</span></span></code></pre></div>
+<p>The iteration manipulation works like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="cf">for</span>(<span class="kw">auto</span> e : map1)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    cout &lt;&lt; e.first &lt;&lt; <span class="st">&quot;:&quot;</span> &lt;&lt; e.second;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="cf">for</span>(<span class="kw">auto</span> it = map1.begin(); it != map.end(); it++)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="st">&quot;:&quot;</span> &lt;&lt; it-&gt;second;</span></code></pre></div>
+<p>Where the key and value are considered as the property of the key-value pair <code>struct</code>, and the <code>-&gt;operator</code> of iterator (pointer) provides a quick access method.</p>
+<p>Notices that map is an unordered data structure, you need to use <code>vector</code> to manipulate a map if you want the order information perserved.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">struct</span> ordered_map{</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">int</span> key,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">int</span> value</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>};</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>vector&lt;ordered_map&gt; omap1;</span></code></pre></div>
+<h3 id="set">3. Set</h3>
+<h3 id="stack">4. Stack</h3>
+<p>As we know stack is the container with FILO property. Notice that <code>stack</code> container doesn’t support a method for initialize the values, if which is wanted we have to manually do the push loop:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stack&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="bu">std::</span>stack&lt;<span class="dt">int</span>&gt; nums;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="cf">for</span>(<span class="kw">auto</span>&amp; num: {<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>}){</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    nums.push(num);</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="queue">5. Queue</h3>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

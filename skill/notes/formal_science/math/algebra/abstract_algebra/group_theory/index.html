@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> $$
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< abstract_algebra</a></p>
+
+<p><span class="math display">\[
+\newcommand{\GL}{\text{GL}}
+\]</span></p>
+<h1 id="group-theory">Group Theory</h1>
+<h3 id="group">1. Group</h3>
+<h5 id="definition">Definition</h5>
+<p>A non-empty set <span class="math inline">\(S\)</span> with its <strong>combinative</strong> binary operation called <strong>SemiGroup</strong>. If there’s identical element in semigroup, it’s a <strong>Monoid</strong>. Monoid with all the elements reversible is a <strong>Group</strong>.</p>
+<p>The subset <span class="math inline">\(M^{\times}\)</span> which contains all the reversible elements of a monoid <span class="math inline">\(M\)</span> construct a group, which is defined as the <strong>Unit Group</strong> of <span class="math inline">\(M\)</span>.</p>
+<p>Formally, a group, with binary operation <span class="math inline">\(\cdot\)</span>, is restricted by four conditions:</p>
+<ol type="1">
+<li>For any element <span class="math inline">\(x, y\in G\)</span>, <span class="math inline">\(x\cdot y\in G\)</span>.</li>
+<li>For any element <span class="math inline">\(x, y, z\in G\)</span>, <span class="math inline">\((x\cdot y)\cdot z = x\cdot (y\cdot z)\)</span>.</li>
+<li>There exists an <strong>identical element</strong> <span class="math inline">\(e\in G\)</span> which makes <span class="math inline">\(e\cdot x = x\)</span> for all <span class="math inline">\(x\in G\)</span>.</li>
+<li>There exists an <strong>reverse element</strong> <span class="math inline">\(x^{-1}\in G\)</span> which makes <span class="math inline">\(x^{-1}\cdot x = e\)</span> for all <span class="math inline">\(x\in G\)</span></li>
+</ol>
+<p>Notice that by definition the identical <span class="math inline">\(e\)</span> and reverse element is left-operated with element <span class="math inline">\(x\)</span> traditionally, though we’ll prove that the opposite side is equivlent for group.</p>
+<p>Furthermore, if the operation equiped is also commutative, the group is called <strong>additive</strong> or <strong>Abelian</strong>, and <strong>additive notation</strong> is proposed if the context is proper:</p>
+<ol type="1">
+<li>The operation is denoted as <span class="math inline">\(+\)</span> instead of <span class="math inline">\(\times\)</span>.</li>
+<li>The identical element is denoted as <span class="math inline">\(0\)</span> instead of <span class="math inline">\(1\)</span>.</li>
+<li>The reverse element is denoted as <span class="math inline">\(-x\)</span> instead of <span class="math inline">\(x^{-1}\)</span>.</li>
+</ol>
+<p>Particularly in the study of ring, the one operation that is commutative almos t always use the additive notation.</p>
+<h5 id="property">Property</h5>
+<p>With the four restrictions listed above, a group is such a well-structed structure with nice properties:</p>
+<ol type="1">
+<li><p><strong>Left Elimination Property</strong> of left operation. If <span class="math inline">\(x\cdot a = x\cdot b\)</span> , then <span class="math inline">\(a = b\)</span>.</p>
+<blockquote>
+<p>Proof. Left multiple <span class="math inline">\(x^{-1}\)</span> for both sides. <span class="math display">\[
+\begin{align}
+x\cdot a &amp;= x\cdot b \\
+x^{-1}\cdot x \cdot a &amp;= x^{-1}\cdot x\cdot b \\
+(x^{-1}\cdot x) \cdot a &amp;= (x^{-1}\cdot x)\cdot b \\
+e\cdot a &amp;= e\cdot b \\
+a &amp;= b
+\end{align}
+\]</span></p>
+</blockquote>
+<p>As noticed, this is not a simple property, the proof uses all of the restrictions of a group to make the simple elimination possible, hence the elimination law is not held for the general monoid.</p></li>
+<li><p>If <span class="math inline">\(x\cdot x = x\)</span>, then <span class="math inline">\(x = e\)</span>. This is the specical case of the elimination property, you can multiple <span class="math inline">\(x^{-1}\)</span> to prove it.</p>
+<p>This property gives an important rule to tell if an element is the identical: just simply square it, and check if the result is still itself. No more element involved.</p></li>
+<li><p><strong>Symmetric reverse element</strong>: If <span class="math inline">\(x^{-1}\)</span> is the reversed element of <span class="math inline">\(x\)</span>, so <span class="math inline">\(x\)</span> is the reverse of <span class="math inline">\(x^{-1}\)</span>, which indicates <span class="math inline">\(x^{-1}\cdot x = x\cdot x^{-1} = e\)</span></p>
+<blockquote>
+<p>Proof. To prove that something is an element, we try to use property(2), that is, square it and check if it returns the input.</p>
+<p><span class="math display">\[
+(x\cdot x^{-1})\cdot(x\cdot x^{-1}) = x\cdot (x^{-1}\cdot x)\cdot x^{-1} = x\cdot x^{-1}
+\]</span></p>
+<p>Hence we have <span class="math inline">\(x\cdot x^{-1} = e\)</span></p>
+</blockquote>
+<p>By definition, if we consider <span class="math inline">\(x^{-1}\)</span> as the “original element”, <span class="math inline">\(x\cdot x^{-1}\)</span> indicates that <span class="math inline">\(x\)</span> is exactly the reverse elementof $ x^{-1} $, hence $ (x<sup>{-1})</sup>{-1} = x$.</p>
+<p>Since the reverse can be multiply either to the left side or right side, the elimination property now can be generalized to the right multiple case:</p>
+<p><span class="math display">\[
+ a\cdot x = b\cdot x \Rightarrow a = b
+ \]</span></p></li>
+<li><p>Identical element commutativity. <span class="math inline">\(x\cdot e = e\cdot x = x\)</span></p>
+<blockquote>
+<p>Proof.</p>
+<p><span class="math display">\[
+x\cdot e = x\cdot ( x^{-1} \cdot x) = (x\cdot x^{-1})\cdot x = e\cdot x = x
+\]</span></p>
+</blockquote></li>
+<li><p>There’s only one reverse element of any <span class="math inline">\(x\in G\)</span>.</p>
+<blockquote>
+<p>Proof. Assume there’s another reverse element <span class="math inline">\(x&#39;\)</span> for <span class="math inline">\(x\)</span>.</p>
+<p><span class="math display">\[
+\begin{align}
+x&#39;\cdot x = e &amp;= x^{-1}\cdot x \\
+x&#39;\cdot x\cdot x^{-1} &amp;= x^{-1}\cdot x \cdot x^{-1} \\
+x&#39;\cdot (x\cdot x^{-1}) &amp;= x^{-1}\cdot (x \cdot x^{-1}) \\
+x&#39;\cdot e &amp;= x^{-1}\cdot e \\
+x&#39; &amp;= x^{-1}
+\end{align} \\
+\]</span></p>
+</blockquote></li>
+<li><p>There’s only one identical element of any <span class="math inline">\(x\in G\)</span>.</p>
+<blockquote>
+<p>Proof. Assume there’s another identical element notes as <span class="math inline">\(e&#39;\)</span> that statifies</p>
+<p><span class="math display">\[
+e&#39;\cdot x = e\cdot x
+\]</span></p>
+<p>Simply use the right-version elimination law, <span class="math inline">\(e&#39; = e\)</span>.</p>
+</blockquote></li>
+<li><p>$ (ab)^{-1} = b^{-1} a^{-1}$.</p>
+<blockquote>
+<p>Proof.</p>
+<p><span class="math display">\[
+(a\cdot b)\cdot (b^{-1}\cdot a^{-1}) = a\cdot (b\cdot b^{-1})\cdot a^{-1} = a \cdot  a^{-1} = e
+\]</span></p>
+</blockquote>
+<p>Generally, for any <span class="math inline">\(n\)</span> elements in the group:</p>
+<p><span class="math display">\[
+ \left( \prod_{i=1}^{n} a_i \right)^{-1} = \prod_{i=n}^{1} a_{i}^{-1}
+ \]</span></p></li>
+</ol>
+<h5 id="example">Example</h5>
+<p>All permutations on a set, equiped with the permutation composition, construct a <strong>symmetric</strong> group.</p>
+<p>The set <span class="math inline">\(\mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}\)</span> equiped with addition operation constructs abelian group.</p>
+<p>To make the ring equiped with multiplication operation also constructs group we need to substract <span class="math inline">\(0\)</span> from them: <span class="math inline">\(\mathbb{Q}^{\times}=\mathbb{Q}-\{0\}, \mathbb{R}^{\times}=\mathbb{R}-\{0\}, \mathbb{C}^{\times}=\mathbb{C}-\{0\}\)</span>. Notice that <span class="math inline">\(\mathbb{Z}^{\times}=\mathbb{Z} - \{0\}\)</span> still cannot constructs group since the reverse of those <span class="math inline">\(n\neq\pm1\)</span> does not hold.</p>
+<p>It’s obvious that to the general <span class="math inline">\(m\times n\)</span> dimensional vector/matrix equiped with the normal entry-wise addition operation above any group also constructs a group.</p>
+<p>Define <span class="math inline">\(M_n(\mathbb{R})\)</span> as the set of all <span class="math inline">\(n\times n\)</span> real matrix, and <span class="math inline">\(\GL(n, \mathbb{R})\)</span> is a subset of <span class="math inline">\(M_n(\mathbb{R})\)</span> which contains the reversible parts.</p>
+<p>As mentioned above, the <span class="math inline">\(M_n(\mathbb{R})\)</span> with the matrix addition constructs a group. Besides, <span class="math inline">\(M_n(\mathbb{R})\)</span> with matrix multiplication is a monoid, and <span class="math inline">\(\GL(n,\mathbb{R})\)</span> with matrix multiplication is a group. <span class="math inline">\(\GL(n,\mathbb{R})\)</span> is the unit group of <span class="math inline">\(M_n(\mathbb{R})\)</span>. Generally, we can define <span class="math inline">\(M_n(F)\)</span> and <span class="math inline">\(\GL(n, F)\)</span> for any domain <span class="math inline">\(F\)</span>. <span class="math inline">\(\GL(n, F)\)</span> is named as <strong>General Linear Group</strong> upon domain <span class="math inline">\(F\)</span>.</p>
+<h5 id="power-of-element">Power of Element</h5>
+<p>We define the <span class="math inline">\(n\in\mathbb{Z}\)</span> exponent of element <span class="math inline">\(x\in G\)</span> recursively:</p>
+$$ x^n = {
+<span class="math display">\[\begin{array}{ll}
+\begin{align}
+
+&amp;1, &amp;n = 0  \\
+&amp;x^{n-1}\cdot x, &amp;n\ge 1 \\
+&amp;(x^{-1})^{-n}, &amp;n\lt 0 
+
+\end{align}
+\end{array}\]</span>
+<p>. $$</p>
+<p>Here’re some simple properties about the exponent:</p>
+<ol type="1">
+<li><p><span class="math inline">\((a^n)^m = a^{nm}\)</span></p></li>
+<li><p><span class="math inline">\(a^n\cdot a^m = a^{n+m}\)</span></p></li>
+<li><p>if <span class="math inline">\(a, b\)</span> commutes, then <span class="math inline">\((ab)^n = a^n b^n\)</span></p></li>
+</ol>
+<p>If there’s one <span class="math inline">\(k\ge1\)</span> that makes <span class="math inline">\(a^k = 1\)</span>, the smallest <span class="math inline">\(k\)</span> is defined as the <strong>order</strong> of <span class="math inline">\(a\)</span>. otherwise we say <span class="math inline">\(a\)</span> has <strong>infinite order</strong>. It’s easy to prove that, any <span class="math inline">\(n\)</span> satisifies that <span class="math inline">\(a^n = 1\)</span> must be the multiple of order <span class="math inline">\(k\)</span>.</p>
+<blockquote>
+<p>Proof. If it is not, let <span class="math inline">\(n = qk + r\)</span> where <span class="math inline">\(r\neq0\)</span>, <span class="math inline">\(e = a^n = a^{qk+r} = a^{qk}a^r = a^r\)</span>, since <span class="math inline">\(0&lt;r&lt;k\)</span>, this infers that we’ve found a smaller number <span class="math inline">\(r\)</span> which makes <span class="math inline">\(a^r = 1\)</span>, which is contradict with the defintion of <span class="math inline">\(k\)</span>.</p>
+</blockquote>
+<h5 id="generated-group">Generated Group</h5>
+<h3 id="subgroup">2. Subgroup</h3>
+<h5 id="definition-1">Definition</h5>
+<p>If the subset <span class="math inline">\(H\subset G\)</span> meets</p>
+<ol type="1">
+<li><p><span class="math inline">\(1\in H\)</span>.</p></li>
+<li><p>H is closed under the operation <span class="math inline">\(\cdot\)</span> of group <span class="math inline">\(G\)</span>.</p></li>
+<li><p>for any <span class="math inline">\(x\in H\)</span>, <span class="math inline">\(x^{-1}\in H\)</span>.</p></li>
+</ol>
+<p>We define the subset <span class="math inline">\(H\)</span> is a <strong>subgroup</strong> of <span class="math inline">\(G\)</span>. Here we don’t mention about the associvity since it is ensured by the group <span class="math inline">\(G\)</span>. Notice that the condition (1) is necessary to avoid <span class="math inline">\(H=\varnothing\)</span>.</p>
+<p>The <strong>proper subgroup</strong> is those <span class="math inline">\(H\neq G\)</span>, and <strong>nontrivial group</strong> is those <span class="math inline">\(H\neq\{1\}\)</span>.</p>
+<p>As a shortcut for proving the subgroup, we assert that <span class="math inline">\(H\)</span> is a subgroup <strong>iff</strong> it’s nonempty and for any <span class="math inline">\(x, y\in H\)</span>, <span class="math inline">\(xy^{-1}\in H\)</span>.</p>
+<blockquote>
+<p>Proof. (<span class="math inline">\(\Rightarrow\)</span>) If <span class="math inline">\(H\)</span> is a subgroup, it’s obvious that <span class="math inline">\(y^{-1}\in H\)</span>, hence <span class="math inline">\(xy^{-1}\in H\)</span>.</p>
+<p>(<span class="math inline">\(\Leftarrow\)</span>) We’re required to prove the three conditions of subgroup.</p>
+<ol type="1">
+<li><p>Let <span class="math inline">\(y = x\)</span>, <span class="math inline">\(xy^{-1} = xx^{-1} = 1\)</span>, so <span class="math inline">\(1\in H\)</span>.</p></li>
+<li><p>Based on (1), let <span class="math inline">\(x = 1\)</span>, <span class="math inline">\(xy^{-1} = y^{-1}\in G\)</span>.</p></li>
+<li><p>Based on (3), let <span class="math inline">\(y = y^{-1}\)</span>, <span class="math inline">\(xy^{-1} = x(y^{-1})^{-1} = xy\in G\)</span>.</p></li>
+</ol>
+<p>This concludes that <span class="math inline">\(H\)</span> is the subgroup of <span class="math inline">\(G\)</span>.</p>
+</blockquote>
+<p>Although its tedious and hard to prove the subgroup in general group, while for finite group <span class="math inline">\(G\)</span>, the subset <span class="math inline">\(H\subset G\)</span> is only required <strong>closed</strong> to be a subgroup, due to its <strong>finity </strong>, which makes there must be at least one element whose exponent will eventually “falls into itself”.</p>
+<blockquote>
+<p>Proof. Since <span class="math inline">\(H\neq \varnothing\)</span>, assume that <span class="math inline">\(a\in H\)</span>, hence <span class="math inline">\(a^n\in H\)</span> for all the <span class="math inline">\(n\ge0\)</span> according to the closed conditionof <span class="math inline">\(H\)</span>.</p>
+<p>In the sequence of exponent of <span class="math inline">\(a\)</span>, there must be at least two integer <span class="math inline">\(i&lt;j\)</span> which makes <span class="math inline">\(a^j = a^i\)</span>, since the element number of <span class="math inline">\(H\subset G\)</span> is finite.</p>
+<p>This results in <span class="math inline">\(a^{j-i} = a^{i-i} = a^0 = 1 \in H\)</span>, which ensures that the identical element is in <span class="math inline">\(H\)</span>.</p>
+<p>Besides, since <span class="math inline">\(j&gt;i\)</span>, <span class="math inline">\(j-i-1\ge0\)</span>, <span class="math inline">\(a^{-1} = a^{j-i-1}\in H\)</span>.</p>
+<p>Hence the set <span class="math inline">\(H\)</span> is the subgroup of <span class="math inline">\(G\)</span>.</p>
+</blockquote>
+<h5 id="coset">Coset</h5>
+<h3 id="cyclic-group">3. Cyclic Group</h3>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

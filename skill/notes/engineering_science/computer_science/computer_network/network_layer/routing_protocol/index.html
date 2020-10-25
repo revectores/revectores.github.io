@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Routing Protocol
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< network_layer</a></p>
+
+<h1 id="routing-protocol">Routing Protocol</h1>
+<h3 id="autonomous-system">Autonomous System</h3>
+<p>We’ve knwon that the router maintains a <a href="">routing table</a>, which stores the mapping from the target network to the next address. While when amounts of networks are connected to Internet, the routing table will be unacceptable large if each router has to maintain all the mapping information, even worse, the information interchange among routers will occupy all the bandwidth.[1]</p>
+<p>To solve this problem, we devide the Internet into amounts of <strong>autonomous system(AS)</strong>, each AS will act as whole, the routing inside AS is decided by the AS itself. The routing inside the AS called <strong>intradomain routing</strong>, the protocol is <strong>interior gateway protocol(IGP)</strong>, and the routing between AS called <strong>interdomain routing</strong>, the protocol is <strong>external gateway protocol(EGP)</strong>. The interdomain routing is taken by the special routers, called <strong>area border router(ABR)</strong>.</p>
+<p>Notice that, since the terminology “router” has not been proposed the early RFC, the routing protocol is named as “<a href="">gateway</a> protocol”, which works upper the fourth level. Some materials convert IGP and EGP as “IRP” and “ERP”.</p>
+<p>The common IGP are <strong>router information protocol(RIP)</strong> and <strong>open shortest path first(OSPF)</strong>. The common EGP is <strong>Border Gateway Protocol(BGP)</strong>. The earliest EGP also called EGP, but has been abandoned now.</p>
+<p>Now we’ll illustrate RIP, OSPF, BGP respectively.</p>
+<h3 id="router-information-protocol">Router Information Protocol</h3>
+<h3 id="open-shortest-path-first">Open Shortest Path First</h3>
+<h3 id="border-gateway-protocol">Border Gateway Protocol</h3>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

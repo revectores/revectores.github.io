@@ -1,0 +1,164 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> DataBase Operations
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< php_framwork</a></p>
+
+<h3 id="database-operations">DataBase Operations</h3>
+<h5 id="table-object-select"># Table Object Select</h5>
+<p>The table is modeled as an object, the table name is converted to camel-case automatically. E.G. <code>user_base</code> is modeled as <code>UserBase</code>. You can also get the table object from method of <code>Db</code> module, by using the <code>table</code> method <code>Db::table('table_name')</code>. This is somehow a functional approach.</p>
+<h5 id="record-access"># Record Access</h5>
+<p>Three parameters style are suppoted in the <code>get</code> method of table object database:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">// By Primary Key</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">$user</span> = User::get<span class="ot">(</span><span class="dv">1</span><span class="ot">);</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co">// By Condition</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">$user</span> = User::get<span class="ot">([</span><span class="st">&#39;name&#39;</span>: <span class="st">&#39;admin&#39;</span><span class="ot">]);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="co">// Closure style supported more operation than array, which only considered the array as a where condition.</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="kw">$user</span> = User::get<span class="ot">(</span><span class="kw">function</span><span class="ot">(</span><span class="kw">$query</span><span class="ot">)</span>{</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">$query</span>-&gt;where<span class="ot">(</span><span class="st">&#39;name&#39;</span><span class="ot">,</span> <span class="st">&#39;admin&#39;</span><span class="ot">);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>          -&gt;order_by<span class="ot">(</span><span class="st">&#39;name&#39;</span><span class="ot">);</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>}<span class="ot">);</span></span></code></pre></div>
+<p>ThinkPHP construction the dynamic query method for each column:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">// Dynamic query only support single data query.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">$user</span> = User::getByName<span class="ot">(</span><span class="st">&#39;admin&#39;</span><span class="ot">);</span></span></code></pre></div>
+<p><code>get</code> and <code>getByColumn</code> query returns as a object, subscripting approach is also supported.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">$user</span>-&gt;id<span class="ot">;</span>  <span class="co">// same as $user[&#39;id&#39;];</span></span></code></pre></div>
+<p>Using alternatives inside the model implementation:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">$this</span>-&gt;getAttr<span class="ot">(</span><span class="st">&#39;name&#39;</span><span class="ot">);</span>  <span class="co">// processed by ACCESSOR.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">$this</span>-&gt;getData<span class="ot">(</span><span class="st">&#39;name&#39;</span><span class="ot">);</span>  <span class="co">// raw data</span></span></code></pre></div>
+<p>Using <code>all</code> method, correspondent to <code>get</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">// By Primary Key</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">$users</span> = User::all<span class="ot">([</span><span class="dv">1</span><span class="ot">,</span><span class="dv">2</span><span class="ot">,</span><span class="dv">3</span><span class="ot">]);</span> <span class="co">// or string &#39;1,2,3&#39;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co">// By Condition</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">$users</span> = User::all<span class="ot">([</span><span class="st">&#39;status&#39;</span>=&gt;<span class="dv">1</span><span class="ot">]);</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="kw">$users</span> = User::all<span class="ot">(</span><span class="kw">function</span><span class="ot">(</span><span class="kw">$query</span><span class="ot">)</span> {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="kw">$query</span>-&gt;where<span class="ot">(</span><span class="st">&#39;status&#39;</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">)</span>-&gt;limit<span class="ot">(</span><span class="dv">3</span><span class="ot">)</span>-&gt;order<span class="ot">(</span><span class="st">&#39;id&#39;</span><span class="ot">,</span> <span class="st">&#39;asc&#39;</span><span class="ot">);</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>}<span class="ot">);</span></span></code></pre></div>
+<p>Using where statement(see next section).</p>
+<p>Multiple data query returns an array of object.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">foreach</span> <span class="ot">(</span><span class="kw">$users</span> <span class="kw">as</span> <span class="kw">$user</span><span class="ot">)</span>{</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    <span class="kw">echo</span> <span class="kw">$user</span>-&gt;name<span class="ot">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="where"># Where</h5>
+<h5 id="simple-equal-condition-case">Simple Equal Condition Case</h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">// Single field</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="kw">$User</span>::where<span class="ot">(</span><span class="st">&#39;id&#39;</span><span class="ot">,</span> <span class="dv">10</span><span class="ot">)</span>-&gt;select<span class="ot">();</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="kw">$User</span>::where<span class="ot">([</span><span class="st">&#39;id&#39;</span>=&gt;<span class="dv">10</span><span class="ot">])</span>-&gt;select<span class="ot">();</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="co">// Multi field combined with `and` logic.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">$id</span><span class="ot">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;username&#39;</span><span class="ot">]</span> = <span class="kw">$username</span><span class="ot">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="kw">$User</span>::where<span class="ot">(</span><span class="kw">$where</span><span class="ot">)</span>-&gt;select<span class="ot">();</span></span></code></pre></div>
+<h5 id="tp5-chain-style">tp5: Chain Style</h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">$User</span>::</span></code></pre></div>
+<h4 id="where-1">3. Where</h4>
+<h5 id="tp3-array-style">tp3: Array Style</h5>
+<div class="sourceCode" id="cb9"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co">// Single Condition Query</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">array</span><span class="ot">(</span><span class="st">&#39;lt&#39;</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">);</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">// Mutli Condition Query</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">array</span><span class="ot">(</span><span class="kw">array</span><span class="ot">(</span><span class="st">&#39;lt&#39;</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">),</span> <span class="kw">array</span><span class="ot">(</span><span class="st">&#39;neq&#39;</span><span class="ot">,</span> <span class="dv">6</span><span class="ot">));</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">array</span><span class="ot">(</span><span class="kw">array</span><span class="ot">(</span><span class="st">&#39;lt&#39;</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">),</span> <span class="kw">array</span><span class="ot">(</span><span class="st">&#39;gt&#39;</span><span class="ot">,</span> <span class="dv">500</span><span class="ot">),</span> <span class="st">&#39;or&#39;</span><span class="ot">);</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a><span class="co">// Multi Field (Complex Logic Relation) Query</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">$id</span><span class="ot">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;username&#39;</span><span class="ot">]</span> = <span class="kw">$username</span><span class="ot">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;_logic&#39;</span><span class="ot">]</span> = <span class="st">&#39;or&#39;</span><span class="ot">;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a><span class="co">// `_complex` is required if such complex relation which involves 3 or more fields is introduced.</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a><span class="kw">$base_where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">$id</span><span class="ot">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a><span class="kw">$base_where</span><span class="ot">[</span><span class="st">&#39;username&#39;</span><span class="ot">]</span> = <span class="kw">$username</span><span class="ot">;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true"></a><span class="kw">$base_where</span><span class="ot">[</span><span class="st">&#39;_logic&#39;</span><span class="ot">]</span> = <span class="st">&#39;or&#39;</span><span class="ot">;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;_complex&#39;</span><span class="ot">]</span> = </span></code></pre></div>
+<p>Supported Conditional List:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>eq</code></td>
+<td>equal</td>
+</tr>
+<tr class="even">
+<td><code>neq</code></td>
+<td>not equal</td>
+</tr>
+<tr class="odd">
+<td><code>gt</code></td>
+<td>greater than</td>
+</tr>
+<tr class="even">
+<td><code>egt</code></td>
+<td>greater then or equal</td>
+</tr>
+<tr class="odd">
+<td><code>lt</code></td>
+<td>less than</td>
+</tr>
+<tr class="even">
+<td><code>elt</code></td>
+<td>less than or equal</td>
+</tr>
+<tr class="odd">
+<td><code>[not] between</code></td>
+<td>(not) in the interval</td>
+</tr>
+<tr class="even">
+<td><code>[not] in</code></td>
+<td>(not )in the given list</td>
+</tr>
+<tr class="odd">
+<td><code>like</code></td>
+<td>fuzzy query</td>
+</tr>
+<tr class="even">
+<td><code>exp</code></td>
+<td>any valid SQL query expression</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Some Shortcuts Field</p>
+<p><code>_string</code></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="co">// Use `_string` to manually construct sql query</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">array</span><span class="ot">(</span><span class="st">&#39;lt&#39;</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">);</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;_string&#39;</span><span class="ot">]</span> = <span class="st">&#39;status=1 AND score&gt;10&#39;</span><span class="ot">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="co">// Equivalent to $where[&#39;_string&#39;] = array(&#39;exp&#39;, &#39;status=1 AND score&gt;10&#39;)</span></span></code></pre></div>
+<p><code>_qeury</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="co">// Use `_query` to simulate passing url parameters</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co">// As a result, only equal condition is supported</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;id&#39;</span><span class="ot">]</span> = <span class="kw">array</span><span class="ot">(</span><span class="st">&#39;lt&#39;</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">);</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="kw">$where</span><span class="ot">[</span><span class="st">&#39;_query&#39;</span><span class="ot">]</span> = <span class="st">&#39;status=1&amp;score=10&amp;_logic=or&#39;</span><span class="ot">;</span></span></code></pre></div>
+<h5 id="not-recommend-string-style">Not Recommend: String Style</h5>
+<div class="sourceCode" id="cb12"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="co">// Pure String</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="kw">$User</span>::where<span class="ot">(</span><span class="st">&#39;id=10001&#39;</span><span class="ot">)</span>-&gt;select<span class="ot">();</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">// String Concatenation</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="kw">$User</span>::where<span class="ot">(</span><span class="st">&#39;id=%d and username=%s&#39;</span><span class="ot">,</span> <span class="kw">array</span><span class="ot">(</span><span class="kw">$id</span><span class="ot">,</span> <span class="kw">$username</span><span class="ot">));</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="kw">$Uesr</span>::where<span class="ot">(</span><span class="st">&#39;id=%d and username=%s&#39;</span><span class="ot">,</span> <span class="kw">$id</span><span class="ot">,</span> <span class="kw">$username</span><span class="ot">);</span></span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

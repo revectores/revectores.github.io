@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Qt Layout
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< qt</a></p>
+
+<h1 id="qt-layout">Qt Layout</h1>
+<p><u>Illustrate the class hierarchy and usage about layout classes of Qt. Examples using vbox, hbox and grid layout included.</u></p>
+<p>There are four common layout class for Qt: <code>QBoxLayout</code>, <code>QFormLayout</code>, <code>QGridLayout</code> and <code>QStackedLayout</code>, all of these are inherited from <code>QLayout</code>. Specially, <code>QBoxLayout</code> inherits <code>QHBoxLayout</code> and <code>QVBoxLayout</code>, we use these two instead of the parent class.</p>
+<pre class="mermaid"><code>classDiagram
+    QObject &lt;|-- QLayout
+    QLayoutItem &lt;|-- QLayout
+    
+    QLayout &lt;|-- QBoxLayout
+    QLayout &lt;|-- QFormLayout
+    QLayout &lt;|-- QGridLayout
+    QLayout &lt;|-- QStackedLayout
+    
+    QBoxLayout &lt;|-- QHBoxLayout
+    QBoxLayout &lt;|-- QVBoxLayout</code></pre>
+<p>The <code>QHBoxLayout</code> and <code>QVBoxLayout</code> place widgets in one row/colum respectively, demonstrated in <a href="qt_layout_hbox/qt_layout_hbox.cpp">qt_layout_hbox.cpp</a> and <a href="qt_layout_vbox/qt_layout_vbox.cpp">qt_layout_vbox.cpp</a>.</p>
+<p>More generally, <code>QGridLayout</code> provides the power to place widgets based on <span class="math inline">\((x, y)\)</span> gird coordinates system, and we can place one widget across multiple girds, demonstrated in <a href="qt_layout_grid/qt_layout_grid.cpp">qt_layout_grid.cpp</a>.</p>
+<p>==TODO: Find what <code>QFormLayout</code> and <code>QStackLayout</code> do==</p>
+<p>==TODO: Find in which case we might use <code>QBoxLayour</code> directly==</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

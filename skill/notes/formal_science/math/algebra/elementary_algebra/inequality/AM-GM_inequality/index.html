@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> AM-GM Inequality
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< inequality</a></p>
+
+<h1 id="am-gm-inequality">AM-GM Inequality</h1>
+<h3 id="two-variable-case">1. Two Variable Case</h3>
+<p>The AM-GM inequality shows the relation between arithmetic mean <span class="math inline">\(\cfrac{a+b}{2}\)</span> and the geometric mean <span class="math inline">\(\sqrt{ab}\)</span>.</p>
+<p><span class="math display">\[
+\cfrac{a+b}{2} \ge \sqrt{ab} ~~~~ (a, b &gt; 0)
+\]</span></p>
+<blockquote>
+<p><strong>Proof</strong>. <span class="math display">\[
+a+b = (\sqrt a)^2 + (\sqrt b)^2 \ge 2\sqrt{ab} ~\Rightarrow~ \cfrac{a+b}{2} \ge \sqrt{ab}
+\]</span></p>
+</blockquote>
+<p>Some geometric interpretations of this inequality:</p>
+<ul>
+<li><p>In the right triangle, the middle line of hypotenuse is longer than the height of the hypotenuse.</p></li>
+<li><p>Diameter is the longest chord.</p></li>
+</ul>
+<h3 id="general-case">2. General Case</h3>
+<h5 id="form-and-interpretation"># Form and Interpretation</h5>
+<p>The general form of AM-GM inequality is</p>
+<p><span class="math display">\[
+\cfrac{1}{n} \sum{x_i} \ge \prod{x_i^{\frac{1}{n}}}
+\]</span></p>
+<p>Denote <span class="math inline">\(A_n\)</span> as the arithmetic mean of <span class="math inline">\(n\)</span> variables, and <span class="math inline">\(G_n\)</span> as geometric mean of <span class="math inline">\(n\)</span> variables, the AM-GM inequality can be formally written as</p>
+<p><span class="math display">\[
+A_{n} \ge G_{n}
+\]</span></p>
+<p>and <span class="math inline">\(A_n = G_n\)</span> iff all <span class="math inline">\(x_i\)</span> are identical. That is,</p>
+<ul>
+<li><p>If the sum of numbers are constant, we got the maximal product when the numbers are the same.</p></li>
+<li><p>If the product of numbers are constant, we got the minimal sum when the numbers are the same.</p></li>
+</ul>
+<p>These two results are very useful in practice. For example, to fence the maximum rectangle area with constant length of fence, we make it a square.</p>
+<h5 id="proofs"># Proofs</h5>
+<p>The most simple and intrinsic proof method is using <strong>Jensen’s inequality</strong>, with logarithm function <span class="math inline">\(f(x) = \log x\)</span>.</p>
+<blockquote>
+<p>Proof 1. <span class="math display">\[
+\log \left( {\cfrac{1}{n} \sum x_{i}} \right)
+\ge \cfrac{1}{n} \sum{\log x_{i}}
+= \cfrac{1}{n} \log \left( \prod x_{i} \right)
+= \log \left( \prod x_{i}^{\frac{1}{n}} \right)
+\]</span></p>
+</blockquote>
+<p>This prove shows that the essence of AM-GM inequality is: the logarithm function is concave function.</p>
+<p>Most of the other approaches of proofs are not as simple as Jensen’s inequality. Here we list the represents to illustrate the methods.</p>
+<blockquote>
+<p>Proof 2. (Cauchy forward-backward induction)</p>
+<p>The core idea of this approach is, prove the <span class="math inline">\(n = 2^k\)</span> cases first (since this is much simpler by grouping), then we inducting it backward, from <span class="math inline">\(n = k\)</span> to <span class="math inline">\(n = k - 1\)</span>.</p>
+<p>Assume the <span class="math inline">\(n = k\)</span> case is correct, then, for the <span class="math inline">\(n = 2k\)</span> case,</p>
+<p><span class="math display">\[
+A_{2k}
+= \cfrac{1}{2k} \left( \sum_{i=1}^k {x_i} + \sum_{i=k+1}^{2k} {x_i} \right)
+= \cfrac{1}{2} \left( \cfrac{1}{k} \left( \sum_{i=1}^k {x_i} \right) + \cfrac{1}{k} \left( \sum_{i=k+1}^{2k} {x_i} \right) \right)
+\ge \cfrac{1}{2} \left( \left( \prod_{i=1}^{k} {x_i^{\frac{1}{k}}} \right) + \left( \prod_{i=k}^{2k} {x_i^{\frac{1}{k}}} \right)  \right)
+\ge G_{2k}
+\]</span></p>
+<p>Since the <span class="math inline">\(n=2\)</span> case has been proved before, by which we proved any <span class="math inline">\(n = 2^k, k\in\mathbb{Z}\)</span> cases.</p>
+<p>Assume that <span class="math inline">\(n = k\)</span> case is correct,</p>
+<p><span class="math display">\[
+\cfrac{1}{k} \left( \sum_{i=1}^{k-1}{x_{i}} + A_{k-1} \right) \ge \left( A_{k-1}\prod_{i=1}^{k-1}x_i \right)^{\frac{1}{k}}
+\]</span></p>
+<p>which implies that</p>
+<p><span class="math display">\[
+\begin{align}
+\cfrac{1}{k} \left( (k-1)A_{k-1} + A_{k-1} \right) &amp; \ge \left( A_{k-1}G_{k-1}^{k-1} \right)^{\frac{1}{k}} \\
+A_{k-1}^{k} &amp; \ge A_{k}G_{k-1}^{k-1} \\
+A_{k-1} &amp; \ge G_{k-1}
+\end{align}
+\]</span></p>
+<p>by which we proved that if <span class="math inline">\(n = k\)</span> case is correct, it ensures the <span class="math inline">\(n = k-1\)</span> case is correct. Since we’ve proved the <span class="math inline">\(n = 2^k\)</span> cases, for any given number <span class="math inline">\(n\)</span>, we can always find a larger number and trace backward to the given <span class="math inline">\(n\)</span>. So we’ve proved it successfully for any number <span class="math inline">\(n\in\mathbb{Z}\)</span>.</p>
+</blockquote>
+<p>With the binomial theorem applied, we can directly use the forward induction, instead of the indirect way in proof 2.</p>
+<blockquote>
+<p>Proof 3. (normal induction, with the binomial theorem applied)</p>
+<p><span class="math display">\[
+A_{n+1}^{n+1} = \left(A_n + \cfrac{x_{n+1}-A_{n}}{n+1} \right)^{n+1}
+\ge A_{n}^{n+1} + (n+1)A_n \cfrac{x_{n+1}-A_{n}}{n+1}
+= A_{n}x_{n+1}
+\ge G_{n}x_{n+1}
+= G_{n+1}^{n+1}
+\]</span></p>
+</blockquote>
+<h3 id="generalization">3. Generalization</h3>
+<h5 id="weighted-form"># Weighted Form</h5>
+<p>If we adjust the weight for each variables, we got the weighted AM-GM inequality:</p>
+<p><span class="math display">\[
+\cfrac{1}{w} \sum{w_{i}x_{i}}  \ge  \left( \prod x_i^{w_{i}} \right)^{w^{-1}}, ~~~~ \text{where} ~~ w = \sum w_{i}
+\]</span></p>
+<p>This can be proved by the Jensen’s inequality similarly. Note that this not only generalize the weights, but also generalize the sum of them into any real number.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

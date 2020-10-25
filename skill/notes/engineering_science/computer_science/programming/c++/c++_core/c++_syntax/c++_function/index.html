@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Cpp Function
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c++_syntax</a></p>
+
+<h1 id="cpp-function">Cpp Function</h1>
+<h3 id="lambda-expression">5. Lambda Expression</h3>
+<h5 id="introduction"># Introduction</h5>
+<p>Here’s an typical example of lambda expression:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> addition = <span class="dv">1</span>;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>[addition] (<span class="dt">int</span> x, <span class="dt">int</span> y) -&gt; <span class="dt">int</span> {<span class="cf">return</span> x + y + addition;}</span></code></pre></div>
+<p>We noticed that there’re there part of this inline function: variable capture <code>[addition]</code>, type declaration part <code>(int x, int y)-&gt;int</code> and the function body part.</p>
+<p>The first part declares a <strong>clourse</strong> of the lambda function: only the global variables those in this set can be used in the lambda function. If none of this is not needed, then we just leave an empty <code>[]</code>. This can also set the specific reference/value capture:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>[]          <span class="co">// None of the global variable are captured.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>[x, &amp;y] <span class="co">// only x,y and x captured by value, y captured by reference.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>[=]         <span class="co">// All of the global variable can be captured, by value.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>[&amp;]         <span class="co">// All of, and by reference.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>[&amp;, x]  <span class="co">// All by reference but x by value.</span></span></code></pre></div>
+<p>The second part declares the type of input and output variables. It’s called trailing return types which is introduced in C++11.</p>
+<p>The third part is simply the function definition, which usually short and can be written in one line.</p>
+<p>Lambda expressions are usually used to provide an <strong>function parameter</strong> to avoiding the unnecessary space waste for only one-time using:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>vector&lt;<span class="dt">int</span>&gt; A = {<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>};</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="dt">bool</span> all_even = is_all(A.begin(), A.end(), [](<span class="dt">int</span> i){<span class="cf">return</span> !(i%<span class="dv">2</span>)});</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>cout &lt;&lt; all_even;       <span class="co">// true</span></span></code></pre></div>
+<p>If the persistence is required, we can use a function pointer to store the address of that lambda expression.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">int</span> (*add)(<span class="dt">int</span> a, <span class="dt">int</span> b) = [](<span class="dt">int</span> a, <span class="dt">int</span> b) {<span class="cf">return</span> a+b;}</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">// It seems it&#39;s not possible to create recursion by this:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="dt">int</span> (*sum)(<span class="dt">int</span> n) = [&amp;](<span class="dt">int</span> n){<span class="cf">return</span> n? sum(n/<span class="dv">10</span>)+n%<span class="dv">10</span> : <span class="dv">0</span>;}; <span class="co">// error.</span></span></code></pre></div>
+<p>Instead, we need an <code>std::function</code> object to receive the lambda expression to create recursion successfully:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>function&lt;<span class="dt">int</span> (<span class="dt">int</span>)&gt; sum = [&amp;](<span class="dt">int</span> n){<span class="cf">return</span> n? sum(n/<span class="dv">10</span>)+n%<span class="dv">10</span> : <span class="dv">0</span>;};</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

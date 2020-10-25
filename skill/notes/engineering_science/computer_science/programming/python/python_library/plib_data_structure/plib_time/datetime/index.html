@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Datetime
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< plib_time</a></p>
+
+<h1 id="datetime">Datetime</h1>
+<p><code>datetime.date</code>, <code>datetime.time</code> and <code>datetime.datetime</code> are three time-point representing and processing classes provided by the <code>datetime</code> package, as well as the <code>timedelta</code> package which represents the time interval. These packages have pretty good designs with following features:</p>
+<ul>
+<li>OOP design, the data structure and interface are human-readable.</li>
+<li>The operations and calculation of time are supported well.</li>
+<li>Flexible Format &amp; Deformat approach.</li>
+</ul>
+<h3 id="basic-usage-of-datetime-package-toolkits">1. Basic Usage of <code>datetime</code> Package Toolkits</h3>
+<h5 id="package-import"># Package Import</h5>
+<p>The same as the other packages, two import method used for <code>datetime</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> datetime</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, date, time, timedelta</span></code></pre></div>
+<p>Notice that there exists a <code>time</code> package in the python standard library also. We should avoid the name confliction between packages. In order to keep the conciseness, we’ll use the second method to accomplish our notes and not to use the <code>time</code> package of STL.</p>
+<h5 id="initialization-and-data-access"># Initialization and Data Access</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>now <span class="op">=</span> datetime.now()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>datetime_datetime_demo <span class="op">=</span> datetime(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>  year<span class="op">=</span><span class="dv">2019</span>, month<span class="op">=</span><span class="dv">9</span>,   day<span class="op">=</span><span class="dv">17</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>  hour<span class="op">=</span><span class="dv">20</span>,   minute<span class="op">=</span><span class="dv">10</span>, second<span class="op">=</span><span class="dv">40</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="co"># These two initializations create `datetime` objects:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="bu">type</span>(now)   <span class="co"># &lt;class &#39;datetime.datetime&#39;&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="bu">print</span>(now)  <span class="co"># datetime.datetime(2019, 11, 12, 22, 28, 15, 427165)</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="bu">print</span>(datetime_demo) <span class="co"># datetime.datetime(2019, 9, 17, 20, 10, 40)</span></span></code></pre></div>
+<p>With the initialization finished, we’re able to access each comp.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

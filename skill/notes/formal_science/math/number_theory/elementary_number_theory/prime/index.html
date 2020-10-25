@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Prime
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< elementary_number_theory</a></p>
+
+<h1 id="prime">Prime</h1>
+<h3 id="basic-concept">1. Basic Concept</h3>
+<h5 id="definition"># Definition</h5>
+<p>The integer with only 2 factors is called <strong>prime</strong>. The integar with more than 2 factors are <strong>composite</strong>. 1 is neither prime nor composite.</p>
+<h3 id="related-theorem">2. Related Theorem</h3>
+<h5 id="infinity-of-primes"># Infinity of Primes</h5>
+<p>There are infinite primes. The most classical proof is given by Euclid based on the division algorithm.</p>
+<blockquote>
+<p>Proof. Assume that only finite primes there are, notes them as <span class="math inline">\(p_i, i=0, 1, ..., n\)</span>, Construct a number <span class="math display">\[
+p&#39; = \prod p_i + 1
+\]</span> Now based on the division with remainder, for any <span class="math inline">\(p_k\)</span>, <span class="math display">\[
+p&#39; = p_k\prod_{i\neq k} p_i + 1
+\]</span> where <span class="math inline">\(\prod_{i\neq k}p_i\in\mathbb{Z}\)</span>, which shows that any <span class="math inline">\(p_k\)</span> is not the divisor of <span class="math inline">\(p&#39;\)</span>, which makes <span class="math inline">\(p&#39;\)</span> a new prime, leads to contradication.</p>
+</blockquote>
+<p>Except the Euclid’s approach, there’re plenty of methods show the infinity of primes, we collect and introduce them in <a href="proofs_of_infinity_of_primes">proofs_of_infinity_of_primes</a>.</p>
+<h5 id="fundamental-theorem-of-arithmetic"># Fundamental Theorem of Arithmetic</h5>
+<p>any <span class="math inline">\(n\in\mathbb{N}, n&gt;1\)</span> can be divided into the only form of products of prime factors. That is, <span class="math display">\[
+n = \prod p_i
+\]</span></p>
+<blockquote>
+<p>Proof.</p>
+</blockquote>
+<p>If we combining the same factors we have <span class="math display">\[
+n = \prod p_i^{\alpha_i}
+\]</span> This is the standard factoring form of <span class="math inline">\(n\)</span>.</p>
+<p>divisibility</p>
+<h5 id="eulers-theorem"># Euler’s Theorem</h5>
+<p>Euler Function <span class="math inline">\(\varphi(n)\)</span> represents the count of positive number less than <span class="math inline">\(n\)</span> those <strong>coprime with</strong> <span class="math inline">\(n\)</span>. <span class="math display">\[
+\varphi(n) = n\prod\left(1-\cfrac{1}{p_i}\right)
+\]</span></p>
+<blockquote>
+<p>Prov. Applied Eratosthenes Sieve Method using <span class="math inline">\(n\)</span> as the limit, and with the help with inclusive-exclusive prinpicle.</p>
+</blockquote>
+<p>The order of <span class="math inline">\(a\)</span> to mod <span class="math inline">\(n\)</span> is the least number <span class="math inline">\(r\)</span> which makes <span class="math inline">\(a^r \equiv 1 \pmod m\)</span>.</p>
+<p>Euler Theorem: If <span class="math inline">\(\gcd(a,\ m) = 1\)</span>, <span class="math display">\[
+a^{\varphi(m)} \equiv 1 \pmod m
+\]</span> If the <span class="math inline">\(m=p\)</span> is a prime number, then the coprime condition <span class="math inline">\(\gcd(a,p) = 1\)</span> must hold, and <span class="math inline">\(\varphi(p) =p-1\)</span>. This gives the <strong>Fermat’s Little Theorem</strong>: <span class="math display">\[
+a^{p-1} \equiv 1 \pmod p
+\]</span></p>
+<h3 id="special-prime">3. Special Prime</h3>
+<p>There are some primes with special forms that worth studying.</p>
+<h5 id="fermat-prime"># Fermat Prime</h5>
+<p>Fermat guesses that <span class="math inline">\(F_n = 2^{2^n} + 1\)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is prime for all <span class="math inline">\(n\in\mathbb{N}\)</span> by observing <span class="math inline">\(F_n = 3, 5, 17, 257, 65537\)</span> for <span class="math inline">\(0\le n \le 4\)</span>, hence the form <span class="math inline">\(F_n\)</span> is called <strong>Fermat number</strong>, and the prime in Fermat number is called <strong>Fermat prime</strong>. Ironically we’ve not found any prime <span class="math inline">\(F_n\)</span> for <span class="math inline">\(n\ge 5\)</span>.</p>
+<h5 id="mersenne-prime"># Mersenne Prime</h5>
+<p>The form <span class="math inline">\(M_p = 2^p -1\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> where <span class="math inline">\(p\)</span> is a prime called <strong>Mersenne number</strong>, the prime in Mersenne number is called <strong>Mersenne prime</strong>. As of July 2020, 51 Mersenne primes are known. The largest known prime number, <span class="math inline">\(2^{82589933} − 1\)</span>, is a Mersenne prime. Since 1997, all newly found Mersenne primes have been discovered by the <a href="https://www.mersenne.org/">Great Internet Mersenne Prime Search</a>, a distributed computing project.</p>
+<h3 id="primality-test">4. Primality Test</h3>
+<ol type="1">
+<li><p>Eratosthenes Sieve Method</p>
+<p>This Sieve Method based on a simple fact:</p></li>
+<li><p>Wilson’s Theorem</p>
+<p>For any positive <span class="math inline">\(n\in\mathbb{N}\)</span>, <span class="math inline">\(n\)</span> is a prime if any only if <span class="math inline">\((n-1)! \equiv -1 \pmod n\)</span>.</p>
+<blockquote>
+<p>Proof. Consider the polynomial with order <span class="math inline">\(p-2\)</span> <span class="math display">\[
+f(x) = (x-1)(x-2)\cdots(x-(p-1)) - (x^{p-1}-1)
+\]</span> The Fermat’s Little Theorem tells <span class="math inline">\(x=1, 2, \ldots, p-1\)</span> are all the solutions of equation <span class="math inline">\(f(x)\equiv 0\)</span>. That is, the polynomial with order <span class="math inline">\(p-2\)</span> generates <span class="math inline">\(p-1\)</span> roots, which contradicts to Lagrange Theorem, which means the <span class="math inline">\(p(x)\)</span> can only be a zero-polynomial mod <span class="math inline">\(p\)</span>, which indicates each cofficient could be divided by <span class="math inline">\(p\)</span>. Hence <span class="math display">\[
+\begin{align}
+f(p) = (p-1)! - (p^{p-1}-1) &amp;\equiv 0 \pmod p \\
+(p-1)! &amp;\equiv -1 \pmod p
+\end{align}
+\]</span></p>
+</blockquote></li>
+<li></li>
+<li><p>Rabin-Miller Primality Test</p>
+<p><strong>Quadratic Test Theorem</strong>: If <span class="math inline">\(p\)</span> is a prime, the Quadratic Congruence Equation <span class="math inline">\(x^2 \equiv 1 \pmod p\)</span> can only be <span class="math inline">\(x=1\)</span> or <span class="math inline">\(x = p -1\)</span>.</p>
+<blockquote>
+<p>Prov. $$ x^2 p</p>
+<p>(x+1)(x-1)  p</p>
+<p>x_1 , x_2p-1 $$</p>
+</blockquote>
+<p>==Implement the RMPT==</p></li>
+</ol>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>https://oeis.org/A000215<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>https://oeis.org/A000668<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

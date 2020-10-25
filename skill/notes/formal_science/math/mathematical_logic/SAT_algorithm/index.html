@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> SAT Algorithm
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< mathematical_logic</a></p>
+
+<h1 id="sat-algorithm">SAT Algorithm</h1>
+<p>==SAT Algorithm, an algorithm to find the values fit a logic expression. literal, clause, CNF-formula.==</p>
+<p>The algorithm contains three basic model:</p>
+<ol type="1">
+<li><code>Decide()</code> function,</li>
+<li><code>BCP()</code> function, <a href="https://www.coursera.org/lecture/vlsi-cad-logic/boolean-constraint-propagation-bcp-for-sat-OTOi5">Boolean Constraint Propagation</a></li>
+<li><code>resolveConflict()</code> function;</li>
+</ol>
+<p>The search should be formed as a <strong>Decision Tree</strong>;</p>
+<p>Backtracking Search in Action.</p>
+<p>Status of Clause: Satisfied, Unsatisfied, Unit, Unresolved. Noticed that <code>Unit</code> Status is special and important. The prinicipal of <code>BCP()</code> algorithm is searching the pool of status, find the <code>Unit</code> Status and give it the proper value.</p>
+<p>The degisn of <code>Decide()</code> and <code>resolveConfiit()</code> is tricky. When <code>BCP()</code> can not push anymore, the <code>Decide()</code> function must decide which variable to guess for next step, this required the</p>
+<p>Implication graphs and learning</p>
+<p>Non-chronological backtracking</p>
+<p>More Conflict Clauses</p>
+<p>Asserting Clause: Instant BCP affect. The first-UIP is the closest UIP to the conflict.</p>
+<p>Conflict-driven backtracking (Option #2)</p>
+<pre class="pseudocode"><code>procedure Analyze-Conflict</code></pre>
+<h5 id="binary-resolution"># Binary Resolution</h5>
+<p><span class="math display">\[
+\cfrac{F(x)\lor p  \qquad G(x)\lor\neg p} {F(x)\lor G(x)}
+\]</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

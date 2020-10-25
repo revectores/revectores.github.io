@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> x86 Assembly Basic
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< assembly</a></p>
+
+<h1 id="x86-assembly-basic">x86 Assembly Basic</h1>
+<h3 id="file-extension">File Extension</h3>
+<p>Captial extension <code>.S</code> represents the assembly language file that still needs to be passed into a preprocessor, i.e. contains <code>include</code> command, denoted as <code>.sx</code> also, while <code>.s</code> represnts the pure assembly code that can be complied into object file (<code>.o</code> file) directly.</p>
+<h3 id="register">Register</h3>
+<p><strong>Register</strong> is the variable of CPU, but other than variable in the programming language, register used specific name to play specific function.</p>
+<p><code>ax, bx, cx, dx</code> and their extention are the most common-used register, which are assigned as the special function respectically:</p>
+<ul>
+<li><code>ax</code>: <strong>accumulator register</strong>, used to store the middle result of sum or product.</li>
+<li><code>bx</code>: <strong>base register</strong>, used to store the base address during the memory addressing process.</li>
+<li><code>cx</code>: <strong>counter register</strong>, as the counter in <code>rep</code> and <code>loop</code> instruction.</li>
+<li><code>dx</code>: <strong>remainder register</strong>, used to store the remainder of the integer division</li>
+</ul>
+<p><code>ax, bx, cx, dx</code> represent 16-bit register, each of them can be devided to the low bits parts (0~7 bits) and high bits part (8~15 bits), called <code>al</code> and <code>ah</code> for <code>ax</code> and similarly for the rest. The extended 32-bit <code>eax, ebx, ecx, edx</code> are most famous register in modern 32-bit machine, and 64-bit <code>rax, rbx, rcx, rdx</code>.</p>
+<h3 id="instruction">Instruction</h3>
+<h5 id="mov">mov</h5>
+<p>Four types of <code>mov</code> instruction included: <code>movb, movw, movl, movq</code>.</p>
+<ul>
+<li><code>movb</code>: move 1 bytes (8-bit).</li>
+<li><code>movw</code>: move 1 word (2 bytes, 16-bit).</li>
+<li><code>movl</code>: move 1 <code>long</code>, (2 words, 4 bytes, 32-bit)</li>
+<li><code>movq</code>: move quad-words (4 words, 8 bytes ,64-bit).</li>
+</ul>
+<p>Four typical usage of <code>mov</code>:</p>
+<ul>
+<li><p>Transfer value between register.</p>
+<pre class="assembly"><code>movl %eax, %edx;</code></pre>
+<p>Notice that this operation means <code>%eax-&gt;%edx</code>, i.e. <code>%edx=%eax</code>, instead of vice versa.</p></li>
+<li><p>Assign a constant into the register</p>
+<pre class="assembly"><code>movl 0x0000ffff, %edx;</code></pre></li>
+<li></li>
+</ul>
+<h1 id="unittest-for-x86-assembly-basic">Unittest For x86 Assembly Basic</h1>
+<ol type="1">
+<li>What’s the difference between <code>.S</code> file and <code>.s</code> file?</li>
+<li>Explain the usage of following register: <code>ax, bx, cx, dx</code>.</li>
+<li>Explain the difference among <code>ax, eax, rax</code>.</li>
+<li>Give the four types of <code>mov</code> instruction.</li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

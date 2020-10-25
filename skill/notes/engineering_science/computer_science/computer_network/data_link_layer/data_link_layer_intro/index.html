@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Data Link Layer
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< data_link_layer</a></p>
+
+<h1 id="data-link-layer">Data Link Layer</h1>
+<h3 id="basic-concepts">1. Basic Concepts</h3>
+<h5 id="responsibility"># Responsibility</h5>
+<p>As the sender in trasmission, data link layer receive the package from <a href="http://revectores.com/skill/notes/engineering_science/computer_science/computer_network/network_layer/network_layer_intro/network_layer_intro.md">network layer</a> and framming it than pass it into the <a href="http://revectores.com/skill/notes/engineering_science/computer_science/computer_network/physical_layer/physical_layer.md">physical layer</a>. As the receiver in transmission, data link layer receive the physical signals froms physical layer and pass it into network layer.</p>
+<h5 id="terminology-physical-link-and-logical-link"># Terminology: Physical Link and Logical Link</h5>
+<p><strong>Link</strong> or <strong>physical link</strong> is a physical concept referring wireline that connects two device directly. The communication link between two far away devides usually contains multiple continous physical links. <strong>Logical link</strong> or <strong>data link</strong> is a logic concept, its the combination of physical link and the protocols with its hardware and software implementation. Those hardware and software are usually integreted into the <strong>network adaptor</strong>.</p>
+<h5 id="types-of-channel"># Types of Channel</h5>
+<p>There are two kinds of channel in data link layer: <strong>point-to-point channel</strong> and the <strong>broadcast channel</strong>. The protocols <strong>Point-to-point protocol (PPP)</strong> and <strong>Carrier-sense multiple access/collision detection (CSMA/CD)</strong> are designed for the communication in the two types of channel correspondingly.</p>
+<h5 id="framming"># Framming</h5>
+<p><strong>Frame</strong> - The PDU of data link layer - is constructed by the control part and the data part of a frame, the IP packet from network layer is the data part of frame, and different from the protocol of upper layer, control part contains both the head and tail. The length limit of the data is <strong>maximum transfer unit(MTU)</strong>, which is specified by the data link layer.</p>
+<h5 id="transfer-error-and-checking-mechanism"># Transfer Error and Checking Mechanism</h5>
+<p>The error-checking mechanism used in PPP is usually <a href="http://revectores.com/skill/notes/engineering_science/computer_science/computer_network/error_detection/cyclic_redundancy_check/cyclic_redundancy_check.md">Cyclic Redundancy Check</a>, notice that CRC can only handle the bit-error, hence PPP does not provide the reliable transport. <strong>High-level data link control(HDLC)</strong> is chosen in the decade when errors occur in physical channel frequently.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,140 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> MultiVariable Function
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< multivariable_calculus</a></p>
+
+<h1 id="multivariable-function">MultiVariable Function</h1>
+<p><span class="math display">\[
+\newcommand{\euler}{\text{e}}
+\newcommand{\p}{\partial}
+\newcommand{\px}{\p x}
+\newcommand{\py}{\p y}
+\newcommand{\pz}{\p z}
+\newcommand{\pf}{\p f}
+\newcommand{\pu}{\p u}
+\newcommand{\pv}{\p v}
+\newcommand{\pl}{\p \boldsymbol{l}}
+\newcommand{\d}{\text{d}}
+\newcommand{\dt}{\d t}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dv}{\d v}
+\newcommand{\dz}{\d z}
+\newcommand{\du}{\d u}
+\]</span></p>
+<h3 id="double-limit">1. Double Limit</h3>
+<h5 id="definition"># Definition</h5>
+<p>For the function of two variables <span class="math inline">\(f(P) = f(x, y)\)</span> defined in domain <span class="math inline">\(D\)</span>, and <span class="math inline">\(P_0(x_0, y_0)\)</span> is the cluster point. If there exists a constant <span class="math inline">\(A\)</span>, for any given positive number <span class="math inline">\(\varepsilon\)</span>, there is always a positive <span class="math inline">\(\delta\)</span> which makes <span class="math inline">\(\forall P(x, y)\in D\bigcap \dot U(P_0, \delta)\)</span>, <span class="math inline">\(|f(x, y) - A| \lt\varepsilon\)</span>, we defined <span class="math inline">\(A\)</span> as the <strong>double limit</strong> of <span class="math inline">\(f(x, y)\)</span> as <span class="math inline">\((x, y)\rightarrow(x_0, y_0)\)</span>, denoted as <span class="math display">\[
+\lim_{x\rightarrow0 \\ y\rightarrow0} f(x, y) = \lim_{(x, y)\rightarrow(0,0)} f(x, y) = A
+\]</span> <strong>Remark.</strong> The existence of double limit requires the derivative from all directions, for example, if we try to find the limit of the following function at <span class="math inline">\((0,0)\)</span>: <span class="math display">\[
+z = f(x, y) =
+\left\{\begin{array}{ll}\begin{align}
+&amp; \frac{xy}{x^2+y^2}, ~~~~ &amp;&amp; x^2+y^2\neq 0 \\
+&amp; 0, ~~~~ &amp;&amp; x^2+y^2 = 0 \\
+\end{align}\end{array}\right.
+\]</span> Consider about approaching <span class="math inline">\((0,0)\)</span> through the line <span class="math inline">\(y=kx\)</span> as route, we have <span class="math display">\[
+\displaystyle\lim_{(x, y) \rightarrow (0,0) }\dfrac{xy}{x^2+y^2}
+= \displaystyle\lim_{(x, y) \rightarrow (0,0) }\dfrac{kx^2}{x^2+k^2x^2}
+= \dfrac{k}{1+k^2}
+\]</span> The limit depends on the value of <span class="math inline">\(k\)</span> if we approach the origin through line <span class="math inline">\(y = kx\)</span>, which is variational based on <span class="math inline">\(k\)</span>, hence there limit does not exist for the function at <span class="math inline">\((0,0)\)</span>.</p>
+<p><strong>Remark 2.</strong> One should notice that the double limit is different from the <a href="">iterated limit</a>, which only approaching one variable at a time and consider the other as a constant.</p>
+<h5 id="generalization"># Generalization</h5>
+<p>Similarly, we could define the generalized limit for the function with multiple variables. Similar properties applied to the single variable function will also apply to function with double and multiple variables.</p>
+<h5 id="valuation"># Valuation</h5>
+<p>All the properties applied to the limit of single variable can be applied to the limit of the multiple variables, such as definition, using the two important limit, squeeze theorem, equivalent infinitesimal, and so on. The examples are shown in <a href="limit_of_multivariable_function_computing_example">limit_of_multivariable_function_computing_example</a>. Specially, some important and classical limit of multivariable function will be collected in <a href="important_multivariable_function_limit">important_multivarible_function_limit</a>.</p>
+<p>Find the continuous domain of function <span class="math inline">\(f(x, y) = \dfrac{\arcsin(3-x^2-y^2)}{\sqrt{x-y^2}}\)</span>.</p>
+<p>All the combination of continuous function are continuous in definition domain. Hence, we’re only required to get the defintion domain. <span class="math display">\[
+\left\{\begin{array}{ll}
+|3 - (x^2 + y^2)| \le 1 \\
+x-y^2\ge 0
+\end{array}\right.
+\Rightarrow
+\left\{\begin{array}{ll}
+2 \le x^2+y^2 \le 1 \\
+x\ge y^2
+\end{array}\right.
+\]</span></p>
+<h3 id="continuity">2. Continuity</h3>
+<p>For function of two variables <span class="math inline">\(f(x, y)\)</span> defined on <span class="math inline">\(D\)</span>, <span class="math inline">\(P(x_0, y_0)\in D\)</span> is the limit point. We call the function <span class="math inline">\(f(x, y)\)</span> is continuous at point <span class="math inline">\((x_0, y_0)\)</span> if <span class="math display">\[
+\lim_{(x, y)\rightarrow(x_0, y_0)}f(x, y) = f(x_0, y_0)
+\]</span> If the function is continuous in every points of interval <span class="math inline">\(I\)</span>, we call <span class="math inline">\(f(x, y)\)</span> is continuous in <span class="math inline">\(I\)</span>, and <span class="math inline">\(f(x, y)\)</span> is the continuous function on interval <span class="math inline">\(I\)</span>.</p>
+<p>If the function is not continuous at limit point <span class="math inline">\(P(x_0, y_0)\)</span>, we call it as the discontinuity point.</p>
+<p>Take an example, we’ve computed the limit at limit point <span class="math inline">\((0,0)\)</span> of the function <span class="math display">\[
+z = f(x, y) =
+\left\{\begin{array}{ll}\begin{align}
+&amp; \frac{xy}{x^2+y^2}, ~~~~ &amp;&amp; x^2+y^2\neq 0 \\
+&amp; 0, ~~~~ &amp;&amp; x^2+y^2 = 0 \\
+\end{align}\end{array}\right.
+\]</span> which is not exist, hence <span class="math inline">\((0,0)\)</span> is one of the discontinuity point of <span class="math inline">\(f(x, y)\)</span>. Since the determination of continuity is no more than the computing of limit, we’ve merge the examples about continuity determination into <a href="limit_of_multivariable_function_computing_example">limit_of_multivariable_function_computing_example</a>.</p>
+<p>Similar to the single variable case, the basic operations and compound of continuous function is still continuous. Specially, the basic elementary functions are all continuous in their domain.</p>
+<p>Generally, we can also generalize the concept of continuity into multivariable case.</p>
+<h3 id="partial-derivative">2. Partial Derivative</h3>
+<h5 id="definition-1"># Definition</h5>
+<p>The partial derivative of <span class="math inline">\(f(x, y)\)</span> to <span class="math inline">\(x\)</span> or <span class="math inline">\(y\)</span> are defined as</p>
+<p><span class="math display">\[
+\frac{\pf}{\px} \bigg\rvert_{x=x_0\\y=y_0} = \lim_{\Delta x\rightarrow 0} \frac{f(x_0+\Delta x, y_0) - f(x_0, y_0)}{\Delta x}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\pf}{\py} \bigg\rvert_{x=x_0\\y=y_0} = \lim_{\Delta y\rightarrow 0} \frac{f(x_0, y_0+\Delta y) - f(x_0, y_0)}{\Delta y}
+\]</span></p>
+<p>if the limit exists.</p>
+<p>The examples about computing the partial derivative will be shown in <a href="partial_derivative_computing_example">partial_derivative_computing_example</a>. Specially, some important and classical limit of multivariable function will be collected in <a href="important_partial_derivative">important_partial_derivative</a>.</p>
+<p><span class="math inline">\(z = x^y (x\gt 0, x\neq 1)\)</span>, prove</p>
+<p><span class="math display">\[
+\frac{x}{y}\frac{\p z}{\px} + \frac{1}{\ln x}\frac{\p z}{\py} = 2z
+\]</span></p>
+<p>Compute the partial derivative <span class="math display">\[
+r = \sqrt{x^2 + y^2 + z^2}
+\]</span></p>
+<h3 id="direction-derivative">3. Direction Derivative</h3>
+<h5 id="definition-of-direction-derivative"># Definition of Direction Derivative</h5>
+<p>Define the derivative in the direction of vector <span class="math inline">\(\boldsymbol{l}\)</span> with direction cosine vector <span class="math inline">\(( \cos{\alpha}, \cos{\beta} )\)</span> as</p>
+<p><span class="math display">\[
+\frac{\pf}{\pl} = \lim_{t \rightarrow 0^+} \frac{f(x_0+t\cos\alpha, y_0+t\cos\beta) - f(x_0, y_0)}{t}
+\]</span></p>
+<p>as defined, the direction derivative is a special direction derived from the total derivative, and we could compute the direction derivative from the partial derivative respect to <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> by the vector multiplication, if the total derivation exists:</p>
+<p><span class="math display">\[
+\frac{\pf}{\pl} = \left( \frac{\pf}{\px}, \dfrac{\pf}{\py} \right)\cdot(\cos\alpha, \cos\beta)
+\]</span></p>
+<p><strong>Remark.</strong> The partial derivative <span class="math inline">\(f_x\)</span> is not the same as the derivative in the direction of <span class="math inline">\(x\)</span>-axis, because of the direction derivative only requies the limit in one direction exists while the partial one requires both. That is, the partial derivative respect to <span class="math inline">\(x\)</span> exists, if and only if both the direction derivative of <span class="math inline">\(\pm x\)</span> exist and equal.</p>
+<p>Similarly, we could define the direction derivative of the three variables, and multiple variables furthermore.</p>
+<h5 id="gradient"># Gradient</h5>
+<p><strong>Gradient</strong> is the vector that with maximum direction derivative in its direction, that is,</p>
+<p><span class="math display">\[
+\nabla f(x, y) = \left( \frac{\pf}{\px}, \dfrac{\pf}{\py} \right)(\boldsymbol i, \boldsymbol j) = \frac{\pf}{\px}\boldsymbol i + \dfrac{\pf}{\py}\boldsymbol j 
+\]</span></p>
+<p>where the operator <span class="math inline">\(\nabla\)</span> is named <strong>vector operator</strong> or <strong>nabla operator</strong>.</p>
+<h3 id="extremum">4. Extremum</h3>
+<h5 id="definition-of-local-extremum"># Definition of Local Extremum</h5>
+<p>Fors the function of two variable <span class="math inline">\(z = f(x, y)\)</span> with domain <span class="math inline">\(D\)</span>, <span class="math inline">\(P_0(x_0, y_0)\)</span> is the interior point of <span class="math inline">\(D\)</span>, if there exists one neighbourhood <span class="math inline">\(U(P_0)\subset D\)</span> which makes <span class="math inline">\(f(x, y) &lt; f(x_0, y_0)\)</span> for all the <span class="math inline">\((x, y)\in U\)</span> expect <span class="math inline">\(P_0\)</span>, then we define the <span class="math inline">\(P_0(x_0, y_0)\)</span> as the <strong>local maximum point</strong> of function <span class="math inline">\(z\)</span>, with the <strong>local maximum</strong> <span class="math inline">\(f(x, y)\)</span>. Similarly, we could define the <strong>local minimum point</strong> and the <strong>local minimum</strong>. The local maxmium and local minimum are both <strong>extremum</strong>, with its point <strong>extremum point</strong>.</p>
+<h5 id="stationary-point"># Stationary Point</h5>
+<p>Define <strong>stationary point</strong> as the points with all its first partial derivatives equal to zero. For the two-variables function case, that is <span class="math display">\[
+f_x(x_0, y_0) = f_y(x_0, y_0) = 0
+\]</span> In the geometric perspective, this indicates the tangent plane at the stationary point <span class="math display">\[
+z - z_0 = f_x(x_0, y_0)(x-x_0) + f_y(x_0,y_0)(y-y_0) = 0
+\]</span> is parallel to the <span class="math inline">\(xOy\)</span> plane.</p>
+<p><strong>Necessity Theroem.</strong> All the extemum point <span class="math inline">\((x_0, y_0)\)</span> must be <strong>stationary point</strong>. Hence, when trying to get the extermum, we usually first find the stationary points to narrow down the search space of extremum.</p>
+<h5 id="sufficient-theorem-of-extremum"># Sufficient Theorem of Extremum</h5>
+<p><span class="math inline">\(z = f(x, y)\)</span> continuous in some neigbourhood of <span class="math inline">\((x_0, y_0)\)</span> with continuous first and second derivatives. For all the stationary points <span class="math inline">\((x_0, y_0)\)</span>, define <span class="math inline">\(\Delta = f_{xx}(x_0, y_0)f_{yy}(x_0, y_0) - [f_{xy}(x_0, y_0)]^2\)</span>, there are 3 cases:</p>
+<ol type="1">
+<li>if <span class="math inline">\(\Delta &gt; 0\)</span>, the extremum exist. if <span class="math inline">\(f_{xx}(x_0, y_0)&gt;0\)</span> it’s local minimum, if <span class="math inline">\(f_{xx}(x_0, y_0)&lt;0\)</span> it’s local maximum. Notice that it is not possible to make <span class="math inline">\(A = 0\)</span> and <span class="math inline">\(AC-B^2&gt;0\)</span>.</li>
+<li>if <span class="math inline">\(\Delta&lt;0\)</span>, the extremum does not exist.</li>
+<li>if <span class="math inline">\(\Delta = 0\)</span>, whether the extremum exist requires further investigation.</li>
+</ol>
+<p>Some examples that combine necessity theroem and the sufficient theorem of extremum are provided in <a href="examples_for_double_variable_extremum.md">examples_for_double_variable_extremum</a>.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

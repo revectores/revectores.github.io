@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Serialization and Deserialization
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< vanilla_javascript</a></p>
+
+<h1 id="serialization-and-deserialization">Serialization and Deserialization</h1>
+<h3 id="serialization-json.stringify-function">1. Serialization: JSON.Stringify() Function</h3>
+<p>Refer <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">document of JSON.stringify()</a> for details about serialization.</p>
+<h5 id="basic-usage"># Basic Usage</h5>
+<p><code>JSON.stringify()</code> method serializes JavaScript object into JSON string:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">let</span> obj <span class="op">=</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="dt">data</span><span class="op">:</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;robert&quot;</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        <span class="dt">age</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    }<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="dt">msg</span><span class="op">:</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="dt">code</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj))<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="co">// {&quot;data&quot;:{&quot;name&quot;:&quot;robert&quot;,&quot;age&quot;:20},&quot;msg&quot;:&quot;success&quot;,&quot;code&quot;:200}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="co">// Here we use console.log as the wrapper to avoid the fussy escaping symbols.</span></span></code></pre></div>
+<h5 id="value-conversion"># Value Conversion</h5>
+<p>due to the purpose of JSON - transferring data across languages, some properties will be filtered automatically during the serialization, included <code>undefined</code>, <code>function</code>, and <code>Symbol</code>.</p>
+<p>There are three cases of converting <code>undefined</code>, <code>function</code> and <code>Symbol</code> based on the position of them:</p>
+<ol type="1">
+<li><p>Raw type conversion, converted into <code>undefined</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="kw">undefined</span>))<span class="op">;</span>         <span class="co">// undefined</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(()<span class="kw">=&gt;</span>{<span class="cf">return</span><span class="op">;</span>}))<span class="op">;</span>     <span class="co">// undefined</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="bu">Symbol</span>(<span class="st">&#39;symbol&#39;</span>)))<span class="op">;</span>  <span class="co">// undefined</span></span></code></pre></div></li>
+<li><p>Within the object, omitted:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">let</span> obj <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;robert&quot;</span><span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">age</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="dt">say_hi</span><span class="op">:</span> ()<span class="kw">=&gt;</span>{<span class="cf">return</span><span class="op">;</span>}<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="dt">id_card</span><span class="op">:</span> <span class="bu">Symbol</span>(<span class="st">&#39;robert&#39;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj))<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="co">// {&quot;name&quot;:&quot;robert&quot;}</span></span></code></pre></div></li>
+<li><p>Placed in an <code>array</code>, <code>null</code> will takes place the corresponding position:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">let</span> obj <span class="op">=</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">my_array</span><span class="op">:</span> [<span class="st">&quot;robert&quot;</span><span class="op">,</span> <span class="kw">undefined</span><span class="op">,</span> ()<span class="kw">=&gt;</span>{<span class="cf">return</span><span class="op">;</span>}<span class="op">,</span> <span class="bu">Symbol</span>(<span class="st">&#39;robert&#39;</span>)]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj))<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">// {&quot;my_array&quot;:[&quot;robert&quot;,null,null,null]}</span></span></code></pre></div></li>
+</ol>
+<p>Besides, two special number type, i.e. <code>NaN</code> and <code>Infinity</code>, in JavaScript will be converted into <code>null</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="st">&quot;NaN&quot;</span>))<span class="op">;</span>         <span class="co">// null</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="st">&quot;Infinity&quot;</span>))<span class="op">;</span>    <span class="co">// null</span></span></code></pre></div>
+<p>Finally, the wrapped primitive instances will be converted into the primitive values:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="kw">new</span> <span class="bu">String</span>(<span class="st">&#39;str&#39;</span>)))  <span class="co">// &quot;str&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="kw">new</span> <span class="bu">Boolean</span>(<span class="kw">true</span>)))  <span class="co">// true</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="kw">new</span> <span class="bu">Number</span>(<span class="dv">1</span>)))      <span class="co">// 1</span></span></code></pre></div>
+<h5 id="parameters"># Parameters</h5>
+<p>The second parameter of <code>JSON.stringify()</code> gives an array that specify those wanted properties, or gives a function to manually process every <code>(key, value)</code> pair when serialization. For example, to only select the name and age property from the object:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">let</span> person <span class="op">=</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;robert&quot;</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="dt">age</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="dt">interests</span><span class="op">:</span> [<span class="st">&quot;coding&quot;</span><span class="op">,</span> <span class="st">&quot;reviewing&quot;</span>]<span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="dt">girlfriend</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="dt">say_hello</span><span class="op">:</span> ()<span class="kw">=&gt;</span>{<span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&quot;hello!&quot;</span>)}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(person)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="co">// {&quot;name&quot;:&quot;robert&quot;,&quot;age&quot;:20,&quot;interests&quot;:[&quot;coding&quot;,&quot;reviewing&quot;],&quot;girlfriend&quot;:null}</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(person<span class="op">,</span> [<span class="st">&#39;name&#39;</span><span class="op">,</span> <span class="st">&#39;age&#39;</span>])<span class="op">;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a><span class="co">// {&quot;name&quot;:&quot;robert&quot;,&quot;age&quot;:20}</span></span></code></pre></div>
+<p>We can also pass a function to do the preprocess:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(person<span class="op">,</span> (key<span class="op">,</span> value)<span class="kw">=&gt;</span>{</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    <span class="cf">return</span> (value <span class="op">!==</span> person) <span class="op">&amp;&amp;</span> (<span class="kw">typeof</span> value <span class="op">===</span> <span class="st">&#39;object&#39;</span>) <span class="op">?</span> <span class="kw">undefined</span> <span class="op">:</span> value<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>})<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="co">// {&quot;name&quot;:&quot;robert&quot;,&quot;age&quot;:20}</span></span></code></pre></div>
+<p>Notice that the iterator will be executed hierarchically, and the top level object (<code>person</code> object in this case) will also be considered as a <code>value</code>, hence we add <code>value !== person</code> condition to keep to top-level object.</p>
+<p>As noticed, after the execution of our preprocessor function, the value conversion mechanism will still take responsibility, that’s why we can set property to <code>undefined</code> to hide them. On the contrary, we can also adjust the property with invisible value into visible, for example, convert the function object into its definition string:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(person<span class="op">,</span> (key<span class="op">,</span> value)<span class="kw">=&gt;</span>{</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="cf">if</span>(<span class="kw">typeof</span> value <span class="op">===</span> <span class="st">&#39;function&#39;</span>){</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>        <span class="cf">return</span> <span class="bu">Function</span><span class="op">.</span><span class="at">prototype</span><span class="op">.</span><span class="at">toString</span><span class="op">.</span><span class="fu">call</span>(value)<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    }</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>})</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a><span class="co">// {&quot;name&quot;:&quot;robert&quot;,&quot;age&quot;:20,&quot;interests&quot;:[&quot;coding&quot;,&quot;reviewing&quot;],&quot;girlfriend&quot;:null,&quot;say_hello&quot;:&quot;()=&gt;{console.log(\&quot;hello!\&quot;)}&quot;}</span></span></code></pre></div>
+<h5 id="tojson-method"># <code>toJSON</code> Method</h5>
+<p><code>toJSON</code> method overrides the default behaviour of the object when serialized:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">let</span> person <span class="op">=</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">&#39;robert&#39;</span><span class="op">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>    <span class="dt">age</span><span class="op">:</span> <span class="st">&#39;20&#39;</span><span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>    <span class="dt">toJSON</span><span class="op">:</span> ()<span class="kw">=&gt;</span>{<span class="cf">return</span> [<span class="st">&#39;robert&#39;</span><span class="op">,</span> <span class="st">&#39;20&#39;</span>]}<span class="op">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>}<span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(person)<span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="co">// [&quot;robert&quot;,&quot;20&quot;]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(wrapper<span class="op">:</span> {<span class="dt">person</span><span class="op">:</span> person})</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="co">// {&quot;wrapper&quot;:{&quot;person&quot;:[&quot;robert&quot;,&quot;20&quot;]}}</span></span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

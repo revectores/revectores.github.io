@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Lotka-Volterra Competition Model
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< Lotka-Volterra_model</a></p>
+
+<h1 id="lotka-volterra-competition-model">Lotka-Volterra Competition Model</h1>
+<p><span class="math display">\[
+\newcommand{\d}{\text d}
+\newcommand{\dt}{\d t}
+\newcommand{\dN}{\d N}
+\]</span></p>
+<h5 id="modeling"># Modeling</h5>
+<p>For the two competition species with population number <span class="math inline">\(N_1, N_2\)</span>, the environment environmental capacity and instant growth rate are <span class="math inline">\(K_1, r_1, K_2, r_2\)</span> respectively. For the species 1, based on <a href="">Logistic equation</a>, we have <span class="math display">\[
+\frac{\dN_1}{\dt} = r_1N_1\left( 1-\frac{N_1}{K_1}-\alpha\frac{N_2}{K_1} \right)
+\]</span> where <span class="math inline">\(\alpha\)</span> is the <strong>competition coefficient</strong> from species 2 to species 1, the physical meaning is “one animal of species 2 is the same as <span class="math inline">\(\alpha\)</span> animals of species 1”. Similarly, for species 2 we have <span class="math display">\[
+\frac{\dN_2}{\dt} = r_2N_2\left( 1-\frac{N_2}{K_2}-\alpha\frac{N_1}{K_2} \right)
+\]</span> where <span class="math inline">\(\alpha\)</span> is the competition coefficient of species 1 to species 2.</p>
+<p>The two equations give the <strong>Lotka-Volterra competition model</strong>.</p>
+<h5 id="conclusion1"># Conclusion<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></h5>
+<p>We could use the reciprocal of capacity <span class="math inline">\(K^{-1}\)</span> as the indicator of the <strong>intensity of intraspecific competition,</strong> and <span class="math inline">\(\alpha K_1^{-1}\)</span> as the <strong>intensity of interspecific competition</strong> from species 2 to species 1, symmetrically, <span class="math inline">\(\beta K_2^{-1}\)</span> as the intensity of interspecific completition from species 1 to species 2.</p>
+<p>One species win in the interspecific competition, if and only if the intensity of interspecific completition larger than the intensity of intraspecific competition, that is</p>
+<ol type="1">
+<li><span class="math inline">\(K_1^{-1} &lt; \beta K_2^{-1}, K_2^{-1} &gt; \alpha K_1^{-1}\)</span>, species 1 win, species 2 is excluded.</li>
+<li><span class="math inline">\(K_1^{-1} &gt; \beta K_2^{-1}, K_2^{-1} &lt; \alpha K_1^{-1}\)</span> , species 2 win, species 1 is excluded.</li>
+<li><span class="math inline">\(K_1^{-1} &lt; \beta K_2^{-1}, K_2^{-1} &lt; \alpha K_1^{-1}\)</span>, both species might win, unstable equilibrium.</li>
+<li><span class="math inline">\(K_1^{-1} &gt; \beta K_2^{-1}, K_2^{-1} &gt; \alpha K_1^{-1}\)</span>, both species exist.</li>
+</ol>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>The detailed proof refers to 《基础生态学(第2版)》P133-P134<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

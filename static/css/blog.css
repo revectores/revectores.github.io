@@ -1,16 +1,11 @@
 body {
-    padding-left: 6rem;
-    padding-right: 6rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     margin-left: auto;
     margin-right: auto;
     max-width: 42rem;
     display: block;
 
-	color: #444;
-	font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
-	line-height: 1.5em;
-	margin: auto;
-	background: #fefefe;
 }
 
 h1 {
@@ -18,7 +13,32 @@ h1 {
     line-height: 1em;
 }
 
-pre {
-    background-color: #eee;
+h3 {
+    margin-top: 8em;
+}
+
+h1 + h3 {
+    margin-top: 2em;
+}
+
+h5 {
+    margin-top: 4em;
+    margin-bottom: 1em;
+}
+
+h3 + h5 {
+    margin-top: 2em;
+}
+
+code {
     line-height: 1em;
+}
+
+pre {
+    background-color: #ddd;
+    line-height: 1em;
+}
+
+img{
+max-width:100%;
 }

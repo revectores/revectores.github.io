@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Clustering
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< machine_learning</a></p>
+
+<h1 id="clustering">Clustering</h1>
+<p>Clustering is a new and fast-developing domain in machine learning. In this notes we’ll first give basic concepts, including definition and the performance index of clustering, then talk about three types of clustering:</p>
+<ul>
+<li>Prototype-based clustering.</li>
+<li>densitry-based clustering.</li>
+<li>hierarchical clustering.</li>
+</ul>
+<h3 id="concepts">Concepts</h3>
+<h5 id="definition"># Definition</h5>
+<p>Clustering is partition of unlabelled samples set. i.e. Clustering partition <span class="math inline">\(D=\{x_1, x_2, ..., x_m\}\)</span> into <span class="math inline">\(k\)</span> <strong>disjoint</strong> different cluster <span class="math inline">\(\{C_l ~|~ 1\le l\le k\}\)</span>. We denoted <span class="math inline">\(1\le\lambda_j\le k\)</span> as <strong>cluster label</strong> of sample <span class="math inline">\(x_j\)</span>, that is, <span class="math inline">\(x_j\in C_{\lambda_j}\)</span>, and represents the result of clustering process as the vector of <span class="math inline">\(m\)</span> labels: <span class="math inline">\({\boldsymbol\lambda} = \{\lambda_1, \lambda_2, ..., \lambda_m \}\)</span>.</p>
+<h5 id="validity-index"># Validity Index</h5>
+<p>There are two types of approaches to check the performance of a clustering algorithm, use the <strong>external index</strong> or <strong>internal index</strong>.</p>
+<p>The external index clustering the samples manually, which called <strong>reference model</strong>. and we check the difference between reference model and the result given from the algorithm. For any two sample <span class="math inline">\(x_i, x_j\)</span>, reference model indicates the positive (in same cluster) and negative (in different cluster) in reality.</p>
+<p>Here we give three classical types of external index:</p>
+<ul>
+<li><p><strong>Jaccard Coefficient(JC)</strong> . <span class="math display">\[
+  \text{JC} = \frac{TP}{TP+FP+FN}
+  \]</span></p></li>
+<li><p><strong>Forlkes-Mallows Index(FMI)</strong>. <span class="math display">\[
+  \text{FMI} = \sqrt{\frac{TP}{TP+FP}\times\frac{TP}{TP+FN}}
+  \]</span></p></li>
+<li><p><strong>Rand Index(RI)</strong>. <span class="math display">\[
+  \text{RI} = \frac{TP+TN}{TP+TN+FP+FN}
+  \]</span></p></li>
+</ul>
+<p>For the most cases, it’s not possible to give the reference model manually (anyway, in this case we’ve actually labelled all the samples, why brother to use unsupervised learning method…?). Internal index uses the internal information of the distances among samples to try to validate whether an algorithm is proper. The core idea is to compare the <strong>similarity</strong> inside cluster and <strong>difference</strong> among clusters. Clearly, the algorithm is better for the higher similarity inside and higher difference comparing with others.</p>
+<p>To describe the similiarity and difference quantitatively, we define the following property of clusters:</p>
+<ul>
+<li><p>Average distance between samples inside cluster <span class="math inline">\(C\)</span>: <span class="math display">\[
+  \newcommand{\avg}{\text{avg}}
+  \newcommand{\dist}{\text{dist}}
+  \newcommand{\diam}{\text{diam}}
+  \avg(C) = \frac{2}{|C|(|C|-1)}\sum_{1\le i \lt j \le |C|} \dist(x_i, x_j)
+  \]</span></p></li>
+<li><p>The maximum distance between samples inside cluster <span class="math inline">\(C\)</span>: <span class="math display">\[
+  \diam(C) = \max_{1\le i \lt j \le|C|} \dist(x_i, x_j)
+  \]</span></p></li>
+<li><p>The distance of two nearest samples in cluster <span class="math inline">\(C_{i}\)</span> and <span class="math inline">\(C_j\)</span> respectively: <span class="math display">\[
+  d_{min}(C_i, C_j) = \min_{x_i\in C_i, x_j\in C_j} \dist(x_i, x_j)
+  \]</span></p></li>
+<li><p>The distance of the central vector of two cluster <span class="math display">\[
+  d_{cen}(C_i, C_j) = \dist(\mu_i, \mu_j)
+  \]</span> where the centeral vector <span class="math inline">\(\mu_i = \dfrac{1}{|C_i|}\displaystyle\sum_{x_k\in C_i}x_k\)</span></p></li>
+</ul>
+<p>Now two internal index based on the properties above are introduced:</p>
+<ul>
+<li><p><strong>Davies-Bouldin Index(DBI)</strong>. Davies-Bouldin Index use the average distance between samples to describe the similarity inside cluster, and the distance of the central vector to describe the difference. Larger DBI indicates better clustering. <span class="math display">\[
+  \textrm{DBI} = \cfrac{1}{k}\sum_{i=1}^k \max_{j\neq i}\left( \cfrac{\avg(C_i)+\avg(C_j)}{d_{\textrm{cen}}(C_i, C_j)} \right)
+  \]</span></p></li>
+<li><p><strong>Dunn Index(DI)</strong>. Dunn Index use the maximum distance between samples inside cluster to describe th e similarity inside clutser, and the minimum distance between clusters to describe the difference. <span class="math display">\[
+  \min_{1\le i \le k}\left\{ \min_{j\neq i}\left( \frac{d_\min(C_i, C_j)}{\max_{1\le l\le k}\diam(C_l)} \right)  \right\}
+  \]</span> Unlike the sum form in DBI, DI only takes the minimum value from all the pairs, besides, since its “difference/similarity”, Smaller DI indicates better clustering, which is in constrast to DBI.</p></li>
+</ul>
+<p>The two internal index are both based on <strong>distances</strong> of samples. Thus, in some tasks where the classification are not based on distances(i.e. density-based clustering), the two index might be not appropriate.</p>
+<h5 id="defining-distance"># Defining Distance</h5>
+<p>Most clustering algorithm consider distance as the indicator of similarity, while there are different types of distance and we should choose carefully properly based on the background and requirement. The most famous distance is <strong>Minkowski distance</strong>:</p>
+<p><span class="math display">\[
+\newcommand{\distm}{\dist_{\text{wmk}}}
+\distm(x_i, x_j) = \|x_i, x_j\|_p  =  \left( \sum_{u=1}^n|x_{iu} - x_{ju}|^p  \right)^{\frac{1}{p}}
+\]</span></p>
+<p><strong>Euclidean distance</strong> and <strong>Manhattan distance</strong> are the special case at <span class="math inline">\(p=2\)</span> and <span class="math inline">\(p=1\)</span>, denoted as <span class="math inline">\(\|x_i, x_j\|_2\)</span> and <span class="math inline">\(\|x_i, x_j\|_1\)</span> respectively. And there’s weighted version of Minkowski distance, applied if the some properties are considered more important than others to check the similarity:</p>
+<p><span class="math display">\[
+\distm(x_i, x_j) = \left( \sum_{u=1}^n w_i | x_{iu} - x_{ju}|^p  \right)^{\frac{1}{p}}
+\]</span></p>
+<p>You may refer ==TODO: math notes link== for more theoretical material about rich types of distance.</p>
+<p>For some algorithms, the definition of distance is pre-defined and will not change during training, while there is also some algorithm that based on the data samples to learn the proper distance formula, which process is named <strong>distance metric learning</strong>.</p>
+<h3 id="prototype-based-clustering">Prototype-based Clustering</h3>
+<p>The prototype-based clustering uses one <strong>prototype vectors</strong> to represents a type, and the classification of one sample is determined by which prototype vector it is nearest.</p>
+<p>Three prototype-based clustering methods are introduced:</p>
+<ul>
+<li><span class="math inline">\(k\)</span>-means algorithm</li>
+<li>Learning vector quantization</li>
+<li>Mixture-of-Gaussian.</li>
+</ul>
+<p>We’ll focus on <span class="math inline">\(k\)</span>-means algorithm and learning vector quantization, and leave mixture-of-Gaussian after we bulit a strong basis of probability and statistics.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

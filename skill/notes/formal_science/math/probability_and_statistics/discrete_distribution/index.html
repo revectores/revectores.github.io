@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Discrete Distribution
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< probability_and_statistics</a></p>
+
+<h1 id="discrete-distribution">Discrete Distribution</h1>
+<p><span class="math display">\[
+\newcommand{\e}{\text{e}}
+\]</span></p>
+<h3 id="binomial-distribution">1. Binomial Distribution</h3>
+<p>Let <span class="math inline">\(X\)</span> represents the total counts of success in <span class="math inline">\(n\)</span>-times Bernoulli exprements, we have <span class="math display">\[
+P(X=k) = {n\choose k}p^k(1-p)^{n-k}, ~~~~ k = 0, 1, ..., n
+\]</span> define <span class="math inline">\(X\)</span> complies the <strong>binomial distribution</strong> with parameter <span class="math inline">\((n, p)\)</span>, denoted as <span class="math inline">\(X\sim b(n, p)\)</span>. Specially, when <span class="math inline">\(n=1\)</span>, we call <span class="math inline">\(b(1, p)\)</span> as <strong>two points distribution</strong>, <strong>0-1 distribution</strong>, or <strong>Bernoulli distribution</strong>.</p>
+<h3 id="geometric-distribution">2. Geometric Distribution</h3>
+<p>Let <span class="math inline">\(X\)</span> represents the total experiment counts when first success in Bernoulli exprement, we have <span class="math display">\[
+P(X=k) = p(1-p)^{k-1}, ~~~~k = 1, 2, ...
+\]</span> define <span class="math inline">\(X\)</span> complies the geometric distribution with parameter <span class="math inline">\(p\)</span>, denoted as <span class="math inline">\(X\sim Ge(p)\)</span>.</p>
+<p>We say the geometric distribution is <strong>memoryless</strong>, since <span class="math inline">\(P(X&gt;m+n|X&gt;m) = P(x&gt;n)\)</span>. Moreover, we can prove that, a <strong>memoryless</strong> discrete distribution must be the geometric distribution.</p>
+<p>The memoryless tells us, the probability of success in the next experiments will not be affected by the unsuccessful expriements before in Bernoulli experiments. Well in a Bayes’ perspective which might infer that we should update the prior belief of the success rate <span class="math inline">\(p\)</span>.</p>
+<h3 id="negative-binomial-distribution">3. Negative Binomial Distribution</h3>
+<p>Let <span class="math inline">\(X\)</span> represents the total dexperiment counts at <span class="math inline">\(r\)</span>-times of success, we have <span class="math display">\[
+P(X=k) = {{k-1}\choose{r-1}}p^r(1-p)^{k-r}, ~~~~ k = r, r+1, ...
+\]</span> define <span class="math inline">\(X\)</span> complies the <strong>negative binomial distribution</strong> or <strong>Pascal distribution</strong> with parameters <span class="math inline">\((r, p)\)</span>, denoted as <span class="math inline">\(X\sim Nb(r, p)\)</span>.</p>
+<h3 id="poisson-distribution">4. Poisson Distribution</h3>
+<p><span class="math display">\[
+P(X=k) = \frac{\lambda^k}{k!}\e^{-\lambda}, ~~~~ k = 0, 1, 2, ...
+\]</span></p>
+<p>define <span class="math inline">\(X\)</span> comlies the Poisson distribution with parameter <span class="math inline">\(\lambda\)</span>, denoted as <span class="math inline">\(X\sim P(\lambda)\)</span>.</p>
+<h3 id="hypergeometric-distribution">5. Hypergeometric Distribution</h3>
+<p>The hypergeometric distribution is modelled based on the <span class="math inline">\(M\)</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Divisibility
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< elementary_number_theory</a></p>
+
+<h1 id="divisibility">Divisibility</h1>
+<h5 id="division-algorithm"># Division Algorithm</h5>
+<p>For integer <span class="math inline">\(a,b\)</span> with <span class="math inline">\(b\neq0\)</span>, there only exists two integer <span class="math inline">\(q,r\)</span> which satisified <span class="math display">\[
+a = b \times q + r, \quad 0\leq r &lt; b
+\]</span> where <span class="math inline">\(q\)</span> is <strong>quotient</strong> and <span class="math inline">\(r\)</span> is <strong>remainder</strong>. <span class="math inline">\(q\)</span> also named as <strong>partial quotient</strong> if <span class="math inline">\(r\neq0\)</span>.</p>
+<blockquote>
+<p>Proof. First we prove the case when <span class="math inline">\(a, b &gt; 0\)</span>.</p>
+<p>(Existence) Let <span class="math inline">\(R = \{r ~|~ r = a-qb \ge 0, ~ q\in\mathbb{Z} \} \subset \mathbb{N}\)</span>, since <span class="math inline">\(a, b&gt;0\)</span>, there must be at least one element that <span class="math inline">\(r = a - 0\times b = a &gt; 0\)</span>, which inferred that <span class="math inline">\(R\)</span> is a non-empty set of <span class="math inline">\(\mathbb{N}\)</span>, hence there must be a minimum number <span class="math inline">\(r \ge 0\)</span>.</p>
+<p>Notice that the minimum <span class="math inline">\(r\)</span> must less than <span class="math inline">\(b\)</span>. If not, we have <span class="math inline">\(a-qb \ge b\)</span>, so <span class="math inline">\(a-(q+1)b\ge 0\in R\)</span>, which contradicts to the statement that <span class="math inline">\(r\)</span> is minimal.</p>
+<p>(Uniqueness) Assume there’s another pair <span class="math inline">\((p&#39;, r&#39;)\)</span> which satisfies the same condition:</p>
+<p><span class="math display">\[
+a = bq + r, \quad a = bq&#39; + r&#39;, \qquad 0 \leq r,\ r&#39; &lt;b
+\]</span> Thus, <span class="math display">\[
+b(q-q&#39;) = r-r&#39; &lt; b \Rightarrow q - q&#39; &lt; 1
+\]</span></p>
+<p>Since <span class="math inline">\(q, q&#39;\)</span> are both integer, this inequation implies that <span class="math inline">\(q=q&#39;\)</span> thus <span class="math inline">\(r=r&#39;\)</span>, which concludes the uniqueness of pair <span class="math inline">\((p, r)\)</span>.</p>
+</blockquote>
+<h5 id="definition"># Definition</h5>
+<p>For integer <span class="math inline">\(a, b\neq0\)</span>, if there exits an integer <span class="math inline">\(q\)</span> which satisfies <span class="math display">\[
+a = bq
+\]</span> We say that <span class="math inline">\(a\)</span> <strong>divides</strong> <span class="math inline">\(b\)</span>, and <span class="math inline">\(a\)</span> is a <strong>divisor</strong> or <strong>factor</strong> or <span class="math inline">\(b\)</span>, and <span class="math inline">\(b\)</span> is a <strong>multiple</strong> of <span class="math inline">\(a\)</span>, denotes as <span class="math inline">\(a \ | \ b\)</span>.</p>
+<h5 id="property"># Property</h5>
+<ul>
+<li><p>Trivial Divisibility</p>
+<p>For any integer <span class="math inline">\(a\neq0\)</span>, <span class="math display">\[
+  1\ | \ a, \qquad a \ | \ 0
+  \]</span></p></li>
+<li><p>Partial Relation’s Requirement</p>
+<ol type="1">
+<li>For any integer <span class="math inline">\(a\neq0\)</span>, <span class="math inline">\(a\ | \ a\)</span>, and <span class="math inline">\(a \ | \ (-a)\)</span>.</li>
+<li>For <span class="math inline">\(a, b&gt; 0\)</span>, if <span class="math inline">\(a \ | \ b\)</span> and <span class="math inline">\(b \ | \ a\)</span>, then <span class="math inline">\(a=b\)</span>.</li>
+<li>If <span class="math inline">\(a\ | \ b\)</span> and <span class="math inline">\(b \ | \ c\)</span>, then <span class="math inline">\(a \ | \ c\)</span>.</li>
+</ol>
+<p>This concludes that the divisibility relation on <span class="math inline">\(\mathbb{N}\)</span> is <strong>partial order relation</strong>, while the definition domain can not be extended into <span class="math inline">\(\mathbb{Z}-\{0\}\)</span>, since the negatives would broke the anti-transtive rule.</p></li>
+<li><p><strong>Calcellation Law</strong> <span class="math display">\[
+  \textrm{If}\ \ \gcd(a,\ c) = 1, \quad a \ | \ (b\cdot c) \Rightarrow a \ | \ b \qquad (1)
+  \]</span></p></li>
+<li><p>If <span class="math inline">\(p\)</span> is prime and <span class="math inline">\(p|ab\)</span>, then <span class="math inline">\(p|a\)</span> or <span class="math inline">\(p|b\)</span>.</p>
+<blockquote>
+<p><strong>Proof</strong>. Since <span class="math inline">\(p\)</span> is a prime, <span class="math inline">\((p, a) = 1\)</span> or <span class="math inline">\((p, a)=p\)</span>. If <span class="math inline">\((p, a)=p\)</span> then <span class="math inline">\(p|a\)</span>, if <span class="math inline">\((p, a)=1\)</span> the</p>
+</blockquote></li>
+</ul>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

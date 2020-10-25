@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> HTML Style Attribute
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< html</a></p>
+
+<h1 id="html-style-attribute">HTML Style Attribute</h1>
+<h3 id="general-style-attribute">3. General Style Attribute</h3>
+<h5 id="background"># Background</h5>
+<p><code>bgcolor</code>和<code>background</code></p>
+<p>可以设定背景的标签有<code>&lt;body&gt;</code>和<code>&lt;table&gt;</code>的任意子标签(除<code>&lt;caption&gt;</code>).</p>
+<p><code>bgcolor</code>属性指定了某个元素的背景色, background属性指定元素背景图像的URL.</p>
+<p><code>bgcolor</code>属性的值可以是颜色的十六进制值、RGB值或颜色名. 例如如果要将背景色设定为黑色, 可以使用以下三种等效的表达方式:</p>
+<ul>
+<li><p><code>&lt;body bgcolor="#000000"&gt;</code></p></li>
+<li><p><code>&lt;body bgcolor="rgb(0,0,0)"&gt;</code></p></li>
+<li><p><code>&lt;body bgcolor="black"&gt;</code></p></li>
+</ul>
+<p>对于<code>background</code>, 如果所给的图像小于页面, 则默认情况下图像将重复平铺.</p>
+<h5 id="alignment"># Alignment</h5>
+<p>对齐方式<code>align</code>, 宽度<code>width</code>, 高度<code>height</code>一般而言当标签存在对这几个属性的需要时, 都可以应用.</p>
+<h5 id="inline-style"># Inline Style</h5>
+<p>粗体字标签<code>&lt;b&gt;</code>, 斜体字标签<code>&lt;i&gt;</code>, 更大的字号<code>&lt;big&gt;</code>, 更小的字号<code>&lt;small&gt;</code>, 下标<code>&lt;sub&gt;</code>, 上标<code>&lt;sup&gt;</code></p>
+<h3 id="tag-specific-style">4. Tag Specific Style</h3>
+<h5 id="style-for-table-tag"># Style for Table Tag</h5>
+<p><code>&lt;table&gt;</code>的<code>border</code>和<code>img</code>的<code>border</code>属性一样, 表示表格最外层边框<code>frame</code>的厚度, 以像素为单位. 默认情况下<code>border=0</code>, 此时的表格无论内外层都是没有边框的.</p>
+<p><code>frame</code>属性指定了最外层边框的模式, 其属性值包括</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>frame</code> value</th>
+<th style="text-align: center;">rendering effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">box</td>
+<td style="text-align: center;">frame in all sides</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">above</td>
+<td style="text-align: center;">above frame</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">below</td>
+<td style="text-align: center;">below frame</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">hsides</td>
+<td style="text-align: center;">horizontal frame</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">vsides</td>
+<td style="text-align: center;">vertical frame</td>
+</tr>
+</tbody>
+</table>
+<p><code>cepadding</code>属性和<code>cellspacing</code>属性分别指定了单元格内容到其边框的距离和不同单元格之间的距离.</p>
+<p><code>&lt;table&gt;</code>及其子标签(除<code>&lt;caption&gt;</code>)都可以应用通用的<code>bgcolor</code>属性和<code>background</code>属性来指定其背景色或背景图案URL. 注意在<code>&lt;table&gt;</code>中设定它们时不会影响到<code>&lt;caption&gt;</code>的背景, 尽管<code>&lt;caption&gt;</code>是<code>&lt;table&gt;</code>的子标签.</p>
+<p>此外, <code>&lt;table&gt;</code>及其子标签(除<code>&lt;caption&gt;</code>)都可以应用<code>align</code>属性和<code>width</code>属性.</p>
+<h5 id="style-for-list"># Style for List</h5>
+<p><code>&lt;ul&gt;</code>的<code>type</code>属性可以定义项前面的标志图形, 默认状态是小圆点<code>type="disc"</code>. <code>&lt;ol&gt;</code>的<code>type</code>属性可以定义项前面的有序排列, 默认状态是<code>type="1"</code>, 排列是<code>1, 2, 3...</code></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

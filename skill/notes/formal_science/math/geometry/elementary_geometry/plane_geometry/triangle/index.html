@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Triangle
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< plane_geometry</a></p>
+
+<h1 id="triangle">Triangle</h1>
+<h3 id="basic-concepts">1. Basic Concepts</h3>
+<h5 id="definition"># Definition</h5>
+<p>Notes: This document describes the triangle in Euclidean geometry and Euclidean plane.</p>
+<h3 id="classification">2. Classification</h3>
+<p>The triangle can be classified according to the sides or the angles.</p>
+<h5 id="classify-by-sides"># Classify By Sides</h5>
+<p>By sides, the triangle can be classified as equilateral triangle, isosceles triangle, and scalene triangle.</p>
+<ul>
+<li><p>The <strong>equilateral triangle</strong> has all sides the same length. In fact, you can prove that all the angles are also the same, as <span class="math inline">\(60^\circ\)</span>.</p></li>
+<li><p>The <strong>isosceles triangle</strong> has two sides of equal length. An isosceles triangle also has two angles of the same measure, namely the angles opposite to the two sides of the same length, which named as <strong>isosceles triangle theorem</strong>, which is known and proved by Euclid. Notice that the equilateral triangle is a special isosceles triangle.</p></li>
+<li><p>The <strong>scalene triangle</strong> has all its sides of different lengths. Equivalently, it has all angles of different measure.</p></li>
+</ul>
+<h5 id="classify-by-angles"># Classify by Angles</h5>
+<p>By angles, the triangle can be classified as right triangle, acute triangle, and obtuse triangle.</p>
+<p><strong>Right triangle</strong> has one of its interior angles as the right angle. Right triangle might be the most important triangle, even the most important shape, since all the triangles can be divided into two right triangle, and all the shaped constructed by lines can be expressed by the right triangle eventually. The relation between the sides and angles of a right triangle is the basis for <strong>trigonometry</strong>.</p>
+<p>New names are introduced for the right triangle: The side opposite the right angle is called the <strong>hypotenuse</strong>, and the sides adjacent to the right angle are called <strong>legs</strong> or <strong>catheti</strong> (singular: <strong>cathetus</strong>).</p>
+<p>A triangle is a <strong>oblique triangle</strong> if it’s not a triangle. The <strong>acute triangle</strong> has all its angles acute. The <strong>obtuse triangle</strong> has one angle more than <span class="math inline">\(90^\circ\)</span>.</p>
+<p>Based on the law of cosine, the sides relation for each shape is: (where the <span class="math inline">\(c\)</span> is the longest side of triangle)</p>
+<ul>
+<li><p>The right triangle, <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p></li>
+<li><p>The acute triangle, <span class="math inline">\(a^2 + b^2 &gt; c^2\)</span>.</p></li>
+<li><p>The obtuse triangle, <span class="math inline">\(a^2 + b^2 &lt; c^2\)</span>.</p></li>
+</ul>
+<h3 id="associated-geometry-object">4. Associated Geometry Object</h3>
+<h5 id="introduction"># Introduction</h5>
+<p>Thousands of geometry object (especially points) associated with the triangle, and each of them satisfying some unique property. Often, a special point is constructed by finding three lines associated in a symmetrical way with the three sides (or vertexes) and then proving that the three lines meet in a single point. An important tool for proving the concurrent is <strong>Ceva’s theorem</strong>. Similarly, lines associated with a triangle are often constructed by proving that three symmetrically constructed points are collinear, where <strong>Menelaus’ theorem</strong> gives a useful general criterion. We’ll introduce the most commonly encountered geometry object in this section.</p>
+<h5 id="basic-lines"># Basic Lines</h5>
+<p>The <strong>altitude</strong> of a triangle is a straight line through a vertex and perpendicular to the opposite side. The opposite side is called the <strong>base</strong> of the altitude, and the point where the altitude intersects the base (or its extension) is called the <strong>foot</strong> of the altitude. The length of the altitude is the distance between the base and the vertex.</p>
+<p>The <strong>angle bisector</strong> of a triangle is a straight line through a vertex which cuts the corresponding angle in half.</p>
+<p>The <strong>median</strong> of a triangle is a straight line through a vertex and the midpoint of the opposite side, and divides the triangle into two equal areas.</p>
+<h3 id="center-of-triangle">5. Center of Triangle</h3>
+<h5 id="circumcenter"># Circumcenter</h5>
+<p>The perpendicular bisector of all three sides meet in a single point, which named as the <strong>circumcenter</strong>, usually denoted by <span class="math inline">\(O\)</span>. It named as circumcenter because this point is the center of the circumcircle, the circle passing through all the three vertexes.</p>
+<blockquote>
+<p>Proof that three perpendicular bisectors in a triangle meet in a single point.</p>
+<p>Proof. Let the three perpendicular for <span class="math inline">\(AB, BC, CA\)</span> named <span class="math inline">\(l_{1}, l_{2}, l_{3}\)</span> respectively. Notice that <span class="math inline">\(AB\)</span> must not parallel to <span class="math inline">\(BC\)</span>, so <span class="math inline">\(l_{1}\)</span> meets <span class="math inline">\(l_{2}\)</span> with some point <span class="math inline">\(P\)</span>, with <span class="math inline">\(PA = PB\)</span> and <span class="math inline">\(PB = PC\)</span>, as a result <span class="math inline">\(PA = PC\)</span>, which infers that <span class="math inline">\(P\)</span> must lies on the perpendicular bisector of <span class="math inline">\(AC\)</span>, which is <span class="math inline">\(l_{3}\)</span>. This concludes that The three lines meets in a single point P.</p>
+</blockquote>
+<p>The diameter of circumcircle called the circumdiameter, which can be found by <strong>the law of sines</strong>. The radius of the circumcircle called <strong>circumradius</strong>.</p>
+<p><span class="math display">\[
+D = 2R = \cfrac{a}{\sin{A}} = \cfrac{b}{\sin{B}} = \cfrac{c}{\sin{C}}
+\]</span></p>
+<p>Thales’ theorem implies that whether the circumcenter lies inside or outside the circle is determined by the (largest) angle of triangle:</p>
+<ul>
+<li><p>The circumcenter lies inside the triangle iff it’s acute.</p></li>
+<li><p>The circumcenter lies exactly on the side iff it’s right (actually it must be lies on the hypotenuse).</p></li>
+<li><p>The circumcenter lies outside the triangle iff it’s obtuse.</p></li>
+</ul>
+<h5 id="orthocenter"># Orthocenter</h5>
+<p>The three altitudes of triangles intersect in a single point, denoted by <span class="math inline">\(H\)</span>.<img src="Orthocenter_proof.png" alt="Orthocenter_proof" style="zoom:50%; float:right" /></p>
+<blockquote>
+<p>Proof that three altitudes in a triangle meet in a single point.</p>
+<p>As shown, in <span class="math inline">\(\triangle ABC\)</span> the altitudes <span class="math inline">\(AP, BQ, CR\)</span> are constructed.</p>
+<p>To apply the Ceva’s theorem, we need to</p>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

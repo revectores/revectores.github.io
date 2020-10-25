@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> HTML Advanced Tags
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< html</a></p>
+
+<h1 id="html-advanced-tags">HTML Advanced Tags</h1>
+<p>这份文档中我们将介绍HTML中的一些不那么常用的标签.</p>
+<h5 id="marquee"># <code>&lt;marquee&gt;</code></h5>
+<p><code>&lt;marquee&gt;</code>标签并不是W3C标准中的规范. 通过direction属性可以设置其滚动的方向, 默认情况下自右向左.</p>
+<p><code>scrolldelay</code>和<code>scrollamount</code>是两个共同决定滚动速度的属性, <code>scrolldelay</code>指定单位时间(以毫秒为单位), 而<code>scrollamount</code>指定在单位时间内移动的像素, 其默认值分别为<code>85(ms), 6(px)</code>. 因此减小<code>delay</code>和增加<code>amount</code>都可以加速滚动.</p>
+<p>根据以上两个参数我们很容易计算一个像素点从一端移动到另一端所需的时间. 例如当<code>width = 960px</code>, 则默认滚动一次的时间为960/6*0.085=13.6s.</p>
+<p><code>marquee</code>最常用的两个方法是<code>stop/start</code>, 分别用于停止滚动和开始滚动. 常规的设计是将<code>stop</code>和<code>onmouseon</code>绑定在一起, <code>start</code>和<code>onmouseout</code>绑定在一起, 使得用于能够在鼠标悬停的状态下仔细阅读静态的文字.</p>
+<h5 id="select"># <code>&lt;select&gt;</code></h5>
+<p><code>&lt;select&gt;</code>标签用于创建单选或多选菜单, 其中的每一项由一对<code>&lt;option&gt;</code>标签标志:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">&lt;select&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Apple<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Banana<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Orange<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">&lt;/select&gt;</span></span></code></pre></div>
+<p><select> <option>Apple</option> <option>Banana</option> <option>Orange</option> </select></p>
+<p>如果希望设定多选, 则可以添加multiple属性, 该属性没有属性值. 当设定了这一属性以后, 就可以通过按住Ctrl的方式来选择多个option.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">&lt;select</span><span class="ot"> multiple</span><span class="kw">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Apple<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Banana<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>Orange<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">&lt;/select&gt;</span></span></code></pre></div>
+<p><select multiple> <option>Apple</option> <option>Banana</option> <option>Orange</option> </select></p>
+<p>【size问题】</p>
+<p><code>&lt;select&gt;</code>标签的<code>size</code>样式是一个很混乱的局面, 对于单选而言, 默认情况下的样式是<strong>下拉列表</strong>, 这一样式的好处在于页面的简洁, 但无法直观地一眼看到所有选项; 对于多选而言, 默认情况下的样式则是<strong>定长框</strong>(默认情况下定长框的长度, 理论上是由浏览器来决定, 本地实验表明chrome,Firefox和IE11下无论项数有多少默认定长框长度均为4). 如果我们将size属性设定为0, 则就代表服从默认情况.</p>
+<p>如果我们令<code>size=1</code>, 对于单选框而言, 和<code>size=0</code>没有区别, 仍然是下拉列表, 但对于多选框而言(因为多选框是不可能通过下拉列表形式呈现的), 则是只显示一个项的定长框.</p>
+<p>当我们令<code>size</code>为其他正数时, 则单选框和多选框的样式都会变成相应长度的定长框.</p>
+<p>综上我们可以得出的结论是: 如果样式是下拉列表, 它一定是单选框; 如果样式是定长框, 它可能是单选框或复选框, 但如果定长框的长度是<code>1</code>, 则它一定是复选框.</p>
+<p>另外值得注意的一点是, 通过原生HTML是不可能规定下拉列表的长度的, 本地实验表明Chrome, Firefox都在下拉列表长度&lt;=20时显示整个列表, 而&gt;20时通过滚动条解决问题. 对于IE而言这个数值是30(而且IE对于下拉列表的显示样式非常奇怪, 不再详述, 有兴趣自己做实验).</p>
+<p>以上就是对于奇特的<code>size</code>属性的讨论(以上讨论建立在尚未设定<code>select</code>的<code>style-height</code>的条件下, 实验表明似乎一旦设定了<code>height</code>则<code>size</code>会自动被屏蔽掉……总之情况会变得非常复杂, 请尽量不要同时设置<code>size</code>和<code>height</code>)</p>
+<p>【宽高设定】</p>
+<p><code>&lt;select&gt;</code>的宽在默认情况下是由选项中最长的一项来决定的. 由于<code>select</code>是坚决不提供水平滚动条的, 这一方式非常自然, 否则会导致后面的内容被截断, 不过你也可以强行设定定宽, 但<code>select</code>不提供<code>width</code>, 需要通过设置样式的方式进行.</p>
+<p><code>select</code>同样不提供<code>height</code>, 必须通过style设置, 不过我们不建议直接调整<code>height</code>, 如果不是有严格像素要求的话请尽量通过<code>size</code>来控制.</p>
+<p>【select对象的属性、事件和方法】</p>
+<p>很多时候<code>select</code>中的选项需要即时地和页面上的项目发生联系, 最常见的是和另外的<code>select</code>发生联系. 举个例子, 我们有两个<code>select</code>, A是国家的选择项, 而B是地区的选择项, 我们需要根据A的变化而动态地改变B中的项目, 这时候就需要对<code>select</code>对象本身的特点进行考察.</p>
+<p>获取当前<code>select</code>所选择项的<code>index</code>的属性是<code>selectedIndex</code>. 举个例子:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">&lt;select</span><span class="ot"> id=</span><span class="st">&quot;select-1&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>op1<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="kw">&lt;option</span><span class="ot"> selected</span><span class="kw">&gt;</span>op2<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="kw">&lt;option&gt;</span>op3<span class="kw">&lt;/option&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">&lt;/select&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">&lt;script&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    <span class="kw">var</span> sel1 <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;select-1&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(sel1<span class="op">.</span><span class="at">selectedIndex</span>)     <span class="co">// 1</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="kw">&lt;/script&gt;</span></span></code></pre></div>
+<p><code>select</code>最常见的是<code>onchange</code>事件, 当所选择的<code>option</code>发生改变时触发.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

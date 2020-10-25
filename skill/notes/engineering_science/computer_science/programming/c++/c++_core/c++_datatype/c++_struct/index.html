@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Struct
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c++_datatype</a></p>
+
+<h1 id="struct">Struct</h1>
+<h3 id="construction">1. Construction</h3>
+<p>Struct is a sequential group of different types of data, we provide a set of name and their corresponding types to construct a struct:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">struct</span> time{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="dt">int</span> hour;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="dt">int</span> min;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="dt">int</span> sec;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>After this we’re able to declare some variable as an instance of <code>time</code> to use this structure:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">struct</span> time t0;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">// Sequent initalization:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">struct</span> time t1 = {<span class="dv">11</span>, <span class="dv">40</span>, <span class="dv">30</span>};</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co">// Keyword pathway:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">struct</span> time t2 = {.min=<span class="dv">40</span>, .sec=<span class="dv">30</span>};</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="co">// or keyword combined with sequent:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw">struct</span> time t3 = {.min=<span class="dv">40</span>, <span class="dv">30</span>};</span></code></pre></div>
+<p>There is a useful short cut for creating new instance struct which is directly writing the struct name and the initalizer after struct definition, and you can create many of them:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">struct</span> time{</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="dt">int</span> hour, min, sec;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>t0,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>t1 = {<span class="dv">11</span>, <span class="dv">40</span>, <span class="dv">30</span>},</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>t2 = {.min = <span class="dv">40</span>, .sec = <span class="dv">30</span>},</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>t3 = {.min = <span class="dv">40</span>, <span class="dv">30</span>};</span></code></pre></div>
+<p>Once the struct is constructed, we’re able to consider it as any build-in data type, which means it’s possibile to make it the parameter or return type of a function, this can be pretty convinent to passby the limitation of return value.</p>
+<h3 id="interact-with-pointer">2. Interact with Pointer</h3>
+<p>The funny part occurs on the interaction between pointer and struct. A pointer which points an struct has a quick path to achieve the attribute:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">struct</span> time* pt = &amp;t0;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>cout &lt;&lt; (*pt).hour &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; (pt-&gt;hour);    <span class="co">// 11 11</span></span></code></pre></div>
+<p>As shown above, if some pointer <code>pt</code> points to the struct, then we’re able to use the left arrow to directly point the struct’s element without fisrt dereference to the struct itself.</p>
+<p>Notice that in the expression above if we remove the brackets besides <code>*pt</code> it will causes error:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>cout &lt;&lt; *pt.hour  <span class="co">// error</span></span></code></pre></div>
+<p>Based to the priority (attribute-achieve dot <code>.</code> has the higher priority), this will be considered as <code>*(pt.hour)</code> instead of <code>(*pt).hour</code>, which makes the interpreter misunderstand to consider <code>pt.hour</code> as a pointer. We can construct a situation to apply this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">struct</span> ptime{</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    <span class="dt">int</span> *phour, *pmin, *psec;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>} pt0 = {&amp;(t0.hour), &amp;(t0.min), &amp;(t0.sec)}</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>cout &lt;&lt; *(pt0.hour);    <span class="co">// 11</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="co">// Here the brackets can be removed without causing misunderstanding.</span></span></code></pre></div>
+<h3 id="abstraction-mechanism">3. Abstraction Mechanism</h3>
+<h5 id="c-support"># C++ Support</h5>
+<p>Comparing to class, struct is a simpler way to construct a group of data. In C++, actually almost all things that class can do is also supported, it’s basicly “A class with all the parameters are public by default”:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">struct</span> person{</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="kw">private</span>:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="bu">std::</span>string name;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="dt">int</span> age;</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="kw">public</span>:</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    person(string _name, <span class="dt">int</span> _age){</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>        <span class="kw">this</span>-&gt;name = _name; <span class="kw">this</span>-&gt;age = _age;</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    }</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="dt">int</span> age(){</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>        <span class="cf">return</span> <span class="kw">this</span>-&gt;age;</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    }</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="dt">int</span> age(<span class="dt">int</span> _age){</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>        <span class="kw">this</span>-&gt;age = age;</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>    }</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="c-style-struct"># C Style Struct</h5>
+<p>But in the primitive C this is limited, anyway there’s no OOP concepts on the C, there is no so-called private and public declaration, besides we are not allowed to define a method of struct and the pointer <code>this</code> is not supported. The C just considered it as a simple group. If we want to construct a function as the method of struct, a function pointer is a good way to express:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">struct</span> person{</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    <span class="dt">int</span> age;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    <span class="dt">void</span> (*print)(<span class="dt">const</span> <span class="kw">struct</span> person*);</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    <span class="dt">char</span> name[<span class="dv">20</span>];</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>};</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="dt">void</span> print(<span class="dt">const</span> <span class="kw">struct</span> person* p){</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>    printf(<span class="st">&quot;name:%s, age:%d&quot;</span>, p-&gt;name, p-&gt;age);</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a><span class="dt">int</span> main(){</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true"></a>    <span class="kw">struct</span> person someone = {<span class="dv">18</span>, print, <span class="st">&quot;Revector&quot;</span>};</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true"></a>    someone.print(&amp;someone);</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true"></a>}</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true"></a><span class="co">/* By constructing function pointer we can even simulate the dot syntax, while it&#39;s not elegant to pass so many meanless construction parameter. Anyway trying to implement a different paradigm in the language itself is not a good idea.*/</span></span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

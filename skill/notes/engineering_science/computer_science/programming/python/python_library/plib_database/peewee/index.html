@@ -1,0 +1,111 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Peewee
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< plib_database</a></p>
+
+<h1 id="peewee">Peewee</h1>
+<h3 id="basic-operations">1. Basic Operations</h3>
+<h5 id="connent-to-database"># Connent to Database</h5>
+<p>Peewee supports multiple types of Databases. We’ll use <code>MySQL</code> as the example in this document.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># Connnect to MySQL Database:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>test_db <span class="op">=</span> peewee.MySQLDatabase(<span class="st">&#39;test_db&#39;</span>, user<span class="op">=</span><span class="st">&#39;root&#39;</span>, passwd<span class="op">=</span><span class="st">&#39;&#39;</span>, host<span class="op">=</span><span class="st">&#39;localhost&#39;</span>, port<span class="op">=</span><span class="dv">3306</span>)</span></code></pre></div>
+<p>If you connect to the <code>localhost</code> with default port <code>3306</code>, the <code>host</code> and <code>port</code> parameter can be omitted. Notice that the port parameter should be <code>int</code> instead of <code>str</code>.</p>
+<p>This database connection method returns an instance of <code>peewee.MySQLDatabase</code>, which will be used when we build class to model tables.</p>
+<p>Until now we just create a model for the database, we must use <code>connect</code> method to estabilish the connection actually:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>test_db.<span class="ex">connect</span>()</span></code></pre></div>
+<p>This step can be omitted as well since peewee will help us to estabilish it automatically when we need to execute the query, but it’s still a good convension to call <code>connect</code> explicitly, by which we could recognize the potential problems about connections immediately, instead of delaying it until the query. Anyway, <strong>explict is better than implicit</strong>.</p>
+<blockquote>
+<p>If the following error raised</p>
+<pre><code>peewee.ImproperlyConfigured: MySQL driver not installed!</code></pre>
+<p>Install <code>PyMySQL</code> module to give a MySQL driver.</p>
+</blockquote>
+<h5 id="modeling-table"># Modeling Table</h5>
+<p>As we know the traditional way to <code>CREATE TABLE</code> in SQL looks like</p>
+<pre class="mysql"><code>CREATE TABLE person (
+    id      INTEGER NOT NULL AUTO_INCREMENT,
+    name    VARCHAR(30) NOT NULL,
+    age     INTEGER NOT NULL,
+);</code></pre>
+<p>The corresponding modeling, notice the class should inherit the <code>peewee.Model</code> prototype:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">class</span> User(peewee.Model):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    <span class="bu">id</span>   <span class="op">=</span> IntegerField()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    name <span class="op">=</span> CharField()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    age  <span class="op">=</span> IntegerField()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    <span class="kw">class</span> Meta:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>        database <span class="op">=</span> test_db</span></code></pre></div>
+<p>As shown we use <code>IntegerField()</code> method to specify <code>INTEGER</code> field and <code>CharField</code> method to specify <code>VARCHAR</code> field. The complete field mapping could be found in <a href="http://docs.peewee-orm.com/en/latest/peewee/models.html#field-types-table">peewee field types table</a>.</p>
+<p>Be aware aboumet the information omission:</p>
+<ul>
+<li>There’s an keyword argument <code>null=False</code> to specify whether <code>NULL</code> value is allowed. Notice that the default value is <code>False</code>, that’s why we don’t need to declare <code>NOT NULL</code> in each case.</li>
+<li>peewee will automatically add the <code>PRIMARY_KEY</code> and <code>AUTO_INCREMENT</code> property to the field named <code>id</code>. You can specify the <code>primary_key</code> keyword argument to another field name, but there’s no <code>auto_increment</code> keyword argument.</li>
+</ul>
+<p>The correspondant desgin can be inferred from this example:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Object</th>
+<th style="text-align: center;">Correspondant</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Model Class</td>
+<td style="text-align: center;">Database Table</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Field Instance</td>
+<td style="text-align: center;">Column on a Table</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Model Instance</td>
+<td style="text-align: center;">Row in a database Table</td>
+</tr>
+</tbody>
+</table>
+<p>More details about the construction of table model will be discussed in <a href="">Modeling Table</a>. In next section we’ll insert data into the database table via class instantiation.</p>
+<h5 id="instance-construction"># Instance Construction</h5>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="co"># Assign values when instantiation.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>robert <span class="op">=</span> Person(name<span class="op">=</span><span class="st">&#39;Robert&#39;</span>, age<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>robert.save()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="co"># Create an empty instance and assign later.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>john <span class="op">=</span> Person()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>john.name <span class="op">=</span> <span class="st">&#39;John&#39;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>john.age <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>john.save()</span></code></pre></div>
+<p>Here we create an instance of <code>User</code> model then <code>save</code> it to the table, since the record <code>robert</code> and <code>john</code> is new, this operation will be implemented by an <code>INSERT</code> command in the SQL-level. <code>save</code> command returns the number of rows modified, that is, returns <code>1</code> in this case.</p>
+<p>Notice that since the <code>id</code> column is auto-increment, we don’t need to specify, so it leaves as <code>None</code> before <code>save</code> operation, and it will be auto-updated after the <code>save</code> method finished its job.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>lewis <span class="op">=</span> Person(name<span class="op">=</span><span class="st">&#39;Lewis&#39;</span>, age<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="bu">print</span>(lewis.<span class="bu">id</span>)     <span class="co"># None</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>lewis.save()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="bu">print</span>(lewis.<span class="bu">id</span>)     <span class="co"># 3</span></span></code></pre></div>
+<p><code>create</code> method is provided as a shortcut for initialization and insertion:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>user <span class="op">=</span> User.create(username<span class="op">=</span><span class="st">&#39;username&#39;</span>, password<span class="op">=</span><span class="st">&#39;password&#39;</span>)</span></code></pre></div>
+<p>This method returns the created instance.</p>
+<p>If there are lots of columns in a table, which is common in industry, you might want to store the columns data in a dictionary and use the dictionary unpack mechanism to pass the arguments:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>user_dict <span class="op">=</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="st">&#39;username&#39;</span>: <span class="st">&#39;username&#39;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    <span class="st">&#39;password&#39;</span>: <span class="st">&#39;password&#39;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>}</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>user <span class="op">=</span> User.create(<span class="op">**</span>user_dict)</span></code></pre></div>
+<h5 id="record-retrieve-and-modification"># Record Retrieve and Modification</h5>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<h3 id="playhouse-helper">2. Playhouse Helper</h3>
+<h5 id="conversion-between-model-and-dictionary"># Conversion between Model and Dictionary</h5>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

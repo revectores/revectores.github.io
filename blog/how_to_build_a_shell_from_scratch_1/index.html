@@ -1,27 +1,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-<title>
-How to Build A Shell From Scratch (1)
-</title>
-<link rel="stylesheet" type="text/css" href="../../static/css/blog.css"> <link rel="stylesheet" type="text/css" href="../../static/css/code.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> How to Build A Shell From Scratch (1)
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
 </head>
 <body>
-<p><a href="../index.html">&lt;&lt; Blog List</a></p>
+
+<p><a href="../"><< blog</a></p>
+
 <h1 id="how-to-build-a-shell-from-scratch-1">How to Build A Shell From Scratch (1)</h1>
 <center>
 October 18, 2020
 </center>
-<p><br /></p>
 <h3 id="introduction">1. Introduction</h3>
 <p>I’ve just hand in the homework of <a href="http://ybwu.org/ecnu-oslabs/projects/myshell/docs/shell.html">Linux Operating System</a> about creating a basic shell today. The most of functions are done two weeks ago but the requirement about details such as blank ignorance and pipe force me to reconsider the design of code structure again and again.</p>
 <p>This tutorial, as a review of work, introduce how to use the fundamental Unix system call to build a useful shell with background, redirection, and pipe supporting. The source code is open at <a href="https://github.com/revectores/resh">Github</a>.</p>
 <p>Why bother building a naive shell when there already are so many great shells like <a href="https://fishshell.com/">fish</a>, <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>? First, shell is a great window to learn about the fundamental Unix concepts, including process model, process communication, and file operation, to be more specific, and the usage of system call like <code>fork()</code>, <code>exec()</code>, <code>wait()</code>, <code>pipe()</code>.</p>
 <p>Second, in many cases there is not practical benefit to create a general purpose shell, but a command line user interface is very common, like the interactive command interpreter provided by Python, node.js, and gdb, all of them can be regarded as the <strong>domain specific shell</strong>.</p>
 <p>In summary, learning about how to make a shell is quite useful theoretically and practically, so let’s build it!</p>
-<p><br /> <br /></p>
 <h3 id="main-loop">2. Main Loop</h3>
 <p>A shell continue to consume line by line from user until exit. Hence the framework of a shell must be a loop that keep processing inputs from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> based on line:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
@@ -67,7 +69,6 @@ October 18, 2020
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>}</span></code></pre></div>
 <p>This time we just simply ignore all other commands. We also added the prompts to mark a shell environment and distinguish the inputs from outputs (You can give your shell a name by placing it before <code>&gt;</code> like <code>resh &gt;</code>!).</p>
-<p><br /> <br /></p>
 <h3 id="parameters-parser">3. Parameters Parser</h3>
 <p>For now we are only able to compare the single command, while in real world there are multiple parameters passed into a command, hence a parser that split the input into parameters is required. To organize the codes, we extract the parsing and command execting process into seperate function, named <code>parse()</code> and <code>route()</code>, and store the parameters in <code>params</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">int</span> main(){</span>
@@ -131,3 +132,8 @@ October 18, 2020
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="ex">1</span> 2 3</span></code></pre></div>
 <p>The complete codes example can be found in <a href="parameters_parser.c"><code>parameters_parser.c</code></a>.</p>
 <p>For users, it is more common to invoke some powerful programs instead of those shell built-in, such as <code>find</code>, <code>grep</code>. That is, we must empower our shell the ability to execute other programs, which require system calls <code>fork()</code> and <code>exec()</code>. We’ll introduce these in next section, and equip our shell with the ability of all executables.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

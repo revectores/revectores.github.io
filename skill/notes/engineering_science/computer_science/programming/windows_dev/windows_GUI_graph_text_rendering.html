@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Windows GUI Graph Text Rendering
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< programming</a></p>
+
+<h2 id="windows-gui-graph-text-rendering">Windows GUI Graph Text Rendering</h2>
+<h3 id="graphics-device-interface">Graphics Device Interface</h3>
+<h5 id="concept"># Concept</h5>
+<p><u>Illustrates definition and function of GDI.</u></p>
+<p><strong>Graphics Device Interface(GDI)</strong> is an abstraction layer between application and the physical output device, which provides a uniform interface for various output device (i.e. monitor in different resolution ratio). The dataflow can be shown as following diagram:</p>
+<pre class="mermaid"><code>graph LR
+Application --&gt; GDI --&gt; D[Drive Program For Device] --&gt; Device</code></pre>
+<p>Here the <code>Drive Program</code> is the linker between the codes that manipulates GDI, which converts the operations into the instruction of device.</p>
+<p>Nowadays the GDI has developed into GDI+.</p>
+<p>==TODO: What is GDI+?==</p>
+<h5 id="device-context"># Device Context</h5>
+<p><strong>Device Context(DC)</strong> is a data structure that defines the graphic object and its properties.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

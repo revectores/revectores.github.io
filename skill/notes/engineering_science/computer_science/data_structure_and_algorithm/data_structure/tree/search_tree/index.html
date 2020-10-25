@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> 1. General Binary Search Tree
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< tree</a></p>
+
+<h3 id="general-binary-search-tree">1. General Binary Search Tree</h3>
+<h5 id="defintion"># Defintion</h5>
+<p>A binary search tree is a binary tree that fits: for any given node, all the values of the nodes in left subtree is less than the value of it, and all the values of the nodes in right subtree is larger than the value of it. By constructing a binary tree like this, we’ll be able to search a value by <span class="math inline">\(O(\log n)\)</span>. We’ll demonstrate how to do the operation of <code>find</code>, <code>insert</code> and <code>delete</code>, and analyse the time complex of these operations.</p>
+<h5 id="implementation"># Implementation</h5>
+<p>The idea of finding an element in a BST is quite simple that, you compare the value you want to search with the data of current node, if the value is smaller, go to the left subtree, instead if the value is larger, go to the right subtree. If the value is exactly the data of root, we’ll say we find the node we want and return it.</p>
+<p>The process about <code>NULL</code> pointer can be tricky and important, when the input node is <code>NULL</code>, since it’s a recursive program, usually it traverse a long distance to here, and finally find out there’s no way to go, in this case we return a <code>NULL</code> pointer which indicates that the required value is not found in out tree.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>Node_ptr find(Node_ptr root, <span class="dt">int</span> value){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="cf">if</span>(root == NULL) <span class="cf">return</span> NULL;   </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &gt; value) <span class="cf">return</span> find(root-&gt;left, value);</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &lt; value) <span class="cf">return</span> find(root-&gt;right, value);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="cf">return</span> root;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Finding the maximum and minimum value can be easily implemented by keep searching the right or left child until there’s none:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>Node_ptr find_min(Node_ptr root){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="cf">if</span>(root == NULL) <span class="cf">return</span> NULL;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;left_child == NULL) <span class="cf">return</span> root;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="cf">return</span> find_min(root-&gt;left_child);</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>Node_ptr find_max(Node_ptr root){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="cf">if</span>(root == NULL) <span class="cf">return</span> NULL;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;right_child == NULL) <span class="cf">return</span> root;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> find_max(root-&gt;right_child);</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The <code>insert</code> process is similar as the <code>find</code> function, while in this case, when we traversal into a <code>NULL</code> node, which means that’s the position the value should be placed, so we’ll create a new node and do the insertion by return it, and in the upper layer the child will be assigend.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>Node_ptr insert(Node_ptr root, <span class="dt">int</span> value){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="cf">if</span>(root == NULL){</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>        Node_ptr new_node = malloc(<span class="kw">sizeof</span>(Node));</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>        new_node-&gt;data = value;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>        new_node-&gt;left_child = new_node-&gt;right_child = NULL;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>        <span class="cf">return</span> root;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    }</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &gt; value)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>        <span class="cf">return</span> root-&gt;left_child = insert(root-&gt;left_child, value);</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &lt; value)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>        <span class="cf">return</span> root-&gt;right_child = insert(root-&gt;right_child, value);</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    <span class="cf">return</span> root;</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Finally the most complex operation is the deletion, we need to keep the BST still a BST after the deletion of nodes, multiple strategy can be applied for this propose, and many of them leads to more complicate tree structure. We’ll introduce a simple one.</p>
+<p>If the deleted node is the leave node, no adjustment is required; if it contains only one child, left or the right but not both, then we only need to replace the deleted node usingn its subnode.</p>
+<p>The most complicate case is the deleted node contains both children, in this case we’ll pick <strong>the smallest one in the right subtree</strong> as the replacement, and delete that picked one recursively. The recursive is in fact not so recursive: since the node we pick up is the smallest one in the right subtree, so there’s no left-child of it, in this case, as mentioned above, add the “recursive” delete need to do is to raise the right child once.</p>
+<p>The implementation based on the idea above:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>Node_ptr delete(Node_ptr root, <span class="dt">int</span> value){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    <span class="cf">if</span>(root == NULL) <span class="cf">return</span> NULL;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &gt; value)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>        <span class="cf">return</span> root-&gt;left_child = delete(root-&gt;left_child, value);</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data &lt; value)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>        <span class="cf">return</span> root-&gt;right_child = delete(root-&gt;right_child, value);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="cf">if</span>(root-&gt;data == value){</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>        <span class="cf">if</span>(root-&gt;left_child &amp;&amp; root-&gt;right_child){</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>            Node_ptr right_min = find_min(root-&gt;right_child);</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>            root-&gt;data = right_min-&gt;data;</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>            root-&gt;right_child = delete(root-&gt;right_child, right_min-&gt;value);</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>        } <span class="cf">else</span> {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>            Node_ptr src_space = root;</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>            <span class="cf">if</span>(root-&gt;left_child)        root = root-&gt;left_child;</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>            <span class="cf">else</span> <span class="cf">if</span>(root-&gt;right_child)  root = root-&gt;right_child;</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>            <span class="cf">else</span> root = NULL;   </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>            free(src_space);</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>        }</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>    }</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The complete and executable demo with manually constructed tree is shown as <code>BinarySearchTree.c</code>.</p>
+<h5 id="complexity-analysis"># Complexity Analysis</h5>
+<p>Ideally, if the tree is balanced, i.e. the left subtree and the right subtree share almost the same nodes, then the query, insert and delete operation only requires <span class="math inline">\(O(\log N)\)</span>. While in practice during the insertion and deletion the tree can be unbalanced, and even degenerates to the linked list, in which case the advantage of tree is no longer maintained and the time complexity will arise to <span class="math inline">\(O(n)\)</span>.</p>
+<p>To solve this problem, seversal limited tree structures are proposed, which limit the tree with given balance condition, which requires additional operations after the insertion and deletion to keep the given condition so the tree <strong>balances itself</strong>. We’ll introduce three typical types of tree of them: AVL tree, B-tree and splay tree.</p>
+<h3 id="avl-tree">2. AVL Tree</h3>
+<p>As mentioned before, AVL Tree is a self-balanced binary serach tree. To introduce the limitation added to AVL tree, we’ll define the balance rate of a tree first.</p>
+<p>The balance rate of a node is defined as the height difference of the left subtree and the right subtree, notice that this is a number with sign, it’s positive when the left subtree is higher. We define a tree is balanced, if the absoluate value of balance rate of all nodes are less or equal than 1.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

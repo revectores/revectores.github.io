@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Signal
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< signals_and_systems</a></p>
+
+<h1 id="signal">Signal</h1>
+<h3 id="basic-concepts">1. Basic Concepts</h3>
+<h5 id="representation"># Representation</h5>
+<p>Signal can be represented as the one or multi variables function. In most of the cases, the variable is time for the actual physical systems, while the variable can also be other physical quantity, i.e. in the image analysis, if we regard the image as a signal, the <span class="math inline">\((x,y)\)</span> coordinates of the point is the variable, and the RGB value or grey scale is the response.</p>
+<h5 id="classification"># Classification</h5>
+<p>There’re two kinds of signals which will be discussed parallely: continous-time signal and discrete-time signal(series), which can be represented as the continous function <span class="math inline">\(x(t)\)</span> or a series <span class="math inline">\(x[n]\)</span> respectively, where <span class="math inline">\(t\in\mathbb{R}\)</span> while <span class="math inline">\(n\in\mathbb{Z}\)</span></p>
+<p>A discrete-time signal can represent those phenomenons that is discrete themselves, or <strong>sampling</strong> from the continous signal. In the general case the original contious signal cannot be recovered from its sample, since some information must lost in sampling operation, while the <strong>sampling theorem</strong> will show us that this is possible under a specific condition.</p>
+<h5 id="transformation"># Transformation</h5>
+<p>Since the signal is represented by function, the transformation of signal is exactly as the transformation of function. Three basic transformations included.</p>
+<ol type="1">
+<li><p>The <strong>time shift</strong> <span class="math inline">\(x(t+t_0)\)</span> is the translation over <span class="math inline">\(x\)</span>-axis, which represents a time <strong>delay</strong> or a time <strong>advance</strong> based on the direction of translation, i.e. the sign of <span class="math inline">\(t_0\)</span> in <span class="math inline">\(x(t+t_0)\)</span>.</p></li>
+<li><p>The <strong>time reversal</strong> <span class="math inline">\(x(-t)\)</span> is the symmetry transformation of <span class="math inline">\(t=0\)</span>.</p></li>
+<li><p>The <strong>time scaling</strong> <span class="math inline">\(x(kt)\)</span> is the scaling transformation.</p></li>
+</ol>
+<p>Combining the transformations above these three method, we’re able to construct any <strong>linear transformation</strong> <span class="math inline">\(x(\alpha t + \beta)\)</span> for a singal. When the transformation formula is given, the workflow to generate the transformed graph is to first do the delay/advance and then the reversal/scaling.</p>
+<h5 id="property"># Property</h5>
+<p>Some important properties of function is also introduced for singal:</p>
+<ol type="1">
+<li><p>The <strong>periodic signal</strong>. The smallest period <span class="math inline">\(T_0\)</span> is called the <strong>fundamental period</strong>. If a signal is not periodic, it’s <strong>aperiodic</strong>.</p></li>
+<li><p>The <strong>odd signal</strong> and <strong>even signal</strong>. One important fact is that: any signal can be broken into the sum of an odd signal and an even signal:</p></li>
+</ol>
+<p><span class="math display">\[
+x(t) = \mathcal{Ev}\{x(t)\} + \mathcal{Od}\{x(t)\}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathcal{Ev}\{x(t)\} = \frac{1}{2}[x(t) + x(-t)] ~~~~~~~~~~~~~~~~ \mathcal{Od}\{x(t)\} = \frac{1}{2}[x(t) - x(-t)].
+\]</span></p>
+<p>The <span class="math inline">\(\mathcal{Ev}\{x(t)\}\)</span> and <span class="math inline">\(\mathcal{Od}\{x(t)\}\)</span> is named the <strong>even part</strong> and the <strong>odd part</strong> respectively.</p>
+<h3 id="energy">2. Energy</h3>
+<h5 id="energy-over-finite-section"># Energy Over Finite Section</h5>
+<p>We define the <strong>energy</strong> of signal for continous and discrete signal as:</p>
+<p><span class="math display">\[
+E = \int_{t_1}^{t_2} |x(t)|^2 \text{d}t ~~~~~~~~~~~~~~~~
+E = \sum_{n_1}^{n_2} |x(n)|^2
+\]</span></p>
+<p>The energy in the unit time, i.e. the <strong>average power</strong> of them are</p>
+<p><span class="math display">\[
+P = \cfrac{1}{{t_2}-{t_1}} \int_{t_1}^{t_2} |x(t)|^2 \text{d}t ~~~~~~~~~~~~~~~~
+P = \cfrac{1}{{n_2-n_1+1}} \sum_{n = n_1}^{n_2} |x(n)|^2
+\]</span></p>
+<p>Notice that there are <span class="math inline">\(n_2-n_1+1\)</span> numbers in <span class="math inline">\([n_1, n_2]\)</span> instead of <span class="math inline">\(n_2-n_1\)</span>.</p>
+<h5 id="energy-over-infinite-section"># Energy Over Infinite Section</h5>
+<p>In the infinity section, the <strong>total energy</strong> of them are</p>
+<p><span class="math display">\[
+\begin{align}
+&amp;E_{\infty} = \int_{-\infty}^{+\infty}|x(t)|^2 \text{d}t = \lim_{T \rightarrow \infty} \int_{-T}^{T} |x(t)|^2 \text{d}t \\~\\
+&amp;E_{\infty} = \sum_{-\infty}^{+\infty}|x[n]|^2 = \lim_{N\rightarrow \infty} \sum_{-N}^{+N} |x(n)|^2
+\end{align}
+\]</span></p>
+<p>and the average power in the infinite section are</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; P_{\infty} = \lim_{T \rightarrow \infty} \cfrac{1}{2T} \int_{-T}^{T} |x(t)|^2 \text{d}t \\~\\
+&amp; P_{\infty} = \lim_{N\rightarrow \infty} \cfrac{1}{2N+1} \sum_{n=-N}^{+N} |x(n)|^2
+\end{align}
+\]</span></p>
+<p>We use the the total energy <span class="math inline">\(E_{\infty}\)</span> and average power <span class="math inline">\(P_{\infty}\)</span> over the infinity section to classify the singals:</p>
+<ol type="1">
+<li><p>Finite total energy, and in this case the average power must be zero.</p></li>
+<li><p>Finite average power, and in this case the total energy must be infinite.</p></li>
+<li><p>Infinite average power, of course, also the infinite total energy.</p></li>
+</ol>
+<p>Several examples about the calculation of energy and average power can be referred in</p>
+<h3 id="exponent-signal">3. Exponent Signal</h3>
+<h5 id="continous-time-complex-exponent"># Continous Time Complex Exponent</h5>
+<p>The continous-time <strong>complex exponential signal</strong> is the form</p>
+<p><span class="math display">\[
+x(t) = Ce^{at}
+\]</span></p>
+<p>where <span class="math inline">\(C\)</span> and <span class="math inline">\(a\)</span> is complex number, hence the different value of <span class="math inline">\(a\)</span> will affect the property of signal to a great extent.</p>
+<ol type="1">
+<li><p>If <span class="math inline">\(a\)</span> is a real number, then the signal will be exponential increase or decrease.</p></li>
+<li><p>If <span class="math inline">\(a\)</span> is pure imaginary number, say <span class="math inline">\(x(t) = e^{j\omega_0t} = \cos{\omega_{0}t} + i\sin{\omega_{0}t}\)</span>, where <span class="math inline">\(\omega_{0}\)</span> is the real number, which makes <span class="math inline">\(\omega_{0}j\)</span> pure imaginary number.</p>
+<p>One important property of this signal is that the fundamental period of this signal is</p>
+<p><span class="math display">\[
+ T_0 = \cfrac{2\pi}{|\omega_0|}
+ \]</span></p>
+<p>where the real number <span class="math inline">\(\omega_{0}\)</span> is called the <strong>fundamental frequency</strong>.</p>
+<blockquote>
+<p>Proof. Notice that <span class="math inline">\(e^{j \omega_0 (t+T_0)} = e^{j \omega_0 t}e^{j \omega_0 T_0} = e^{j \omega_0 t} e^{j 2\pi} = e^{j \omega_0 t}\)</span> for any <span class="math inline">\(t\)</span>, hence <span class="math inline">\(T_{0}\)</span> is the period.</p>
+<p>Since <span class="math inline">\(T_{0}\)</span> is the smallest number which makes <span class="math inline">\(e^{j \omega_{0} T} = 1\)</span>, it’s the fundamental period.</p>
+</blockquote>
+<p>If mutliple signals share the same period, we say they are <strong>harmonically realted</strong>. Obviously the fundamental frequency of harmonically related signals must all be the multiple of some frequency <span class="math inline">\(\omega_{0}\)</span>.</p>
+<p>Notice since it is a <strong>complex function</strong>, the period is actually in the complex plane, but in this case, if we take a look at the real part or the imaginary part, they’re both the period function with the same fundamental period <span class="math inline">\(T_0\)</span> and fundamental frequency <span class="math inline">\(\omega_{0}\)</span>.</p></li>
+<li><p>The general complex exponential signal, where <span class="math inline">\(C\)</span> and <span class="math inline">\(a\)</span> are both complex number with both real and imaginary parts, notes <span class="math inline">\(C = |C|e^{j\theta}, a = r + j\omega_{0}\)</span>, from which we can expand the expression into</p>
+<p><span class="math display">\[
+ Ce^{at} = |C|e^{j\theta}e^{(r+j\omega_{0})t} = |C|e^{rt}e^{j (\omega_{0}t + \theta)} = |C|e^{rt} (\cos{(\omega_{0}t+\theta)} + \sin{(\omega_{0}t+\theta))}
+ \]</span></p>
+<p>which can be considered as the combination of (1)real exponential and (2)pure imaginary exponential, and with an extra bias <span class="math inline">\(\theta\)</span>. Since it’s complex function, to draw the imagine we need to extract the real and imaginary part individually, and both of them are the composition of exponential function and trigonometric function.</p></li>
+</ol>
+<h5 id="discrete-time-complex-exponent"># Discrete Time Complex Exponent</h5>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

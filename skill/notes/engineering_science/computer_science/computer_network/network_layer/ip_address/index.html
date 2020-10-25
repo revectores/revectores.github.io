@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> IP Address
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< network_layer</a></p>
+
+<h1 id="ip-address">IP Address</h1>
+<h5 id="structure-of-ip-address"># Structure of IP Address</h5>
+<p>Naming is necessary for communication, which is called <strong>IP address</strong> in the network layer. IPv4 sets the IP address as 32-bit. The traditional design devides the IP address as <strong>network address</strong> and <strong>host address</strong>, which represents the network and the host respectively, the host connects into the same network should be distributed as the same address.</p>
+<p>We use the <strong>dotted-decimal notation</strong> to represent the 32-bit binary:</p>
+<pre><code>11000000 10101000 00000001 00000001 &lt;-&gt; 192.168.1.1</code></pre>
+<p>As the entity connecting two different network, a router must holds two different IP addresses for the two ports, the network address is the network addresses be connected by the router respectively. Specially, when two routers are connected by one cable directly, we can omit the distribution of IP addresses on both edges to save IP addresses resource. Now this cable is a special network called <strong>unnumbered network</strong> or <strong>anonymous network</strong>.</p>
+<h5 id="historical-ip-address-classification"># Historical IP Address Classification</h5>
+<p>In the traditional design, IP address is divided into five types, type A, B, C are unicast addresses, type D is multicast addresses, and E is left for the future.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">IP Address Type</th>
+<th style="text-align: center;">Network Address Length</th>
+<th style="text-align: center;">Host Address Length</th>
+<th style="text-align: center;">Head Bits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">110</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">/</td>
+<td style="text-align: center;">/</td>
+<td style="text-align: center;">1110</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">/</td>
+<td style="text-align: center;">/</td>
+<td style="text-align: center;">1111</td>
+</tr>
+</tbody>
+</table>
+<p><img src="ip_address_types.png" alt="image-20200915144746152" style="zoom:50%;" /></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

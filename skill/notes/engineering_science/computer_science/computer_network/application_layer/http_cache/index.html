@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> HTTP Cache
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< application_layer</a></p>
+
+<h1 id="http-cache">HTTP Cache</h1>
+<h5 id="section"></h5>
+<h5 id="cache-processing"># Cache Processing</h5>
+<p>Three steps in cache processing:</p>
+<ol type="1">
+<li><p><strong>Cache existence check</strong>. If the cache does not exist in caching server, the server transmit request/response and store a copy.</p></li>
+<li><p><strong>Freshness check.</strong> Some HTTP responses contain <code>Expires</code> header, which sets a absolute expiration date of the page, or the <code>Cache-Control: max-age=&lt;seconds&gt;</code> header, which set a relative expiration time (relative to <code>Date</code> that tells the creation time of response) of the page, or both, for backward compatibility. The caching server first checks whether an historical response is not expired for now. If not expired, <strong>cache hits</strong>.</p></li>
+<li><p><strong>Revalidate</strong>. Even if the cache has expired already, it is still possible that the server has not changed the content of that page for now, hence a revalidation is executed, which is called a <strong>conditional GET</strong>. A <code>if-modified-since</code> header is added into the HTTP request header and sent to server, if not, a <strong>304 Not Modified</strong> response without content will be given by the server (with the new freshment information), in this case we get a <strong>revalidate hit</strong> or <strong>slow hit</strong>. Otherwise the response will be the normal <strong>200 OK</strong> with modified contents, this is a <strong>revalidate miss</strong>.</p>
+<p>Specially, a <code>Cache-control: must-revalidate</code> header can be set by the client that forces the caching server to revalidate the cache.</p></li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

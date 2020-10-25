@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> string.h
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c_lib</a></p>
+
+<h1 id="string.h">string.h</h1>
+<p>Functions in <code>&lt;string.h&gt;</code>. Following the convention in K&amp;R, the variables <code>s, t</code> are of type <code>char *</code>. <code>cs, ct</code> are of type <code>const char*</code>, <code>n</code> is of type <code>size_t</code>, and <code>c</code> is an <code>int</code> converted to <code>char</code>.</p>
+<h5 id="string-copy-and-concatenation-function"># String Copy and Concatenation Function</h5>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">char</span>* strcpy(s, ct);</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="dt">char</span>* strncpy(s, ct, n);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="dt">char</span>* strcat(s, ct);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="dt">char</span>* strncat(s, ct, n);</span></code></pre></div>
+<p>The <code>strcpy</code> function copy string <code>ct</code> to <code>s</code>, including the tailing <code>0</code>. Furthermore, <code>strncpy</code> function copy exactly <code>n</code> characters, padding with <code>\0</code> if <code>ct</code> has fewer than <code>n</code> characters.</p>
+<p>The <code>strcat</code> function concatenate string <code>ct</code> to the end of string <code>s</code>.</p>
+<h5 id="string-comparison"># String Comparison</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">int</span> strcmp(cs, ct);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="dt">int</span> strncmp(cs, ct, n);</span></code></pre></div>
+<p><code>strcmp</code> function compares the string in lexicographical order, returns <code>&lt;0</code> if <code>cs&lt;ct</code>. <code>strncmp</code> compares at most <code>n</code> characters.</p>
+<h5 id="string-searching"># String Searching</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">char</span>* strchr(cs, c);</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="dt">char</span>* strrchr(cs, c);</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="dt">char</span>* strspn(cs, ct);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="dt">char</span>* strcspn(cs, ct);</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="dt">char</span>* strpbrk(cs, ct);</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="dt">char</span>*</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

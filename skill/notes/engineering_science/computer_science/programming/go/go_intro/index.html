@@ -1,0 +1,347 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Go
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< go</a></p>
+
+<h1 id="go">Go</h1>
+<h3 id="basic-concept">1. Basic Concept</h3>
+<h5 id="main-structure"># Main Structure</h5>
+<p>A simplist go program demo:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">package</span> main</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">import</span> <span class="st">&quot;fmt&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;Hello, World!&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>}</span></code></pre></div>
+<p>by which we declare the current file as the package <code>main</code>, the <code>main</code> function inside <code>main</code> package will be executed by default.</p>
+<h5 id="compile-and-execute"># Compile and Execute</h5>
+<pre class="shell"><code>go build hello.go
+go run hello.go</code></pre>
+<p>which will compile (a file <code>hello*</code> will be generated in the directory) and run the program respectively. Notice that the filename is not constrained by the package name.</p>
+<h5 id="package"># Package</h5>
+<p>Use <code>import</code> to import other packages:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">package</span> main</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">import</span> <span class="st">&quot;fmt&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">import</span> <span class="st">&quot;math/rand&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;My favorite number is&quot;</span>, rand.Intn(<span class="dv">10</span>));</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="variables-export"># Variables Export</h5>
+<p>Whether a variables/functions etc. get exported depends on its first character: it get exported if it’s capitalized. As notice, the functions and variables provided in the built-in packages are all beginning with capitalized first character.</p>
+<h3 id="syntax-misc">2. Syntax Misc</h3>
+<h5 id="distributive-law"># Distributive Law</h5>
+<p>The distributive law can be applied to most of the go keyword, no extra comma or semicolon required:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">import</span> (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="st">&quot;fmt&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="st">&quot;math/rand&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="kw">var</span> (</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    i <span class="dt">int</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    s <span class="dt">string</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Style</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Comment</td>
+<td>Conventional inline and multiple lines comment syntax supported.</td>
+</tr>
+<tr class="even">
+<td>Semicolon</td>
+<td>Not necessary. Can be used to merge lines.</td>
+</tr>
+<tr class="odd">
+<td><code>++</code> and <code>--</code></td>
+<td>Supported</td>
+</tr>
+</tbody>
+</table>
+<h3 id="variables">3. Variables</h3>
+<h5 id="variable-declaration"># Variable Declaration</h5>
+<p>Use <code>var</code> to declare variables, the type should be given after the last variable:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">var</span> c, python, java <span class="dt">bool</span></span></code></pre></div>
+<p>The uninitialized variables are assigned as the zero values, referred the data type section for the zero values of each basic data type. We can provide initializer to variables, in this case we can let the compiler to do the type inference:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">var</span> c, python, java = <span class="ot">true</span>, <span class="ot">false</span>, <span class="st">&quot;no!&quot;</span></span></code></pre></div>
+<p>The short assignment <code>:=</code> is supported only inside a function:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>    <span class="kw">var</span> i, j <span class="dt">int</span> = <span class="dv">1</span>, <span class="dv">2</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    c, python ,java := <span class="ot">true</span>, <span class="ot">false</span>, <span class="st">&quot;no!&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="constant"># Constant</h5>
+<p>Replace <code>var</code> with <code>const</code> to declare constant. Constant cannot be declared using <code>:=</code> syntax.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">const</span> pi = <span class="dv">3</span><span class="fl">.14</span></span></code></pre></div>
+<p>The numeric constants are high-precision values.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">const</span> (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    bigInt = <span class="dv">1</span>&lt;&lt;<span class="dv">500</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    smallInt = bigInt&gt;&gt;<span class="dv">499</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    fmt.Println(smallInt)   <span class="co">// 2</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="data-types">4. Data Types</h3>
+<p>The basic types of Go are</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="dt">bool</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="dt">string</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="dt">int</span> <span class="dt">int8</span> <span class="dt">int16</span> <span class="dt">int32</span>(<span class="dt">rune</span>) <span class="dt">int64</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a><span class="dt">uint</span> <span class="dt">uint8</span>(<span class="dt">byte</span>) <span class="dt">uint16</span> <span class="dt">uint32</span> <span class="dt">uint64</span> <span class="dt">uintptr</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="dt">float32</span> <span class="dt">float64</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="dt">complex64</span> <span class="dt">complex128</span></span></code></pre></div>
+<p>To print the type of variable, use <code>fmt.Printf</code> function with <code>%T</code> formatter:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">var</span> (</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>    MaxInt <span class="dt">uint64</span> = <span class="dv">1</span>&lt;&lt;<span class="dv">64</span> - <span class="dv">1</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>    fmt.Printf(<span class="st">&quot;Type: %T Value: %v</span><span class="ch">\n</span><span class="st">&quot;</span>, MaxInt, MaxInt)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">// Type: uint64 Value: 18446744073709551615</span></span></code></pre></div>
+<p>The zero value, traditionally, is <code>0</code> for numeric types, <code>false</code> for boolean type, and empty string <code>""</code> for string.</p>
+<p>The explicit type conversion <code>Type(value)</code> has to be given during the assignment between items of different types.</p>
+<h3 id="function">5. Function</h3>
+<h5 id="syntax"># Syntax</h5>
+<p>The type comes after the variable name and function prototype in Go, like the type hint in Python with arrow removed.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">func</span> add(x <span class="dt">int</span>, y <span class="dt">int</span>) <span class="dt">int</span> {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>    <span class="kw">return</span> x + y; </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>}</span></code></pre></div>
+<p>For consecutive parameters with same types, we can omit type but the last.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">func</span> add(x, y <span class="dt">int</span>) <span class="dt">int</span> {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>    <span class="kw">return</span> x + y;</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Multiple return value supported, notice do the same to the function type:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">func</span> swap(x, y <span class="dt">string</span>) (<span class="dt">string</span>, <span class="dt">string</span>){</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>    <span class="kw">return</span> y, x</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="named-return-values"># Named return values</h5>
+<p>Instead of providing returned values after <code>return</code> statement, we can directly provides the name of returned when specifying the return types. Then the <code>return</code> statement becomes a <strong>naked return</strong>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">func</span> split(sum <span class="dt">int</span>) (x, y <span class="dt">int</span>){</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>    x = sum * <span class="dv">4</span> / <span class="dv">9</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>    y = sum - x</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>    <span class="kw">return</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>In this case, the variables are treated as those variables defined at the top level. This approach should only be used in short functions, to aviod the reability reduce in the long function.</p>
+<h5 id="function-as-value"># Function As Value</h5>
+<p>Function is also one type of value, that is, we can pass and return function, as what we done to common variables.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">func</span> compute(fn <span class="kw">func</span>(<span class="dt">float64</span>, <span class="dt">float64</span>) <span class="dt">float64</span>) <span class="dt">float64</span> {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>    <span class="kw">return</span> fn(<span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>}</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a><span class="kw">func</span> main() {</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    hypot := <span class="kw">func</span>(x, y <span class="dt">float64</span>) <span class="dt">float64</span>{</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>        <span class="kw">return</span> math.Sqrt(x*x + y*y)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a>    }</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a>    fmt.Println(compute(hypot))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true"></a>    fmt.Println(compute(math.Pow))</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="closure"># Closure</h5>
+<p>The concept and property of closure is described in <a href="javascript_function_closure.md">javascript_function_closure</a>. This statement can apply to Go as well. An demonstrating example:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">func</span> adder() <span class="kw">func</span>(<span class="dt">int</span>) <span class="dt">int</span> {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>    sum := <span class="dv">0</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">func</span>(x <span class="dt">int</span>) <span class="dt">int</span> {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>        sum += x</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>        <span class="kw">return</span> sum</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>    }</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>}</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a>    pos, neg := adder(), adder()</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a>    <span class="kw">for</span> i := <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++ {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true"></a>        fmt.Println(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true"></a>            pos(i)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true"></a>            neg(-<span class="dv">2</span>*i)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true"></a>        )</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true"></a>    }</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="flow-control">6. Flow Control</h3>
+<h5 id="syntax-1"># Syntax</h5>
+<p>Parentheses is redundant, but brace is necessary (I recognize Google from the syntax design), initializer can be provided to declare local variable with block scope, not only for <code>for</code>, but also <code>if</code> and <code>switch</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>sum := <span class="dv">0</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="kw">for</span> i := <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++ {</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>    sum += i</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>}</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="kw">if</span> sum == <span class="dv">45</span> {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;correct!&quot;</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>}</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a><span class="kw">if</span> other_sum := <span class="dv">50</span>; sum == <span class="dv">45</span> {</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;correct!&quot;</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a>}</span></code></pre></div>
+<p><code>while</code> is not needed, since it is no more than the special case of <code>for</code> with condition only:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>sum := <span class="dv">1</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a><span class="kw">for</span> ; sum &lt; <span class="dv">1000</span>; {</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>    sum += sum</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>}</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a><span class="co">// equiv to</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a><span class="kw">for</span> sum &lt; <span class="dv">1000</span> {</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    sum += sum</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="new-switch"># New <code>switch</code></h5>
+<p>The semantics of <code>switch</code> is finally redesigned to human-understandable:</p>
+<ul>
+<li>Evalute up-down, only the first true label get executed, that is, no <code>break</code> needed.</li>
+<li>Variables and function are supported.</li>
+<li>Switch with omitted condition is equivalent to <code>swtich true</code>.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>today := time.Now().Weekday()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">switch</span> time.Saturday {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a><span class="kw">case</span> today:</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;today&quot;</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="kw">case</span> today + <span class="dv">1</span>:</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;tomorrow&quot;</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a><span class="kw">case</span> today + <span class="dv">2</span>:</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;two days later&quot;</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a><span class="kw">default</span>:</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;far away&quot;</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>t := time.Now()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="kw">switch</span> {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="kw">case</span> t.Hour() &lt; <span class="dv">12</span>:</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;Good Morning!&quot;</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a><span class="kw">case</span> t.Hour() &lt; <span class="dv">17</span>:</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;Good Afternoon&quot;</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a><span class="kw">default</span>:</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    fmt.Println(<span class="st">&quot;Good Evening&quot;</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="type-and-struct">7. Type and Struct</h3>
+<p>We use the keyword <code>type</code> to create new type based on existing ones, not just making an alias as C <code>typedef</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="kw">type</span> MyInt float</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="kw">func</span> main() {</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>    <span class="kw">var</span> i MyInt = <span class="dv">1</span>;</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>    fmt.Printf(<span class="st">&quot;%T&quot;</span>, i); <span class="co">// main.MyInt</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Normally a useful type is a struct, like C struct, composed of many fields. When initializing, the zero value of corresponding type will be assigned to the unspecified value.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">type</span> point <span class="kw">struct</span> {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>    x <span class="dt">int</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>    y <span class="dt">int</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a>}</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a>    v1 := Vertex{<span class="dv">1</span>, <span class="dv">2</span>}</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a>    v2 := Vertex{x: <span class="dv">1</span>}</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a>    v3 := Vertex{}</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true"></a>    v1.x = <span class="dv">4</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true"></a>    fmt.Printf(v1, v2, v3) <span class="co">// {4, 2}, {1, 0}, {0, 0}</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="pointer">8. Pointer</h3>
+<p><code>*T</code> is the type of pointer points to type <code>T</code>. <code>&amp;</code> and <code>*</code> are supported for referencing and dereferencing.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>p *<span class="dt">int</span>;</span></code></pre></div>
+<p>Specially, the pointer to the field to <code>struct</code> also use <code>.</code>, not <code>-&gt;</code> in C:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">type</span> Vertex <span class="kw">struct</span> {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>    X <span class="dt">int</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    Y <span class="dt">int</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>}</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a><span class="kw">func</span> main() {</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>    v := Vertex{<span class="dv">1</span>, <span class="dv">2</span>}</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a>    p := &amp;v</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>    p.X = <span class="fl">1e9</span>   <span class="co">// equiv to (*p).X</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>    fmt.Println(v)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="built-in-data-structure">9. Built-in Data Structure</h3>
+<h5 id="array-and-slice"># Array and Slice</h5>
+<p>Type <code>[n]T</code> is an array of <code>n</code> values of type <code>T</code>. The size of array is a part of the type, hence the size of array is fixed.</p>
+<p>Instead, a <strong>slice</strong> is dynamically-sized, the type <code>[]T</code> is a slice with element T. The usage is basically the same as slicing in Python, the difference is, slicing (as a syntax sugar) in Python create a new list with those sliced eleemnts, while slice in Go (as a data type) is just a <strong>persepctive</strong> of the sliced array:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>nums := [<span class="dv">5</span>]<span class="dt">int</span> {<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>numsSlice := nums[<span class="dv">2</span>:<span class="dv">4</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>numsSlice[<span class="dv">0</span>] = <span class="dv">22</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a>fmt.Println(nums) <span class="co">// [0 1 22 3 4]</span></span></code></pre></div>
+<p>The <strong>length</strong> of slice is the numbers it contains, while the <strong>capacity</strong> of slice is defined as the numbers in underlying array starting from the start of slice.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>    nums := [<span class="dv">5</span>]<span class="dt">int</span> {<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>    numsSlice := nums[<span class="dv">1</span>:<span class="dv">4</span>]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>    fmt.Printf(<span class="st">&quot;len=%d cap=%d&quot;</span>, <span class="bu">len</span>(numsSlice), <span class="bu">cap</span>(numsSlice)) <span class="co">// len=3 cap=4</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The zero value of a slice is <code>nil</code>, which has a length and capacity of 0, and has no underlying array.</p>
+<h5 id="map"># Map</h5>
+<p>The <code>map</code> maps key to value. Use <code>make</code> to create a map, use the mpa literal to assign key-value pairs.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="kw">var</span> name2age = <span class="kw">map</span>[<span class="dt">string</span>]<span class="dt">int</span> {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>    <span class="st">&quot;Robert&quot;</span>: <span class="dv">21</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>    <span class="st">&quot;Harry&quot;</span>: <span class="dv">14</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Use the conventional subscription <code>[]</code> to access and modify the value of map. <code>delete(m, key)</code> to delete a key from a map.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a>fmt.Println(name2age[<span class="st">&quot;Harry&quot;</span>])</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>name2age[<span class="st">&quot;Harry&quot;</span>] = <span class="dv">15</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a><span class="bu">delete</span>(name2age, <span class="st">&quot;Harry&quot;</span>)</span></code></pre></div>
+<p>If the key does not exist, the one-value assignment casue panic, the two-value assignment makes the <code>ok = false</code> and <code>v</code> as the zero value of map’s element type.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>v = name2age[<span class="st">&quot;John&quot;</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>v, ok = name2age[<span class="st">&quot;John&quot;</span>]</span></code></pre></div>
+<h5 id="range"># Range</h5>
+<p>use <code>range</code> to interates over a slice or map. The behaviour is designed the same for both slice and map: <code>key/index, value</code> are returned in both cases. Use <code>_</code> to omit one of them (this conventional name is now forced since Go consider the unused variable as compile error), or omit the second variable if only the index is needed.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">var</span> pow = []<span class="dt">int</span>{<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>}</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a><span class="kw">var</span> name2age = <span class="kw">map</span>[<span class="dt">string</span>]<span class="dt">int</span> {</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>    <span class="st">&quot;Robert&quot;</span>: <span class="dv">21</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>    <span class="st">&quot;Harry&quot;</span>: <span class="dv">14</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>}</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true"></a><span class="kw">func</span> main() {</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true"></a>    <span class="kw">for</span> i, v := <span class="kw">range</span> pow {</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true"></a>        fmt.Printf(<span class="st">&quot;2**%d = %d</span><span class="ch">\n</span><span class="st">&quot;</span>, i, v)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true"></a>    }</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true"></a>    <span class="kw">for</span> k, v := <span class="kw">range</span> name2age {</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true"></a>        fmt.Println(k, v)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true"></a>    }</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="oop-mechanism">10. OOP Mechanism</h3>
+<h5 id="method"># Method</h5>
+<p>Class not supported, but you can create <strong>method</strong> for type, a method is a function with <strong>receiver</strong>, which is given between the <code>func</code> keyword and function name, this relative location is same as when we call the method <code>T.methodname(params)</code></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">type</span> Vertex <span class="kw">struct</span> {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>    X, Y <span class="dt">float64</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>}</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a><span class="kw">func</span> (v Vertex) Abs <span class="dt">float64</span> {</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true"></a>    <span class="kw">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true"></a>}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true"></a><span class="kw">func</span> main() {</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true"></a>    vertex := Vertex{<span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true"></a>    fmt.Println(vertex.abs())</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="pointer-receiver"># Pointer Receiver</h5>
+<p>Use pointer as recevier type, we gain the ability to modify the attribute of struct:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">func</span> (v *Vertex) Scale(f float <span class="dv">64</span>){</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>    v.X = v.X * f</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>    v.Y = v.Y * f</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>}</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a><span class="kw">func</span> main(){</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>    vertex := Vertex{<span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true"></a>    vertex.Scale(<span class="dv">10</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true"></a>    fmt.Println(vertex)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Notice that although the receiver is pointer to type <code>Vertex</code>, we do not write <code>(&amp;vertex).Scale(10)</code> explicitly, which conversion is done automatically.</p>
+<h3 id="interface">11. Interface</h3>
+<p><code>interface</code> is a type, which is defined as a set of method signatures, which structure is built automatically as the concrete types are built.</p>
+<p>A value of interface type can hold any value that implements those methods. In other words, the interface is marked by its methods or “interfaces”.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

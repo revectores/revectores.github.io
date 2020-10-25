@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Flask Server Configuration Workflow
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< flask</a></p>
+
+<h2 id="flask-server-configuration-workflow">Flask Server Configuration Workflow</h2>
+<ol type="1">
+<li>Update yum for centOS and apt-get for ubuntu This is considered as the best practice, cause the preinstalled software is out-of-date.</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">yum</span> -y update</span></code></pre></div>
+<p>In this document we will use centOS-style commands as the example.</p>
+<ol start="2" type="1">
+<li>Get Python3 Normally the python2.7 is preinstalled in the Linux server, you can check this by</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">python</span> -v</span></code></pre></div>
+<p>Since the python2 is deprecated with lots of different behaviors, there is no doubt that we need to install the python3 as default interpreter.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">sudo</span> yum install -y https://centos7.iuscommunity.org/ius-release.rpm</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="fu">sudo</span> yum install -y python36u python36u-libs python36u-devel python36u-pip</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="ex">python3.6</span> -v</span></code></pre></div>
+<p>It seems that this rpm source doesn’t support python3.7 still. This is easy to fix in the future. One of the most important thing to avoid using error version(2.7) is to create alias for bash:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co"># ~/.bashrc</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="bu">alias</span> python=<span class="st">&#39;python3.6&#39;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="bu">alias</span> python2.7=<span class="st">&#39;python&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="bu">alias</span> pip=<span class="st">&#39;pip3.6&#39;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="bu">alias</span> pip2.7=<span class="st">&#39;pip&#39;</span></span></code></pre></div>
+<p>This approach seems not so elegant and easy to cause misunderstandings but it works fine now, we can fix this in the future too (one simpler approach is to create soft-link or whatever it calls).</p>
+<ol start="3" type="1">
+<li>Get flask &amp; gunicorn</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">pip</span> install flask  # notice that now the pip is actually pip3.6</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ex">pip</span> install gunicorn</span></code></pre></div>
+<ol start="4" type="1">
+<li>Get wget &amp; nginx</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">sudo</span> yum install wget</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">sudo</span> yum install epel-release</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="fu">sudo</span> yum install nginx</span></code></pre></div>
+<ol start="5" type="1">
+<li>A Hello World Program</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co"># /home/flask/run.py</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="im">from</span> flask <span class="im">import</span> Flask</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>app <span class="op">=</span> Flask(<span class="va">__name__</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="at">@app.route</span>(<span class="st">&#39;/&#39;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="kw">def</span> index():</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="st">&#39;&lt;h1&gt;Hello World!&lt;/h1&gt;&#39;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    app.run()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="fu">nohup</span> gunicorn -w 4 -b 0.0.0.0:5000 run:app <span class="kw">&amp;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="bu">exit</span></span></code></pre></div>
+<p>Now if everything goes fine you can view this website from the public IP (or domain name)</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

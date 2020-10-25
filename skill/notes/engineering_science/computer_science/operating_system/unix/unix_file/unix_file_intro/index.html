@@ -1,0 +1,242 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Unix File
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< unix_file</a></p>
+
+<h1 id="unix-file">Unix File</h1>
+<h3 id="file-types">1. File Types</h3>
+<h5 id="seven-file-types-in-unix"># Seven File Types in UNIX</h5>
+<p>There are 7 types of files in UNIX system. Most of the files are regular file or directory file in UNIX system.</p>
+<ol type="1">
+<li><p><strong>Regular file</strong>.</p></li>
+<li><p><strong>Directory file</strong>. A directory file is a file contains the names of other files and pointers on these files. Any process that has read permission for a directory file can read the contents, but only the kernel can write directly to a directory file.</p>
+<p>A device is, and must be, abstracted into one of the block special file or character special file.</p></li>
+<li><p><strong>Block special file</strong>.</p></li>
+<li><p><strong>Character special file</strong>.</p></li>
+<li><p><strong>FIFO</strong>. FIFO file, or pipe, is a type of file used for <a href="../unix_ipc/unix_ipc.md">IPC</a>.</p></li>
+<li><p><strong>Socket</strong>. As introduced in <a href="socket.md">socket.md</a> in computer network, socket is the abstraction for the network communication between processes. A socket can also be used for non-network communication in a single host, in this case it degeneres to one way for the normal IPC.</p></li>
+<li><p><strong>Symbolic link</strong>. Symbolic link points to another file.</p></li>
+</ol>
+<h5 id="related-marcos"># Related Marcos</h5>
+<p>Correspondingly, seven macros are provided to read the type of a file:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">MARCO</th>
+<th style="text-align: center;">Type of file</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>S_ISREG()</code></td>
+<td style="text-align: center;">regular file</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>S_ISDIR()</code></td>
+<td style="text-align: center;">directory file</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>S_ISCHR()</code></td>
+<td style="text-align: center;">character special file</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>S_ISBLK()</code></td>
+<td style="text-align: center;">block special file</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>S_ISFIFO()</code></td>
+<td style="text-align: center;">FIFO or pipe</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>S_ISSOCK()</code></td>
+<td style="text-align: center;">socket</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>S_ISLNK()</code></td>
+<td style="text-align: center;">symbolic link</td>
+</tr>
+</tbody>
+</table>
+<p>An example using these macros to determine the type of a file is given in <a href="print_type_of_file.md">print_type_of_file.md</a>. ==TODO: Create this.==</p>
+<h5 id="file-descriptor"># File Descriptor</h5>
+<p><strong>File descriptor</strong> is a non-negative integer used to referred a file by the system kernel. When we <code>open/creat</code> a new file, a file descriptor will be returned, and then we can use it in the <code>read/write</code> functions to refer the file.</p>
+<p>Specifically, the file descriptor 0 is used to refer the standard input, 1 for standard output, and 2 for standard error. To improve the readibility, <code>include #&lt;unistd.h&gt;</code> to use the symbolic constants instead of the integers.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">File Descriptor</th>
+<th style="text-align: center;">Symbolic Constant</th>
+<th style="text-align: center;">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">STDIN_FILENO</td>
+<td style="text-align: center;">standard input</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">STDOUT_FILENO</td>
+<td style="text-align: center;">standard output</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">STDERR_FILENO</td>
+<td style="text-align: center;">standard error</td>
+</tr>
+</tbody>
+</table>
+<p>The range of file descriptors in modern Linux and Mac OS X is essentially infinite, bounded by the limit of other resources.</p>
+<p>Notice that the file descriptor is process-related, that is, for two processes opening the same file, two file descriptors will be allocated to the two processes respectively.</p>
+<p>The three files <code>stdin/stdout/stderr</code> will be open automatically as a process open.</p>
+<h3 id="file-operation-system-call">2. File Operation System Call</h3>
+<h5 id="openopenat"># <code>open/openat</code></h5>
+<p>We open/craete a file by the <code>open/openat</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="dt">int</span> open(<span class="dt">const</span> <span class="dt">char</span>* path, <span class="dt">int</span> oflag, ... );</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="dt">int</span> openat(<span class="dt">int</span> fd, <span class="dt">const</span> <span class="dt">char</span>* path, <span class="dt">int</span> oflag, ... );</span></code></pre></div>
+<ol type="1">
+<li><p><code>path</code> parameter specifies the path of file to open/create.</p></li>
+<li><p><code>oflag</code> parameter using pre-defined constants to specify the mode we open the file, joining by or <code>||</code> operator. The constants are defined at <code>&lt;fcntl.h&gt;</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Constant</th>
+<th style="text-align: center;">Meanning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">O_RDONLY</td>
+<td style="text-align: center;">Read only</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">O_WRONLY</td>
+<td style="text-align: center;">Write only</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">O_RDWR</td>
+<td style="text-align: center;">Read and write</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">O_EXEC</td>
+<td style="text-align: center;">Execute only</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">O_SEARCH</td>
+<td style="text-align: center;">Search only (directories)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>One and only one</strong> of the listed constant must be specified. And other constants are optional.</p></li>
+<li><p>The last argument <code>...</code> is the ISO C style to specify arguments of uncertain types and numbers. These arguments will be used when a new file is being create.</p></li>
+</ol>
+<p>As mentioned, both of the functions return file descriptor if OK, or -1 will be The returned file descriptor is guaranteed to be the lowest available number.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="dt">int</span> fd = open(<span class="st">&quot;foo&quot;</span>, O_RDONLY);</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    printf(<span class="st">&quot;%d&quot;</span>, fd);   <span class="co">// 3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>** argv){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    close(<span class="dv">0</span>);</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">int</span> fd = open(<span class="st">&quot;foo&quot;</span>, O_RDONLY);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    printf(<span class="st">&quot;%d&quot;</span>, fd);   <span class="co">// 0</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="creat"># <code>creat</code></h5>
+<p>We create a file by <code>creat</code> function</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;fcntl.h&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="dt">int</span> creat(<span class="dt">const</span> <span class="dt">char</span>* path, mode_t mode);</span></code></pre></div>
+<p><code>creat</code> returns file descriptor for write-only if OK, -1 on error.</p>
+<p><code>creat</code> function is equivlaent to</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>open(path, O_WRONLY | O_CREAT | O_TRUNC, mode);</span></code></pre></div>
+<blockquote>
+<p>Historically, in early versions of the UNIX System, the second argument to open could be only 0, 1, or 2. There was no way to open a file that didn’t already exist. Therefore, a separate system call, creat, was needed to create new files. With the <code>O_CREAT</code> and <code>O_TRUNC</code> options now provided by open, a separate creat function is no longer needed.</p>
+<p>One deficiency with creat is that the file is opened only for writing. Before the new version of open was provided, if we were creating a temporary file that we wanted to write and then read back, we had to call creat, close, and then open. A better way is to use the open function, as in</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>open(path, O_RDWR | O_CREAT | O_TRUNC, mode);</span></code></pre></div>
+</blockquote>
+<h5 id="close"># <code>close</code></h5>
+<p>We close a file by <code>close</code> function</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="dt">int</span> close(<span class="dt">int</span> fd);</span></code></pre></div>
+<p><code>close</code> returns 0 if OK, -1 on error.</p>
+<blockquote>
+<p>When a process terminates, all of its open files are closed automatically by the kernel. Many programs take advantage of this fact and don’t explicitly close open files.</p>
+</blockquote>
+<h5 id="lseek"># <code>lseek</code></h5>
+<p>During the processing of a file, the current file offset will be automatically handled as the <code>open/read/write</code> function called. By default, the offset is initialized to 0, unless the <code>O_APPEND</code> option is specified. The <code>read/write</code> function will increase the offset based on how many data have been read/write.</p>
+<p>We can use <code>lseek</code> to set the current offset explicitly:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>off_t lseek(<span class="dt">int</span> fd, off_t offset, <span class="dt">int</span> whence);</span></code></pre></div>
+<p>The interpretation of <code>offset</code> depends on the value of <code>whence</code>:</p>
+<ul>
+<li><code>whence = SEEK_SET</code>, offset is added to the beginning of file.</li>
+<li><code>whence = SEEK_CUR</code>, offset is added to the current offset, can be positive/negative.</li>
+<li><code>whence = SEEK_END</code>, offset is added to the end of file, can be positive/negative.</li>
+</ul>
+<p><code>lseek</code> returns the new file offset if OK, -1 on error. As notice, <code>lseek</code> returns the new file offset, hence we’re able to utilize <code>lseek</code> to find out the current offset by <code>lseek(fd, 0, SEEK_CUR)</code>. This technique can also be used to determined if a file is capable of seeking. If the descriptor refers to a pipe, FIFO, or socket, <code>lseek</code> sets <code>errno</code> to <code>ESPIPE</code> and returns 1. Refer <a href="src__seekable_check/seekable_check.c">seekable_check.c</a> for implementation.</p>
+<p>The infomation of current offset is stored within the kernel, no I/O operation is required to invoke <code>lseek</code> function.</p>
+<p>The current offset of normal file must be non-negative, but not for all “files”, since any object can be abstracted as file, some devices may allow negative offsets, which means the valid test of returned value of <code>lseek</code> must be <code>rv != -1</code> instead <code>rv &lt; 0</code>.</p>
+<p>The offset of a file might greater than the current size. For this case, the next <code>write</code> call will extend the file by adding bytes 0 til the new offset, and whether the “hole” filled by 0 takes the space of disk depends on the implementation of file system. Refer <a href="file_with_hole.md">file_with_hole.md</a>, which gives codes to craete a file with hole and comparing it with the no hole version to find out the difference on size. ==TODO: create and implement the file file_with_hole.==</p>
+<h5 id="read"># <code>read</code></h5>
+<p>We use <code>read</code> function to read from a opened file:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="dt">ssize_t</span> read(<span class="dt">int</span> fd, <span class="dt">void</span>* buf, <span class="dt">size_t</span> nbytes);</span></code></pre></div>
+<p><code>read</code> returns the number of bytes read, 0 if end of file, -1 on error. The performance relative to <code>buf</code></p>
+<h5 id="write"># <code>write</code></h5>
+<p>We use <code>write</code> function to write to a opened file:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="dt">ssize_t</span> write(<span class="dt">int</span> fd, <span class="dt">const</span> <span class="dt">void</span>* buf, <span class="dt">size_t</span> nbytes);</span></code></pre></div>
+<p><code>write</code> returns the number of bytes written if OK, -1 on error. Normally the return value if euqal to the <code>nbytes</code> argument.</p>
+<h3 id="file-information">3. File Information</h3>
+<h5 id="stat-functions"># <code>stat</code> Functions</h5>
+<p><u>Introduce the file information function <code>stat</code>, <code>fstat</code>, <code>lstat</code>, <code>fstatat</code>, with their differences.</u></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;sys/stat.h&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="dt">int</span> stat(<span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> pathname,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>         <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf);</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="dt">int</span> fstat(<span class="dt">int</span> fd, <span class="kw">struct</span> stat* buf);</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="dt">int</span> lstat(<span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> pathname,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>          <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf);</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a><span class="dt">int</span> fstatat(<span class="dt">int</span> fd, <span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> pathname,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a>            <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf, <span class="dt">int</span> flag);</span></code></pre></div>
+<p>All the four three functions return 0 if OK, -1 on error. The information is given by filling the <code>struct stat* buf</code>, which is defined at <a href="struct_stat.md">struct_stat</a>.</p>
+<p>As noticed, the <code>fstat</code> use file descriptor <code>fd</code> as the parameter instead of the <code>pathname</code>. For the symbolic link, <code>lstat</code> list the inforamtion about the symbolic link itself instead of the file it points to.</p>
+<p>Finally, the <code>fstatat</code> function provides a mechanism to retrive the file infomation by the <code>pathname</code> relative file <code>fd</code>. Two special cases are</p>
+<ul>
+<li>If <code>fd = AT_FDCWD</code>, the function will use the current directory as the base.</li>
+<li>If the pathname is an absolute pathname, then the parameter <code>fd</code> will be ignore.</li>
+</ul>
+<p>In both case <code>fstat</code> works like when we providing the relative path or absolute path to system call <code>stat</code>.</p>
+<p>Furthermore, the <code>flag</code> parameter specifies whether we use follows the symbolic link, depending on whether the flag <code>AT_SYMLINK_NOFOLLOW</code> is set.</p>
+<p><code>stat</code> function is used by the <a href="http://revectores.com/skill/notes/engineering_science/computer_science/operating_system/unix/unix_command/cmd_ls/cmd_ls.md"><code>ls</code></a> command, who lists all the information about the files.</p>
+<h3 id="working-directory">4. Working Directory</h3>
+<p>Use <code>chdir/fchdir</code> to change working directory by providing a pathname or a file descriptor.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="dt">int</span> chdir(<span class="dt">const</span> <span class="dt">char</span>* pathname);</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="dt">int</span> fchdir(<span class="dt">int</span> fd);</span></code></pre></div>
+<p>both functions return <code>0</code> if OK, <code>-1</code> on error.</p>
+<h1 id="section"></h1>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

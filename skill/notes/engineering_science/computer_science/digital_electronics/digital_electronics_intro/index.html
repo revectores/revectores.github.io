@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Introduction
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< digital_electronics</a></p>
+
+<h1 id="introduction">Introduction</h1>
+<h3 id="classification-of-circuits">Classification of Circuits</h3>
+<pre class="mermaid"><code>graph TD;
+    Circuit--&gt;DC[Digital Circuit]
+    Circuit--&gt;AC[Analogue Circuit]
+    DC --&gt; CDC[Combinational DC]
+    DC --&gt; SDC[Sequential DC]
+    SDC --&gt; SSDC[Synchronous SDC]
+    SDC --&gt; ASDC[Asynchronous SDC]
+    ASDC --&gt; FASDC[Fundamental-mode Asynchronous SDC]
+    ASDC --&gt; PASDC[Pulse-mode Asynchronous SDC]
+    </code></pre>
+<p>There’re two kinds of circuit: digital and analogue. Same as the terminology the signal processing class, the input/output status of digital circuit is boolean: can only be 0/1, but the IO of analogue circuit can be continous. Based on this feature, the toolkits we process this two are also different: We use <strong><a href="Boolean%20Algebra">Boolean Algebra</a></strong> to design as the theoretical tool to design digital circuit, and usual calculus to design analogue circuit. Since this is a digital circuit course, we’ll only talk about DC in the following classifications, while most of them can be also applied in the AC.</p>
+<p>Based on whether the output rely on the historical input, there’re memoryless <strong><a href="Combinational%20Logic%20Circuit">Combinational Digital Circuit</a></strong> and <strong>Sequential Digital Circuit</strong>.</p>
+<h3 id="circuit-analysis-and-design">Circuit Analysis and Design</h3>
+<h3 id="procedure-of-circuit-analysis">Procedure of Circuit Analysis</h3>
+<ul>
+<li>STEP1: Determine what type of the circuit is(refer the tree)</li>
+<li>STEP2: Chunk the complex circuit to small function unit</li>
+<li>STEP3: Analysis each unit, expressed it(based on 5 methods) if necessary</li>
+<li>STEP4: Join all the units into a large scale</li>
+</ul>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> C MPI
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c</a></p>
+
+<h1 id="c-mpi">C MPI</h1>
+<h5 id="demo-mpi-code"># Demo MPI Code</h5>
+<h5 id="init-and"># Init and</h5>
+<h5 id="configuration-retriving"># Configuration Retriving</h5>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_size(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="dt">int</span>*        comm_sz_p   <span class="co">/* out */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_rank(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="dt">int</span>*        my_rank_p   <span class="co">/* out */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>)</span></code></pre></div>
+<h5 id="mpi_send"># <code>MPI_Send</code></h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Send(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="dt">void</span>* msg_buf_p,                <span class="co">/* in */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">int</span> msg_size,                   <span class="co">/* in */</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    MPI_Datatype msg_type,          <span class="co">/* in */</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="dt">int</span> dest,                       <span class="co">/* in */</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    <span class="dt">int</span> tag,                        <span class="co">/* in */</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    MPI_Comm communicator           <span class="co">/* in */</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Recv(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">void</span>*           msg_buf_p,      <span class="co">/* out */</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">int</span>             buf_size,       <span class="co">/* in */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    MPI_Datatype    buf_type,       <span class="co">/* in */</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">int</span>             source,         <span class="co">/* in */</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="dt">int</span>             tag,            <span class="co">/* in */</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    MPI_Comm        communicator,   <span class="co">/* in */</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    MPI_Status*     status_p        <span class="co">/* out */</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>)</span></code></pre></div>
+<p>The <code>MPI_Datatype</code></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>MPI_Datatype</code></th>
+<th style="text-align: left;">C Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_CHAR</code></td>
+<td style="text-align: left;"><code>signed char</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_SHORT</code></td>
+<td style="text-align: left;"><code>signed short int</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_INT</code></td>
+<td style="text-align: left;"><code>signed int</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_LONG</code></td>
+<td style="text-align: left;"><code>signed long int</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_LONG_LONG</code></td>
+<td style="text-align: left;"><code>signed long long int</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_UNSIGNED_CHAR</code></td>
+<td style="text-align: left;"><code>unsigned char</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_UNSIGNED_SHORT</code></td>
+<td style="text-align: left;"><code>unsigned short int</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_UNSIGNED</code></td>
+<td style="text-align: left;"><code>unsigned int</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_UNSIGNED_LONG</code></td>
+<td style="text-align: left;"><code>unsigned long int</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_FLOAT</code></td>
+<td style="text-align: left;"><code>float</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_DOUBLE</code></td>
+<td style="text-align: left;"><code>double</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_LONG_DOUBLE</code></td>
+<td style="text-align: left;"><code>long double</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>MPI_BYTE</code></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>MPI_PACKED</code></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h5 id="mpi-from-any-source"># MPI From any source</h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Get_count(){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>}</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

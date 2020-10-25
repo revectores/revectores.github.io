@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Class
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< c++_core</a></p>
+
+<h1 id="class">Class</h1>
+<h3 id="basic-usage">1. Basic Usage</h3>
+<h5 id="introduction-by-instance"># Introduction by Instance</h5>
+<p><a href="c++_class_demo/c++_class_demo.cpp"><code>c++_class_demo.cpp</code></a> is a demo for c++ class, which shows the following usages:</p>
+<ol type="1">
+<li>Access control: <code>private</code> and <code>public</code> keyword.</li>
+<li>Construtor and destructor.</li>
+<li>Member function, defined inside and outside the class.</li>
+<li>Operator Overloading for <code>&lt;&lt;</code>, <code>+</code>, <code>-</code>, <code>*</code>.</li>
+<li>How to create instances of class.</li>
+</ol>
+<p>This concludes most of the basic concepts of C++ class.</p>
+<h5 id="constructor-destructor"># Constructor &amp; Destructor</h5>
+<p>In the example above we use the assignments to accomplish the initialization of attribuates.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>Complex(<span class="dt">int</span> re, <span class="dt">int</span> im) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">this</span>-&gt;_re = re;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">this</span>-&gt;_im = im;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Since this is a common pattern, there’s a shortcut for this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>Complex(<span class="dt">int</span> re, <span class="dt">int</span> im): _re(re), _im(im) {};</span></code></pre></div>
+<p>Notice that even if no more codes needed for the construction, the empty braces are still required.</p>
+<p>It’s permitted to define different constructors based on the numbers and types of parameters. For example, we want to set the default imaginary/real part of complex to zero if it’s not provided.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>Complex(<span class="dt">int</span> re, <span class="dt">int</span> im): _re(re), _im(im) {};</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>Complex(<span class="dt">int</span> re): _re(re), _im(<span class="dv">0</span>) {};</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>Complex(): _re(<span class="dv">0</span>), _im(<span class="dv">0</span>) {};</span></code></pre></div>
+<h3 id="class-inheritance">2. Class Inheritance</h3>
+<h5 id="example-of-inheritance"># Example of Inheritance</h5>
+<p><a href="c++_class_inheritance_example/c++_class_inheritance_example.cpp"><code>c++_class_inheritance_example.cpp</code></a> is the example about how C++ create inheritance:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">class</span> Employee {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">public</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="bu">std::</span>string name;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="dt">int</span> age;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>};</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="kw">class</span> Manager : <span class="kw">public</span> Employee {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">public</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="dt">short</span> level;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>};</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    Employee e;</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    Manager m;</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    m.name = <span class="st">&quot;Robert&quot;</span>; m.level = <span class="dv">8</span>;</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; m.name &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; m.level;</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Here class <code>Manager</code> is derived from <code>Employee</code> and is added an attribuate <code>level</code>. We use this structure as example to show the attribuates of inheritance.</p>
+<h5 id="constructor"># Constructor</h5>
+<p>The derived class inherits all the member variables and function from base class, <strong>EXCEPT</strong> the constructor. If the constructor is included in base class, derived class needs to use it as an <strong>initializer</strong> to bulid itself’s constructor.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">class</span> Employee {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="kw">public</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="bu">std::</span>string name;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="dt">int</span> age;</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>    Employee(<span class="bu">std::</span>string name, <span class="dt">int</span> age): name(name), age(age) {};</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="kw">class</span> Manager : <span class="kw">public</span> Employee {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="kw">public</span>:</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>    <span class="dt">short</span> level;</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>    Manager(<span class="bu">std::</span>string name, <span class="dt">int</span> age, <span class="dt">short</span> level): Employee(name, age), level(level) {};</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>}</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a><span class="dt">int</span> main(){</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>    Manager m(<span class="st">&quot;Robert&quot;</span>, <span class="dv">30</span>, <span class="dv">8</span>);</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>    cout &lt;&lt; m.name &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; m.age &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; m.level;</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="construction-order"># Construction Order</h5>
+<p>With two types of relationships of class given: <strong>inheritance</strong> and <strong>composition</strong>, a class definition may written like:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>class_np::classname : baseclass, member1, member2</span></code></pre></div>
+<p>There’s problem occurs about in what kind of sqeuence the constructor and destructor is executed. The answer is inituitive:</p>
+<ol type="1">
+<li>If the class has base class, then the base class is first constructed.</li>
+<li>If the class has member classes, then the member classes constructed successively based on the declaration order.</li>
+<li>After all these works done, the class itself is constructed.</li>
+</ol>
+<p>The destruction order is opposite to the construction order.</p>
+<h5 id="polymorphism-mechanism-virtual-function"># Polymorphism Mechanism: Virtual Function</h5>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

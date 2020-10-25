@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> 
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< differential_equation</a></p>
+
+<h1 id="ordinary-differential-equation">Ordinary Differential Equation</h1>
+<p><span class="math display">\[
+\newcommand{\euler}{\text{e}}
+\newcommand{\d}{\text{d}}
+\newcommand{\dt}{\d t}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dr}{\d r}
+\newcommand{\dv}{\d v}
+\newcommand{\dz}{\d z}
+\newcommand{\du}{\d u}
+\newcommand{\dd}[2]{\dfrac{\d #1}{\d #2}}
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\]</span></p>
+<h3 id="basic-concept">1. Basic Concept</h3>
+<h5 id="definition"># Definition</h5>
+<p><strong>Ordinary Differential Equations(ODE)</strong> is the differential equation which has only one independent and one dependent variable. We define the <strong>order</strong> of an differential equation by its highest derivative.</p>
+<p>If the number of arbitrary constants in the solution is the same as the order of differential equation, then the solution is <strong>general solution</strong>. The solution without any arbitrary constant is a <strong>special solution</strong>. The graph of a special solution is <strong>integral curve</strong>.</p>
+<h2 id="separation-of-variables">2. Separation of Variables</h2>
+<p>If the two variables(one independent and on dependent) with its derivatives could be separated to both sides of the equations, we can do that and then simply integral both sides to get the solution.</p>
+<blockquote>
+<p>Proof. For the equation <span class="math inline">\(g(y)\dy = f(x)\dx\)</span>,</p>
+</blockquote>
+<blockquote>
+<p>Example.</p>
+</blockquote>
+<h5 id="lost-solution"># Lost Solution</h5>
+<p><strong>Lost Solution</strong>: Similar to the lost root in the fractional equation, some root can be hidden since there is fraction process existed in the separation process, generally, equation such like <span class="math display">\[
+\begin{align}
+\dd y x &amp;= 2y + 1 \\
+\frac{\dy}{2y+1} &amp;= 1 \dx \\
+\ln|2y+1| + C &amp;= 2x \dx \\
+2y+1 &amp;= \euler^{2x} \\
+\end{align}
+\]</span> <strong>Isocline</strong>: a line that connect the same slop at the deritative field.</p>
+<h3 id="first-order-ordinary-differential-equation">3. First Order Ordinary Differential Equation</h3>
+<h3 id="total-differential-equation">4. Total Differential Equation</h3>
+<p>If there exists <span class="math inline">\(u(x,y)\)</span> which makes <span class="math inline">\(\du(x, y) = P(x,y)\dx + Q(x,y)\dy\)</span>, we call the equation <span class="math display">\[
+P(x,y)\dx + Q(x,y)\dy = 0
+\]</span> <strong>the total differential equation.</strong> Notice that <span class="math inline">\(\du=0\)</span> hence the general solution is <span class="math inline">\(u(x,y)=C\)</span>. The primitive function can be</p>
+<p>A differential equation is total differential equation if and only if <span class="math inline">\(\displaystyle \pp Py = \pp Qx\)</span>.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Qt Data Type
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< qt</a></p>
+
+<h1 id="qt-data-type">Qt Data Type</h1>
+<h3 id="qstring">1. <code>QString</code></h3>
+<h3 id="datetime">2. Datetime</h3>
+<p><u>Introduce the usage of <code>QDate</code> and <code>QTime</code>.</u></p>
+<h5 id="initialization"># Initialization</h5>
+<p><u>Introduce the init methods of <code>QDate</code> and <code>QString</code>, includes manual setting and getting from current time. As also the stringify method.</u></p>
+<p>Set date during initialization or use <code>setDate()</code> method:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">QDate</span> dt1(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">10</span>);</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">QDate</span> dt2;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>dt2.setDate(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">10</span>);</span></code></pre></div>
+<p><code>toString()</code> method converts <code>QDate</code> into <code>QString</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">QTextStream</span> out(stdout);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>out &lt;&lt; dt1.toString(<span class="st">&quot;yyyy-MM-dd&quot;</span>) &lt;&lt; <span class="ex">Qt::</span>endl;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="co">// 2020-10-10</span></span></code></pre></div>
+<p>Same for the <code>QTime</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">QTime</span> tm1(<span class="dv">20</span>, <span class="dv">26</span>, <span class="dv">40</span>, <span class="dv">100</span>);</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>QTmie tm2;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>tm2.setHMS(<span class="dv">20</span>, <span class="dv">26</span>, <span class="dv">40</span>, <span class="dv">100</span>);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>out &lt;&lt; tm1.toString(<span class="st">&quot;hh:mm:ss.zzz&quot;</span>) &lt;&lt; <span class="ex">Qt::</span>endl;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">// 20:26:40.100</span></span></code></pre></div>
+<p>Use <code>currentDate()</code> and <code>currentTime()</code> method to get the current date/time:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">QDate</span> cd = <span class="ex">QDate::</span>currentDate();</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ex">QTime</span> ct = <span class="ex">QTime::</span>currentTime();</span></code></pre></div>
+<h5 id="operation"># Operation</h5>
+<p><u></u></p>
+<p>Comparison is supported for <code>QDate</code> and <code>QTime</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>QDate dt1(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">10</span>);</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>QDate dt2(<span class="dv">2020</span>, <span class="dv">9</span>, <span class="dv">9</span>);</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>QTime tm1(<span class="dv">18</span>, <span class="bn">00</span>, <span class="bn">00</span>);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>QTime tm2(<span class="dv">20</span>, <span class="dv">26</span>, <span class="dv">40</span>);</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>out &lt;&lt; (dt1 &gt; dt2) &lt;&lt; (tm1 &lt; tm2) &lt;&lt; Qt::endl;</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

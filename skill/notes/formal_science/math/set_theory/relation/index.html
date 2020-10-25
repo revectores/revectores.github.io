@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> $$
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< set_theory</a></p>
+
+<p><span class="math display">\[
+\newcommand{\dom}{\text{dom}}
+\newcommand{\ran}{\text{ran}}
+\]</span></p>
+<h1 id="relation">Relation</h1>
+<h3 id="basic-concept">Basic Concept</h3>
+<h5 id="basic-concepts-about-relation"># Basic Concepts About Relation</h5>
+<p>Assume that <span class="math inline">\(X, Y\)</span> are two sets, the subset <span class="math inline">\(R\)</span> of <span class="math inline">\(X\times Y\)</span> is defined as the <strong>binary relation</strong> or <strong>relation</strong> from <span class="math inline">\(X\)</span> to <span class="math inline">\(Y\)</span>. If tuple <span class="math inline">\((x, y)\in R\)</span>, we say <span class="math inline">\(x, y\)</span> satisfies relation <span class="math inline">\(R\)</span>, denoted as <span class="math inline">\(xRy\)</span>, and we named <span class="math inline">\(x\)</span> as the <strong>antecedent</strong>, and <span class="math inline">\(y\)</span> as <strong>seccedent</strong>.</p>
+<p>The <strong>Domain</strong> and <strong>Range</strong> of relation are denoted as <span class="math inline">\(\dom(R)\)</span> and <span class="math inline">\(\ran(R)\)</span>, which are defined as <span class="math display">\[
+\dom(R) = \{x\ |\ (x,y)\in R\} \\
+\ran(R) = \{y\ |\ (x,y)\in R\}
+\]</span></p>
+<h5 id="classification"># Classification</h5>
+<p>If <span class="math inline">\(X=Y\)</span>, the sebset is called the relation <strong>on</strong> <span class="math inline">\(X\)</span>, this binary relation is called a <strong>homogeneous relation</strong>. The <span class="math inline">\(X\neq Y\)</span> case is called heterogeneous relatively.</p>
+<p>There’re several special relations:</p>
+<ol type="1">
+<li><p>There’re two trivial subsets of <span class="math inline">\(X\times Y\)</span>, empty set <span class="math inline">\(\varnothing\)</span> and <span class="math inline">\(X\times Y\)</span> itself, which two are called <strong>Empty Relation</strong> and <strong>Total Relation</strong>.</p></li>
+<li><p>Identity Relaiton <span class="math inline">\(I\)</span> above <span class="math inline">\(X\)</span>: <span class="math inline">\(I_x = \{(x,x)\ | \ x\in X\}\)</span>.</p></li>
+<li><p>The relation which got <strong>one any only one</strong> seccedent for any antecedent is called <strong><a href="Function">Function</a></strong>.</p></li>
+</ol>
+<h5 id="representation-of-relation"># Representation of Relation</h5>
+<p>Since the relation is no more than a set, so any methods to represent a set can be used to represent a binary relation. Besides, there’re <strong>Relation Map</strong> and <strong>Relation Matrix</strong> to help us represent binary relation.</p>
+<h3 id="calculation-of-relation">Calculation of Relation</h3>
+<h5 id="basic-calculation"># Basic Calculation</h5>
+<p>Again, since relation is no more than a set, any calculations between sets work on relation as well, notes that the universal set of complementary calculation is <span class="math inline">\(X\times Y\)</span>. Besides, there’re two more calculation for relations: <strong>Reverse</strong> and <strong>Compose</strong>.</p>
+<p>Reverse of relation change the position of antecedent and seccedent: <span class="math display">\[
+R^{-1} = \{(y, x) \ | \ (x,y)\in R \}
+\]</span> Composition of relation compose two relation into one: <span class="math display">\[
+R\circ S = \{(x,z)\ |  \ (x,y)\in R,\ (y,z)\in S \}
+\]</span> It’s trival that the composition with identity relation don’t change the original relation, this can be proved by the conditions of set equivlance (notice the symbol and domain):</p>
+<blockquote>
+<p><span class="math inline">\(R: X\rightarrow Y\)</span>, Prove that <span class="math inline">\(I_X\circ R = R\circ I_Y = R\)</span>.</p>
+</blockquote>
+<h5 id="properties-of-relation-calculation"># Properties of Relation Calculation</h5>
+<h3 id="special-properties-of-relation">Special Properties of Relation</h3>
+<h5 id="special-relation"># Special Relation</h5>
+<h5 id="closure"># Closure</h5>
+<h3 id="equivlance-relation">Equivlance Relation</h3>
+<h5 id="basic-concepts-and-properties"># Basic concepts and Properties</h5>
+<h5 id="division"># Division</h5>
+<h3 id="function">Function</h3>
+<h5 id="basic-concepts"># Basic Concepts</h5>
+<p>As mentioned before, function is a relation which got <strong>one any only one</strong> seccedent for any antecedent.</p>
+<h5 id="composition-and-reverse-of-function"># Composition and Reverse of Function</h5>
+<p>The reverse of function is a relation but not may not be a function, unless it’s a <strong>bijective</strong>.</p>
+<p>The compostion of function is still a function, and the composition keeps the correspondent property of function, which means if two functions <span class="math inline">\(F,G\)</span> are (sur/in/bi)jective, the composition of them <span class="math inline">\(F\circ G\)</span> is also (sur/in/bi)jective.</p>
+<p>This is another test about this helper who is not the succdent.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

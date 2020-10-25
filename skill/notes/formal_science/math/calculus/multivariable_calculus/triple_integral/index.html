@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Triple Integral
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< multivariable_calculus</a></p>
+
+<h1 id="triple-integral">Triple Integral</h1>
+<p><span class="math display">\[
+\newcommand{\euler}{\text{e}}
+\newcommand{\p}{\partial}
+\newcommand{\px}{\p x}
+\newcommand{\py}{\p y}
+\newcommand{\pz}{\p z}
+\newcommand{\pf}{\p f}
+\newcommand{\pu}{\p u}
+\newcommand{\pv}{\p v}
+\newcommand{\pl}{\p \boldsymbol{l}}
+\newcommand{\d}{\text{d}}
+\newcommand{\dt}{\d t}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dr}{\d r}
+\newcommand{\dv}{\d v}
+\newcommand{\dz}{\d z}
+\newcommand{\du}{\d u}
+\]</span></p>
+<h3 id="definition">1. Definition</h3>
+<p>For the function bounded within closed area <span class="math inline">\(\Omega\)</span>, devide <span class="math inline">\(\Omega\)</span> into arbitrary <span class="math inline">\(n\)</span> closed area <span class="math inline">\(\{\Delta\sigma_i | 1\le i\le n\}\)</span>, and pick arbitrary point <span class="math inline">\((\xi_i, \eta_i)\in\Delta\sigma_i\)</span>, define the double integral of function <span class="math inline">\(D\)</span> <span class="math display">\[
+\iint_D f(x, y)\d\sigma = \lim_{\lambda\rightarrow 0}\sum_{i=1}^nf(\xi_i, \eta_i)\Delta\sigma_i
+\]</span> if the limit exists for all the methods of devision. The <span class="math inline">\(f(x, y)\)</span> is called <strong>integrand</strong>, <span class="math inline">\(f(x, y)\d\delta\)</span> is the integral expression, <span class="math inline">\(\d\sigma\)</span> is the <strong>area element</strong>, <span class="math inline">\(D\)</span> is the <strong>integral area</strong>. the sum <span class="math inline">\(\displaystyle \sum_{i=1}^nf(\xi_i, \eta_i)\Delta\sigma_i\)</span> is named <strong>integral sum</strong>.</p>
+<h3 id="computation">2. Computation</h3>
+<p>We can reduce the one triple integral into one double integral and one single integral by two ways:</p>
+<p><span class="math display">\[
+T = \iiint_\Omega = \int_0^d \dz \int_0^{2\pi}\d\theta \int_0^r f(r\cos\theta r\sin\theta, z)r\dr
+\]</span></p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+x = r\sin\varphi \cos\theta  \\
+y = r\sin\varphi \sin\theta  \\
+z = r\cos\varphi
+\end{array}\right.
+\\
+\dv = \rho^2 \sin\varphi ~ \d\rho\d\theta\d\varphi
+\]</span></p>
+<p><span class="math display">\[
+(x^2+y^2+z^2)^2 = a^3z (a&gt;0) \\
+\rho^4 = a^3 \rho \cos\varphi
+\]</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

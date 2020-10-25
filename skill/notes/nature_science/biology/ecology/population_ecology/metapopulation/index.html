@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Metapopulation
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< population_ecology</a></p>
+
+<h1 id="metapopulation">Metapopulation</h1>
+<p><span class="math display">\[
+\newcommand{\d}{\text{d}}
+\newcommand{\dp}{\d p}
+\newcommand{\dt}{\d t}
+\]</span></p>
+<h5 id="definition"># Definition</h5>
+<p><strong>集合种群(metapopulation)</strong>是指局域种群通过某种程度的个体迁移而连接在一起的局域种群. 本质上集合种群就是种群的种群. 这一概念近年来被重视的原因在于人类活动导致的生境斑块化.</p>
+<p><strong>周转</strong>指的是局域种群的灭绝以及从现存局域种群中扩散处的个体在尚未被占据的生境斑块内建立起新的局域种群的过程. 周转的速率随斑块面积减小和现存局域种群隔离程度的增加而下降.</p>
+<p>我们定义集合种群在某一时刻<span class="math inline">\(t\)</span>的大小为生境斑块的总数占已被占据的生境斑块的数量的比例: <span class="math display">\[
+p(t) = \frac{h(t)}{H}
+\]</span> 这里有<span class="math inline">\(0\le p\le 1\)</span>, 当<span class="math inline">\(p=0\)</span>时集合种群灭绝, <span class="math inline">\(p=1\)</span>时所有生境斑块都已经被占领.</p>
+<h5 id="levins-model"># Levins Model</h5>
+<p><span class="math display">\[
+\frac{\dp}{\dt} = mp(1-p)-ep
+\]</span></p>
+<p>式中<span class="math inline">\(m\)</span>表迁移率(新的局域种群的建立速度), <span class="math inline">\(e\)</span>表示灭绝率.</p>
+<p>令<span class="math inline">\(\dp/\dt = 0\)</span>得集合种群处于平衡状态时的集合种群大小<span class="math inline">\(p = 1-e/m\)</span>. 因而若<span class="math inline">\(m&lt;e\)</span>, 种群将走向灭绝, 若<span class="math inline">\(m&gt;e\)</span>, 则种群会继续存在.</p>
+<p>Levins模型实际上可以改写成</p>
+<p><span class="math display">\[
+\frac{\dp}{\dt} = (m-e)p\left( 1 - \frac{p}{1-e/m} \right)
+\]</span> 事实上该模型等价于<a href="">Logistic模型</a>. <span class="math inline">\((m-e)\)</span>可以理解成种群的瞬时增长率, <span class="math inline">\((1-e/m)\)</span>(平衡时的种群大小)可以理解成K值.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Mechanical Oscillation
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< kinematics</a></p>
+
+<h1 id="mechanical-oscillation">Mechanical Oscillation</h1>
+<p><span class="math display">\[
+\newcommand{\d}{\text{d}}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dt}{\d t}
+\newcommand{\g}{\text{g}}
+\]</span></p>
+<h3 id="oscillation">1. Oscillation</h3>
+<h5 id="definition"># Definition</h5>
+<p>物体在一定位置附近所作的来回往复的运动称为<strong>机械振动(mechanical oscillation)</strong>. 电路中的某些量在某一定值附近随时间作周期性的变化称为<strong>电磁振荡(electromagnetic oscillation)</strong>, 这两种振动有一定的相似性. 广义地说, 一切在某一定值附近作往复变化的过程都可以称为<strong>振动(oscillation)</strong>.</p>
+<h5 id="classification"># Classification</h5>
+<p>振动可以分为<strong>自由振动(free oscillation)</strong>和<strong>受迫振动(forced oscillation)</strong>, 其中自由振动又可以分为<strong>无阻尼振动(undamped oscillation)</strong>和<strong>阻尼振动(damped oscillation)</strong>. 另外, 振动还可以分为线性振动和非线性振动.</p>
+<h5 id="oscillation-graph"># Oscillation Graph</h5>
+<p>用横坐标表示振动物体运动的时间<span class="math inline">\(t\)</span>, 纵坐标表示物体偏离平衡位置的位移<span class="math inline">\(x\)</span>, 所作出的<span class="math inline">\(x-t\)</span>图像称为<strong>振动图像</strong>. 振动图像的斜率表示物体的运动速度.</p>
+<h3 id="simple-harmonic-motion">2. Simple Harmonic Motion</h3>
+<h5 id="definition-1"># Definition</h5>
+<p>和物体的位移成正比, 并且总是指向<strong>平衡位置</strong>的的力称为<strong>线性回复力</strong>. 即<span class="math inline">\(F=-kx\)</span>. 只在线性回复力作用下物体的运动称为<strong>简谐运动</strong>. 由牛顿第二定律, 做简谐运动物体的位移<span class="math inline">\(x\)</span>满足 <span class="math display">\[
+\frac{\d^2 x}{\d t^2} = -\frac{k}{m}x
+\]</span> 通常我们记<span class="math inline">\(\dfrac{k}{m} = \omega^2\)</span>, 上述方程写作 <span class="math display">\[
+\frac{\d^2 x}{\d t^2} + \omega^2x = 0
+\]</span></p>
+<p>解得 <span class="math display">\[
+x = A\cos(\omega t + \varphi_0)
+\]</span> 其中<span class="math inline">\(A\)</span>和<span class="math inline">\(\varphi_0\)</span>均为求解二阶微分方程产生的积分常数, 由解的解析式可知, 做简谐运动的物体位移随时间按照余弦函数变化.</p>
+<h5 id="property"># Property</h5>
+<p>一次完整的振动过程称为<strong>全振动</strong>. 无论以何处作为运动的起点, 弹簧振子完成一次全振动的时间总是相同的. 完成一次全振动所需的时间称为简谐运动的周期<span class="math inline">\(T\)</span>.</p>
+<p>做简谐运动的物体在位移为零处加速度为零, 此时速度最大; 在位移最大处加速度最大, 此时速度为零. 位移方向始终与加速度方向相反(简谐运动定义).</p>
+<p>简谐运动具有高度的对称性. 物体<strong>连续两次</strong>经过同一点的速度大小相等, 方向相反, 经过关于O点对称的两点的速度大小相等, 方向相同或相反.</p>
+<h5 id="shm-in-spring"># SHM in Spring</h5>
+<p>众所周知, 弹簧由于服从胡克定律, 因此水平的弹簧振子(在忽略摩擦力的前提下)显然满足<span class="math inline">\(F=-kx\)</span>的条件. 对于竖直方向的弹簧振子, 证明其所受力是线性回复力(忽略弹簧自重): 取扰动前小球静止时的位置为平衡位置<span class="math inline">\(x=0\)</span>, 记弹簧伸长量为<span class="math inline">\(x_0\)</span>, 此时张力满足 <span class="math display">\[
+kx_0 = -m\g
+\]</span> 给小球外加一个竖直方向的作用力, 当小球运动到坐标<span class="math inline">\(x\)</span>位置时, 弹簧的张力满足 <span class="math display">\[
+T = -k(x_0 + x)
+\]</span> 此时小球所受的合力 <span class="math display">\[
+F = T - m\g = -k(x_0 + x) - kx_0 = -kx
+\]</span> 故满足合力为线性回复力的条件. 因此竖直方向上的弹簧振子确实作简谐运动. 类似地我们可以证明在光滑斜面上运动的弹簧振子做简谐运动. 注意上述讨论必须建立在小球的运动范围始终处于弹簧的弹性限度内. 综上, 无论在何种方向均可以证明弹簧振子做简谐运动, 因而我们可以用弹簧振子作为简谐运动的机械模型.</p>
+<h5 id="shm-in-simple-pendulum"># SHM in Simple Pendulum</h5>
+<p>考虑由用细线悬挂着的小球, 如果细线的质量和小球相比可以忽略, 球的直径与线的长度相比也可以忽略, 这样的装置就叫做<strong>单摆</strong>(simple pendulum).单摆是实际摆的理想模型. 以下证明单摆在作小角度<span class="math inline">\((\theta\le 5^\circ)\)</span>摆动时做简谐运动. 为了证明这一点, 我们考虑其运动任一点处所受的回复力是否满足简谐运动的定义.</p>
+<p>首先需要找到平衡位置. 显然摆球静止在O点悬线竖直下垂时所受悬线拉力和重力相平衡, 因此O点是平衡位置. 当摆球运动到点P处时, 悬线的拉力和重力沿悬线方向的分力(法向分力)对小球不做功, 只有重力的切向分力<span class="math inline">\(m\g\sin\theta\)</span>作为回复力做功, 注意到<span class="math inline">\(\sin\theta \sim \theta\)</span>, 从而 <span class="math display">\[
+F = m\g\sin\theta = \frac{-m\g x}{l} \propto x
+\]</span> 因此单摆的小角度摆动是简谐运动. 进一步地, 惠更斯确定了单摆周期与摆长的二次方根成正比, 与重力加速度的二次方根成反比, 而与振幅和摆球质量无关, 即</p>
+<p><span class="math display">\[
+T = 2\pi\sqrt{\frac{l}{\g}}, ~~~~  \g=\frac{4\pi^2l}{T^2}
+\]</span> 因而在测量出摆场和周期以后就可以得到当地的重力加速度. 在研究测定单摆周期和摆长关系的的实验中需要注意以下几点:</p>
+<ol type="1">
+<li>摆的摆动角度不要太大, 否则<span class="math inline">\(\sin\theta \sim \theta\)</span>的近似条件会被破坏掉, 摆的振动不再是简谐运动, 周期与摆长的关系会变得十分复杂.</li>
+<li>摆线要选择细、伸缩性小的, 并且尽可能长, 摆球要选择质量大、体积小的. 以上操作都是为了减小相对误差.</li>
+<li>摆长是摆的悬点到单摆重心的距离, 因此是细线长度+<strong>小球半径</strong>. 小球直径用<strong>游标卡尺</strong>测量然后再求半径.</li>
+<li>测量周期时应当测量多次全振动然后求均值以减小测量误差.</li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

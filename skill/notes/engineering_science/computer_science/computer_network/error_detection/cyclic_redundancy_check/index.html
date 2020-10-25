@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Cyclic Redundancy Check
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< error_detection</a></p>
+
+<h1 id="cyclic-redundancy-check">Cyclic Redundancy Check</h1>
+<p><strong>循环冗余检验</strong>(Cyclic Redundancy Check,CRC)可以被认为是某种非常简单的<a href="">数据摘要算法</a>(当然比起MD5和SHA等等的复杂算法其安全性要弱得多, 因此其通常用于传输差错的检验, 而不是提供对抗攻击的数据安全性保证).</p>
+<p>CRC通过对原始数据进行模2下的带余除法得到的余数作为添加在原始数据后的<strong>冗余码</strong>(应用在数据链路层中时也称<strong>帧检验序列(Frame Check Sequence, FCS)</strong>, 接收时则校验数据和冗余码是否吻合(不一定再算一遍, 为提高算法效率可以通过某种简化方式进行). 具体实现如下: (注意以下所涉及运算均为模2运算, 容易证明, 在模2运算下, 加法不进位, 减法将与加法等效, 乘2^n将等价于在末尾加n个0)</p>
+<p>设原始数据二进制编码为M, 用于校验添加的冗余码长度规定为n, 计算带余除法</p>
+<p><span class="math display">\[
+\frac{2^nM}{P}
+\]</span> 得到余数<span class="math inline">\(R\)</span>, 作为冗余码拼接在<span class="math inline">\(M\)</span>后面, 作为帧的数据部分. 式中的<span class="math inline">\(P\)</span>是协议规定的除数, 由始结点和终结点保存, 如果需要得到<span class="math inline">\(n\)</span>位的冗余, 则需要<span class="math inline">\(n+1\)</span>位的除数<span class="math inline">\(P\)</span>. 由于冗余码是<span class="math inline">\(n\)</span>位的, 因此最终得到帧的数据部分的过程(即拼接过程)也可以理解为是计算<span class="math inline">\(2^nM + R\)</span>得到.</p>
+<p>终结点接收到帧以后, 对数据部分执行CRC检验只需要直接除以<span class="math inline">\(P\)</span>, 然后检查余数是否为0即可: 如果传输没有差错, 则得到的余数必然是0; 如果存在误码, 余数仍然为0的概率是很小的. 因此只要余数是0, 我们就<strong>认为</strong>是正确的并接受该帧.</p>
+<blockquote>
+<p>Example For CRC. 设<span class="math inline">\(M=101001\)</span>, 设定<span class="math inline">\(n=3\)</span>, 定义<span class="math inline">\(P=1101\)</span>, 注意<span class="math inline">\(\text{len}(P) = \text{len}(n)+1\)</span>. 则 <span class="math display">\[
+\frac{2^nM}{P} = \frac{2^3\times101001}{1101} = \frac{101001000}{1101} = 110101 \cdots 001 (R)
+\]</span> 则冗余码为<span class="math inline">\(001\)</span>, 最终得到的帧的数据部分是101001001.</p>
+<p>校验: 计算101001001/1101, 余数为0, 接受该帧.</p>
+</blockquote>
+<p>值得注意的是, 这里除数P的选取并不是随意的, 不同的P会导致不同的原始数据产生相同余数的概率不同, 因此我们应当尽量选取那些使余数相同的概率较小的<span class="math inline">\(P\)</span>.</p>
+<p>为了便于表示, 我们将P写成一种叫做<strong>生成多项式</strong><span class="math inline">\(P(x)\)</span>的形式, 例如上述P=1101所对应的生成多项式<span class="math inline">\(P(x) = x^3 + x^2 + 1\)</span>.</p>
+<p>目前广泛使用的生成多项式有以下三种(将余数碰撞的概率极小值化):</p>
+<p>CRC-16: <span class="math inline">\(P(x) = x^{16} + x^{15} + x^2 + 1\)</span></p>
+<p>CRC-CCITT: <span class="math inline">\(P(x) = x^{16} + x^{12} + x^5 + 1\)</span></p>
+<p>CRC-32: <span class="math inline">\(P(x) = x^{32} + x^{26} + x^{23} + x^{22} + x^{16} + x^{12} + x^{11} + x^{10} + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1\)</span></p>
+<p>三种标准的冗余码分别为15,15,31位.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

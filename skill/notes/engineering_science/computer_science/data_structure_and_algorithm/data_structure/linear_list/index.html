@@ -1,0 +1,196 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Linear List
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< data_structure</a></p>
+
+<h1 id="linear-list">Linear List</h1>
+<h3 id="introduction">1. Introduction</h3>
+<h5 id="basic-concepts"># Basic Concepts</h5>
+<p>A <strong>Linear List</strong> is the limited sequence of datas <span class="math inline">\(a_1, a_2, a_3, ..., a_n\)</span> with same type, noted as <span class="math inline">\((a_1, a_2, a_3, ..., a_n)\)</span>. The number of elements called the length of linear list, and the linear list with zero-length called empty list.</p>
+<p>Customarily we can call the element of liner list as <strong>Node</strong> or <strong>Record</strong>. <code>Node</code> usually be used in the practical programming where we define the element as a <code>struct </code>. Based on the definition of linear list, all the records must share the same data type, it can be a simple type like <code>int</code>, <code>char</code>, or complex <code>struct</code> and <code>object</code>. In the complex case, the column of datas are named <strong>Field</strong> or Domain. This naming convention is similar to the cases in Database.</p>
+<h5 id="adt-operations-definition"># ADT Operations Definition</h5>
+<p>The <strong>Abstract Data Type</strong> is defined by the possible operations affected on the data type. We’ll illustarte the opeartions on linear list here.</p>
+<blockquote>
+<ol type="1">
+<li><p>Properties</p>
+<ul>
+<li><p>Count the length of linear list.</p></li>
+<li><p>Determine whether the linear list is empty.</p></li>
+</ul></li>
+<li><p>Iteration</p>
+<ul>
+<li><p>Print all the elements in the linear list.</p></li>
+<li><p>Sort the linear list based on one or more records of the elements.</p></li>
+</ul></li>
+<li><p>Search</p>
+<ul>
+<li><p>Find the value of <code>i</code>th element.</p></li>
+<li><p>Find the location(subscript) of the first element with value <span class="math inline">\(v\)</span>.</p></li>
+</ul></li>
+<li><p>Insertion/Deletion</p>
+<ul>
+<li><p>Insert the new element before(after) <code>i</code>th element.</p></li>
+<li><p>Delete the element on the <code>i</code>th position.</p></li>
+</ul>
+<p>Combined with the value search function, we can implement the function that insert element before element with specific value <code>v</code>, and delete element with specific value <code>v</code>.</p></li>
+<li><p>Data Structure Interaction</p>
+<ul>
+<li>Join multiple linear list into one.</li>
+<li>Divide one linear list into multiple.</li>
+</ul></li>
+</ol>
+</blockquote>
+<h5 id="classification"># Classification</h5>
+<p>There’re two types of most frequently-used storage strategy of linear list: <strong>Sequence List (Array)</strong> and <strong>Linked List</strong>.</p>
+<p>The sequence list stores all the records in the continuous memory, which guranteed all the elements of the sequence list can be found by simple offsets operation. E.G. If each element cost <code>s</code> bytes, and we allocates the first record of list in address <code>[a, a+s)</code>, the <code>i</code>th record will be store and find at address <code>[a+i*s, a+(i+1)*s)</code>. This implies a simple fact, that we can access an element without iterating the elements before it, this feature of access is named <strong>Random Access</strong>. Apparently, with the help of a simple <code>for</code> loop we’re able to get all the elements of sequence list.</p>
+<p>The other approach to storage linear list is linked list. Linked list values the <code>next</code> relationship between nodes, who determines to storage the address of next address with an extended field besides the data field. This implies that we can’t read some data in the middle of the linked list directly, we have to interate everything from the beginning, so the linked list only support <strong>Sequential Reading</strong>. Once we know where the first element is, through the interation of <code>next</code> operation we cloud always get all elements on the list.</p>
+<figure>
+<img src="singly_linked_list.png" alt="Singly Linked List" /><figcaption aria-hidden="true">Singly Linked List</figcaption>
+</figure>
+<p>Normally, the general linear list structure won’t limit the subscripting, insertion and deletion operation, these operations are allowed to act on any place in the linear list, while there’re two type of special linear list which limit these operations, make them can only operate in the specific place: <strong>Stack</strong> and <strong>Queue</strong>.</p>
+<p>Stack can be consider as a bunch of heaped books, you can only remove the book on the top of the stack, added new book on the top of the stack, and read the topmost book’s content only. This limitation implies that the element which was first added to the stack will be the last to be removed. This feature of stack is usually emphasized as “<strong>First In, Last Out</strong>”, or <strong>FILO</strong>.</p>
+<p>Queue is the same as the queue when you go to Disneyland or the most popular restaurant in the city, you can only add person into the tail of the queue, and remove person from the beginning of the queue, i.e. add/remove element in different edge. It’s totally different from stack beacuse it add/remove things in the same edge. As the result, the first element which is pushed into the queue will also be the first to get out of the queue, which is usually emphasized as “<strong>First In, First Out</strong>”, or <strong>FIFO</strong>.</p>
+<p>==TODO: Draw the graph to illustrate the classification of linear list==</p>
+<p>We’ll first illustrate the implementation of general array and linked list, as well as the basic variants of them, followed the construction of stack/queue by both the array or linked list, and showed some applicaitons of these data structures.</p>
+<p>==TODO: Draw the graph to illustrate the notes sequence==</p>
+<p>The further detailed properties and the implementation of these types of structure will be illustrate in the specific sections.</p>
+<h3 id="array">2. Array</h3>
+<h5 id="implementation"># Implementation</h5>
+<p>The sequential list, or array, is supported by almost all of programming language. The following code illustrate the method to declare a new array with type <code>int</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="pp">#define MAX 100</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="dt">int</span> list[MAX];</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="dt">int</span> n;</span></code></pre></div>
+<p>One property that worth noting is that the array structure itself doesn’t contain the information about “where it ends”, and “how long it is” also, unless it’s the <code>char</code> array and you’re using the string literal to implement the declaration like <code>char str[]="hello"</code>, in which case the complier will adding a tailing <code>\0</code> to mark the end of char array, while in the general case this is not supported. The array, are essentially, a continuous memory block, with no special care and attention, and we call the first address “the name of array”.</p>
+<p>This makes it difficult to determine where the iteration on an array should end with, E.G. we’d like to write a function <code>max</code> to get the max element of an <code>int</code> array:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">void</span> max(<span class="dt">int</span> nums[]){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="dt">int</span> max = nums[<span class="dv">0</span>];</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>; i&lt;length_of_nums; i++)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        max = max &gt; nums[i] ? max : nums[i];</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>As no “End Singal” is specified, we’re not able to find out the <code>length_of_nums</code> through the array itself. One solution of this is to give another variable to pass through it:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">void</span> max(<span class="dt">int</span> nums[], <span class="dt">int</span> length_of_nums);</span></code></pre></div>
+<p>That is why we usually use a independent variable <code>n</code> to record the length of array.</p>
+<h5 id="operations-and-complexity-analysis"># Operations and Complexity Analysis</h5>
+<p>We’ve implemented (1)iteration, (2)element search, (3)insert, (4)delete and (5)array join operations of general linear list by array storage in <a href="array_operations.c">array_operations.c</a>.</p>
+<p>Here we illustrate the complexity analysis of subscripting, insert and delete.</p>
+<p>The element access, or subscripting process only cost constant <span class="math inline">\(O(1)\)</span> complexity.</p>
+<p>This insertion operation before the <code>i</code>th location require <code>n-i</code> elements to move one step to the succedent element, which requires the constant time. Give the probability of insertion <span class="math inline">\(p_i\)</span> on each index <span class="math inline">\(i\)</span>, we can calculate the mathematical expectation of the operation: <span class="math display">\[
+\overline T = \sum_{i=0}^n p_i(n-i), \qquad \sum_{i=0}^n p_i = 1
+\]</span> If the frequency of insertion operation is uniform distributed in different subscript, that is, <span class="math inline">\(p_i\)</span> is a constant, then <span class="math display">\[
+\begin{align}
+\overline T
+&amp;= \sum_{i=0}^n p_i(n-i) \\
+&amp;= p_i\sum_{i=0}^n(n-i) \\
+&amp;= p_i\sum_{i=0}^n i \\
+&amp;= \cfrac{1}{n+1}\cdot\cfrac{n(n+1)}{2} \\
+&amp;= \cfrac{n}{2}
+\end{align}
+\]</span> which implies that the time complexity of insertion operation is <span class="math inline">\(O(n)\)</span>, and the deletion operation also required <span class="math inline">\(\cfrac{n}{2}\)</span> elements to move, share the same time complexity <span class="math inline">\(O(n)\)</span> as insertion.</p>
+<p>Further content about array storage will be introduced in the independent topic <a href="Array">Array</a>.</p>
+<h3 id="linked-list">3. Linked List</h3>
+<h5 id="struct-node"># <code>struct node</code></h5>
+<p>Based on the definition, a linked list is a group of nodes that stores not only data but the pointer points to the next node, it’s convience to use the <code>struct</code> in C to implement this concept:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">struct</span> node {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">char</span> data;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="kw">struct</span> node* node;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> node Node;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="kw">typedef</span> Node* Node_ptr;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="dt">const</span> <span class="dt">int</span> NODE_SIZE = <span class="kw">sizeof</span>(Node);</span></code></pre></div>
+<p>Inside the struct definition we use the <code>struct node*</code> to represent the pointer points to the the same type as itself. The later lines about <code>typedef</code> and <code>const</code> will simplify the implementation of initialization and construction operations of linked list, which will be illustrated later.</p>
+<p>To create a new node, the memory allocation function <code>malloc</code> is used to specify a memory block with size <code>NODE_SIZE</code> to be our struct <code>Node</code>, and we encapsulated this process into a function, as if this is a class construction:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>Node_ptr new_node(<span class="dt">char</span> data){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    Node_ptr node = malloc(NODE_SIZE);</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    node-&gt;data = data;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    <span class="cf">return</span> node;</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>}</span></code></pre></div>
+<h5 id="sentinel-node"># Sentinel Node</h5>
+<p>To avoid some problems caused by the operations assoicated with the first element, we’ll add an special empty element to be the <code>head</code> or <code>tail</code> node in some cases which is usually called the <strong>Sentinel Node</strong> or <strong>Dummy Node</strong>, as the result, the actual meaningful first/last element will be the next/previous element of <code>head/tail</code> element. Since sentinel <code>head</code> is used more frequently than sentinel <code>tail</code>, we’ll only talk about the sentinel <code>head</code> in this illustration.</p>
+<figure>
+<img src="singly_linked_list_with_sentinel_head.png" alt="Singly Linked List with Sentinel Head" /><figcaption aria-hidden="true">Singly Linked List with Sentinel Head</figcaption>
+</figure>
+<p>The structure of the sentinel head is the same as normal element, and the data field of it will be set as a meaningless value which won’t appear in the meaningful data. E.G. We can set data field of the sentinel as <code>0</code> if the normal datas are guaranteed to be positive or visible character.</p>
+<p>This feature(speciality of data field) allows sentinel to mark the start of the refined linked list structure like circular linked list. In this case if the sentinel with special data field is not provided, it’s not possible for a program to tell weather it has reached the beginning of linked list.</p>
+<p>The specific comparison between with and without sential head will be introduced in an independent research document <a href="Sentinel%20Head%20In%20The%20Linked%20List:%20Investigation">Sentinel Head In The Linked List: Investigation</a>. An extra empty <code>head</code> is <strong>ALWAYS</strong> added in most of our implementations of initialization and construction, including <strong>ALL</strong> the (singly/doubly)(linear/circular) linked list.</p>
+<h5 id="initialization"># Initialization</h5>
+<p>Finally we’re going to combine nodes into linked list. Two approaches of initializations are introduced here: The <strong>Append Way</strong> and the <strong>Prepend Way</strong>. The append way, as it is named, appends new snode in the end of the linked list, while the prepend way inserts new element into the start of linked list.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="co">/* linked list initializaiton: append way */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co">// We&#39;ll use an array to be the data source of the linked list, to avoid the direct interaction to input/output stream.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>Node_ptr new_linked_list(<span class="dt">char</span> data_src[], <span class="dt">int</span> length){</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    Node_ptr head = new_node(<span class="dv">0</span>);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>    Node_ptr cur = head;</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;length; i++){</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>        Node_ptr suc_node = new_node(data_src[i]);</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>        cur-&gt;next = suc_node;</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>        cur = cur_next;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>    }</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a>    cur-&gt;next = NULL;</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>    </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a>    <span class="cf">return</span> head;</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Since we have to return the <code>head</code> element of linked list, we have to store the <code>head</code> element in the beginning and define another pointer <code>cur</code> to trace as the list grows. Besides, in the software engineering’s perspective, a variable named as <code>head</code> is obviously not used for iteration, so another <code>cur</code> is required anyway XD.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">/* linked list initialization: prepend way */</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>Node_ptr new_linked_list(<span class="dt">char</span> data_src[], <span class="dt">int</span> lenght){</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    Node_ptr head = new_node(<span class="dv">0</span>);</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    head-&gt;next = NULL;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;length; i++){</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>        Node_ptr suc_node = new_node(data_src[i]);</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>        suc_node-&gt;next = head-&gt;next;</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>        head-&gt;next = suc_node;</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    }   </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>    <span class="cf">return</span> head;    </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>}</span></code></pre></div>
+<p>As noticed, the append way requires the cursor keeps to move to the last element, while in the prepend way the pointer just “wait” in the head and let the linked develop naturally, no even a single redundant variable is added. Although this approach seems more elegant, the sequence of the linked list will be <strong>REVERSE</strong> of the original inputs’ sequence.</p>
+<h5 id="operations-and-complexity-analysis-1"># Operations and Complexity Analysis</h5>
+<p>We’ll implement (1)iteration, (2)element search, (3)insertion, (4)deletion, and (5)join operations of linked list in <a href="linked_list_operations.c">linked_list_operations.c</a>.</p>
+<p>Then we illustrate the complexity analysis of subscripting, insert and delete here.</p>
+<p>If the distribution of search target is uniformed, the subscripting process will costs <span class="math inline">\(\cfrac{n}{2}\)</span> operations of dereference to find the next element, which illustrates that the time complexity of element search is <span class="math inline">\(O(n)\)</span>. The insertion and deletion operation only require two repointing at most, which is <span class="math inline">\(O(1)\)</span>.</p>
+<p>We should notice the time complexity difference of operations between array and linked list. The array is preferred if one requires more subscripting than modification, while the linked list is preferred if one requires more modification than subscripting.</p>
+<h5 id="cursor-implementation"># Cursor Implementation</h5>
+<h5 id="combination-of-array-and-linked-list"># Combination Of Array And Linked List</h5>
+<h3 id="enhanced-linked-list">4. Enhanced Linked List</h3>
+<h5 id="doubly-linked-list"># Doubly Linked List</h5>
+<p>It’s trivial for linked list to find the next element, but to find the precedent it costs <span class="math inline">\(O(n)\)</span>, the comlexity is the same to find a unknown element. The precedent relation is not natural supported by singly linked list.</p>
+<p>Another pointer field points to the previous node solves this problem:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">struct</span> node {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    <span class="dt">char</span> data;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    <span class="kw">struct</span> node* prev;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    <span class="kw">struct</span> node* next;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Most of the codes about doubly linked list is similar to the singly linked list, since the repointing processes during <code>initialize/insert/delete</code> processes are easy to construct by one with an Apple Pencil, we’ll not emphasize this operations here in the formal notes for the conciseness, the codes and illustrations will be placed in <a href="doubly_linked_list.c">doubly_linked_list.c</a>.</p>
+<p>Doubly linked list is used by many operating system to manage programs and dynamic objects. One of the detection evasion strategy of rootkits is to unlinked themselves from the list. <a href="https://en.wikipedia.org/wiki/Linked_list#Doubly_linked_list">[REF]</a></p>
+<h5 id="circular-linked-list"># Circular Linked List</h5>
+<h5 id="doubly-circular-linked-list"># Doubly Circular Linked List</h5>
+<h3 id="stack">5. Stack</h3>
+<p><a href="stack.c">stack.c</a></p>
+<h3 id="queue">6. Queue</h3>
+<h5 id="queue-structure"># Queue Structure</h5>
+<p>Use two pointers that point to the <code>head</code> and <code>tail</code> of queue respectively.</p>
+<p>There’s two presentation method of queue, one use the <code>head</code> pointer points to the address of actual head of queue directly, or use the <code>head</code> pointer. The codes are in <a href="queue.c">queue.c</a>.</p>
+<p>One problem of this implementation called <strong>False Full</strong>. Notice that the <code>tail</code> pointer never moved forward, when the <code>tail</code> moved to the <code>MAXN</code> pointer, although the old elements may be moved away, the <code>tail</code> doesn’t receive this information but still consider the queue full. This is so-called the False Full phenomenon.</p>
+<h5 id="ring-queue"># Ring Queue</h5>
+<p>To aviod false full and the waste of memory, we create the <strong>Ring Queue</strong>, consider a segments of memory ring. In this solution the <code>head == tail</code> may because of full queue or empty queue. So we add an <code>is_full</code> tag to mark whether it’s full or empty. <a href="ring_queue.c">ring_queue.c</a></p>
+<h5 id="void-node-solution"># Void Node Solution</h5>
+<p>One more mark variable and <code>if</code> statement increase the complexity and time cost in ring_queue solution.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Limit of Multivariable Function Computing Example
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com//static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< multivariable_calculus</a></p>
+
+<h1 id="limit-of-multivariable-function-computing-example">Limit of Multivariable Function Computing Example</h1>
+<p>$$         </p>
+<p>$$</p>
+<h5 id="computed-by-definition"># Computed by Definition</h5>
+<blockquote>
+<p>Example. Compute the limit</p>
+<p><span class="math inline">\(\displaystyle\lim_{(x, y)\rightarrow(0,0)}\frac{x^2y^2}{x^2+y^2}\)</span></p>
+</blockquote>
+<p><span class="math display">\[
+\left| \frac{x^2y^2}{x^2+y^2} - 0 \right|
+= \frac{x^2y^2}{x^2+y^2} &lt; \frac{1}{4}\frac{(x^2+y^2)^2}{x^2+y^2}
+= \frac{1}{4}(x^2+y^2) &lt; \frac{1}{4}\varepsilon
+\]</span></p>
+<p>Hence <span class="math inline">\(\forall \varepsilon &gt; 0\)</span>, let <span class="math inline">\(\delta = \dfrac{1}{4}\varepsilon\)</span>, then as <span class="math inline">\(0 \lt \sqrt{(x-0)^2 + (y-0)^2} \lt \delta\)</span>, we have <span class="math inline">\(|f(x, y) - 0|\lt \varepsilon\)</span>, which gives <span class="math inline">\(\displaystyle\lim_{(x, y)\rightarrow(0,0)}\frac{x^2y^2}{x^2+y^2} = 0\)</span>.</p>
+<h5 id="computed-by-property"># Computed by Property</h5>
+<blockquote>
+<p>Example. Compute the limit</p>
+<p><span class="math inline">\(\displaystyle\lim_{(x, y)\rightarrow(0,a)}\frac{\sin(xy)}{xy}\)</span></p>
+</blockquote>
+<p>Notice that <span class="math inline">\(\sin(xy) \sim xy\)</span>,</p>
+<p><span class="math display">\[
+\displaystyle\lim_{(x, y)\rightarrow(0,a)}\frac{\sin(xy)}{xy}
+= \displaystyle\lim_{xy \rightarrow 0}{\frac{\sin(xy)}{xy}}
+= \displaystyle\lim_{xy \rightarrow 0}\dfrac{xy}{xy}
+= \displaystyle\lim_{xy \rightarrow 0} 1
+= 1
+\]</span></p>
+<blockquote>
+<p>Example. Compute the limit <span class="math display">\[
+ \displaystyle\lim_{x\rightarrow0 \\ y\rightarrow0} \frac{\sqrt{xy + 1}-1}{xy}
+ \]</span></p>
+</blockquote>
+<p><span class="math display">\[
+\begin{align}
+\lim_{x\rightarrow0 \\ y\rightarrow0} \frac{\sqrt{xy + 1}-1}{xy}
+=&amp; \lim_{x\rightarrow0 \\ y\rightarrow0} \frac{(\sqrt{xy + 1}-1)(\sqrt{xy + 1}+1)}{xy(\sqrt{xy + 1}-1)} \\
+=&amp; \lim_{x\rightarrow0 \\ y\rightarrow0} \frac{xy}{xy(\sqrt{xy+1}+1)} \\
+=&amp; \lim_{x\rightarrow0 \\ y\rightarrow0} \frac{1}{\sqrt{xy+1}+1} \\
+=&amp; \frac{1}{2}
+\end{align}
+\]</span></p>
+<p>or we can apply the encapsulated infinitesimal transformation directly: <span class="math display">\[
+\lim_{x\rightarrow0 \\ y\rightarrow0} \frac{\sqrt{xy + 1}-1}{xy}
+= \lim_{xy \rightarrow 0} \dfrac{xy}{xy}
+= 1
+\]</span></p>
+<blockquote>
+<p>Example. Compute the limit <span class="math display">\[
+ \lim_{x\rightarrow\infty, y\rightarrow1}\left(1+\frac{1}{x}\right)^{\frac{x^2}{x+y}}
+ \]</span></p>
+</blockquote>
+<p><span class="math display">\[
+\displaystyle\lim_{x\rightarrow\infty, y\rightarrow1}\left(1+\frac{1}{x}\right)^{\frac{x^2}{x+y}}
+= \displaystyle\lim_{x\rightarrow\infty, y\rightarrow1}  \left[ \left(1+\frac{1}{x}\right)^x \right]^{\frac{x}{x+y}}
+=   \left[ \displaystyle\lim_{x\rightarrow\infty, y\rightarrow1} \left(1+\frac{1}{x}\right)^x \right]^{\lim_{x\rightarrow\infty, y\rightarrow1}\frac{x}{x+y}}
+= \text{e}^1 = \text{e}
+\]</span></p>
+<h5 id="compute-by-sqeeze-theorem"># Compute by Sqeeze Theorem</h5>
+<blockquote>
+<p>Example. Compute the limit <span class="math display">\[
+\lim_{(x, y)\rightarrow(0,0)}(x^2+y^2)^{x^2y^2}
+\]</span></p>
+</blockquote>
+<p><span class="math display">\[
+\displaystyle\lim_{(x, y)\rightarrow(0,0)}(x^2+y^2)^{x^2y^2}
+= \lim_{(x, y)\rightarrow(0,0)} \text{e}^{x^2y^2\ln(x^2+y^2)}
+= \exp\left[ \lim_{(x, y)\rightarrow(0,0)}x^2y^2\ln(x^2+y^2) \right]
+\]</span></p>
+<p>Now we compute the limit on the exponent:</p>
+<p><span class="math display">\[
+\displaystyle\lim_{(x, y)\rightarrow(0,0)}x^2y^2\ln(x^2+y^2)
+= \lim_{r\rightarrow0} r^4\sin^2\theta\cos^2\theta \ln r^2
+= \lim_{r\rightarrow0} \frac{1}{2}\sin^22\theta \cdot r^4\ln r = 0
+\]</span></p>
+<p>hence <span class="math display">\[
+\displaystyle\lim_{(x, y)\rightarrow(0,0)}(x^2+y^2)^{x^2y^2} = \text{e}^0 = 1
+\]</span></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
