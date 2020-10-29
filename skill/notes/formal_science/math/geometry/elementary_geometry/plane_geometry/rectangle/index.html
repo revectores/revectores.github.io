@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Rectangle
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< plane_geometry</a></p>
+
+<h1 id="rectangle">Rectangle</h1>
+<p><span class="math display">\[
+\newcommand{\v}{\overrightarrow}
+\]</span></p>
+<p>For the rectangle <span class="math inline">\(ABCD\)</span> and any point <span class="math inline">\(P\)</span>, we have <span class="math inline">\(PA^2 + PC^2 = PB^2+ PD^2\)</span>.</p>
+<blockquote>
+<p><strong>Proof</strong>. <span class="math inline">\(\v{PA} + \v{PC} = 2\v{PO}, \v{PA} - \v{PC} = \v{CA}\)</span>, hence <span class="math display">\[
+PA^2 + PC^2 = 4PO^2 + CA^2 = 4PO^2 + DB^2 = PB^2 + PD^2
+\]</span></p>
+</blockquote>
+<p><strong>Remark</strong>. Since the proof is purely the algebraic computation, the position of <span class="math inline">\(P\)</span> could be at anywhere in the space, not limited on the plane <span class="math inline">\(ABCD\)</span>.</p>
+<blockquote>
+<p><strong>Example</strong>. For <span class="math inline">\(Rt\triangle ABC\)</span> where <span class="math inline">\(\angle C = \pi/2\)</span>, if some point <span class="math inline">\(P\)</span> in the plane fits <span class="math inline">\(\v{PA} + \v{PB} + \lambda\v{PC} = \v 0\)</span>, denoted <span class="math display">\[
+m = \dfrac{PA^2 + PB^2}{PC^2}
+\]</span> (i) When <span class="math inline">\(\lambda = 1\)</span>, find <span class="math inline">\(m\)</span>.</p>
+<ol start="2" type="i">
+<li>Find the minimum value of <span class="math inline">\(m\)</span>.</li>
+</ol>
+<p><strong>Solution</strong>. (i) For <span class="math inline">\(\lambda = 1\)</span>, we have <span class="math inline">\(\v{PA} + \v{PB}+ \v{PC} = 1\)</span>, in this case <span class="math inline">\(P\)</span> is the center of gravity for <span class="math inline">\(\triangle ABC\)</span>, <span class="math inline">\(P\)</span> located on the middle on <span class="math inline">\(AB\)</span>.</p>
+<ol start="2" type="i">
+<li>Construct a rectangle <span class="math inline">\(ACBE\)</span>, we have <span class="math display">\[
+\frac{PA^2 + PB^2}{PC^2}
+= \frac{PC^2 + PE^2}{PC^2}
+= 1 + \frac{PE^2}{PC^2}
+\]</span> Hence the <span class="math inline">\(m\)</span> is minimal iff <span class="math inline">\(PE^2/PC^2\)</span> is minimal, that is, <span class="math inline">\(P=E\)</span> and <span class="math inline">\(m_\min = 1\)</span>.</li>
+</ol>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

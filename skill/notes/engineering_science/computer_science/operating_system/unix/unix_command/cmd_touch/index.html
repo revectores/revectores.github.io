@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Linux Command `touch`
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< unix_command</a></p>
+
+<h1 id="linux-command-touch">Linux Command <code>touch</code></h1>
+<h5 id="usage"># Usage</h5>
+<p><code>touch</code> sets the modification time and access time of files use <code>-m</code>/<code>-a</code> flags to set only one of the time individually. That is, it update the fields <code>struct timespec st_atim</code> and <code>struct timespec st_mtim</code> in <a href="http://revectores.com/skill/notes/engineering_science/computer_science/operating_system/unix/unix_file/unix_file_intro/struct_stat.md"><code>struct stat</code></a> of a file.</p>
+<p>By default, If any file (in the given file list) does not exist, it is created with default permissions (ironically this is the most common usage of <code>touch</code>). Use <code>-c</code> to disable the creation if it does not exist.</p>
+<p>To specify the time manually instead of the current time, use <code>-t</code> to give the absoluate time or <code>-A</code> to give the relatvie time to the original one.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

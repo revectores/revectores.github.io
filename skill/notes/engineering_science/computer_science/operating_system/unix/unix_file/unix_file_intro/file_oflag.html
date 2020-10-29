@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> File `oflag`
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< unix_file</a></p>
+
+<h1 id="file-oflag">File <code>oflag</code></h1>
+<p>Compulsory one and only one from the five:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Constant</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>O_RDONLY</code></td>
+<td style="text-align: center;">Read only</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>O_WRONLY</code></td>
+<td style="text-align: center;">Write only</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>O_RDWR</code></td>
+<td style="text-align: center;">Read and write</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>O_EXEC</code></td>
+<td style="text-align: center;">Execute only</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>O_SEARCH</code></td>
+<td style="text-align: center;">Search only (directories)</td>
+</tr>
+</tbody>
+</table>
+<p>Optional:</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 84%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Constant</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>O_CREAT</code></td>
+<td style="text-align: center;">Create the file if it doesn’t exist. This requires an additional parameter <code>mode</code> to specify the permission bits.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>O_EXCL</code></td>
+<td style="text-align: center;">Generate an error if <code>O_CREAT</code> is also specified and the file already exists. The test for whether the file already exists and the creation of the file if it doesn’t is an <a href="">atomic operation</a>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>O_TRUNC</code></td>
+<td style="text-align: center;">If the file exists and if it is successfully opened for write-only/read-write, truncate its length to 0.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>O_APPEND</code></td>
+<td style="text-align: center;">Append to the end of file.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>O_CLOEXEC</code></td>
+<td style="text-align: center;">Set the <code>FD_CLOEXEC</code> file descriptor flag.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

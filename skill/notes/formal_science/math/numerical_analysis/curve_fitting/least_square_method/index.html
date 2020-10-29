@@ -1,0 +1,406 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Least Squares Method
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< curve_fitting</a></p>
+
+<h1 id="least-squares-method">Least Squares Method</h1>
+<p><span class="math display">\[
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\b}{\boldsymbol}
+\newcommand{\bx}{\b x}
+\newcommand{\by}{\b y}
+\newcommand{\bb}{\b b}
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\o}{\overline}
+\]</span></p>
+<h5 id="indicator-of-fitting"># Indicator of fitting</h5>
+<p>The distance(norm) between <span class="math inline">\(\Phi(\b{x}), \by\)</span> shall be minimum, that is <span class="math inline">\(\min\norm{\Phi(\bx) - \by}\)</span>.</p>
+<p>The norm can be defined by multiple ways:</p>
+<p>If we use the 2-norm (square root of sum of squares) as the indicator, the gitting method is called <strong>least squares method</strong>: <span class="math display">\[
+\min\sqrt{\sum_{i=1}^m(\varphi(x_i)-y_i)^2}
+\]</span></p>
+<h5 id="linear-fitting"># Linear Fitting</h5>
+<p>If we want to fit the data into the linear function:</p>
+<p><span class="math display">\[
+Q(a, b) = \sum_{i=1}^m(p(x_i)-y_i)^2 = \sum(a+bx_i-y_i)^2
+\]</span></p>
+<p>To achieve the minimal of <span class="math inline">\(Q(a,b)\)</span>:</p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+\displaystyle\pp{Q(a,b)}{a} = 0 \\
+\displaystyle\pp{Q(a,b)}{b} = 0
+\end{array}\right.
+\]</span></p>
+<p>Solve it, we have</p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+\displaystyle a
+= \frac{D_1}{D}
+= \frac{1}{D}
+\begin{vmatrix}
+\displaystyle \sum_{i=1}^m y_i &amp; \displaystyle \sum_{i=1}^mx_i \\
+\displaystyle \sum_{i=1}^m x_iy_i &amp; \displaystyle \sum_{i=1}^mx_i^2 \\
+\end{vmatrix}
+\\
+\displaystyle b
+= \frac{D_2}{D}
+= \frac{1}{D}
+\begin{vmatrix}
+m &amp; \displaystyle \sum_{i=1}^my_i \\
+\displaystyle \sum_{i=1}^m x_i &amp; \displaystyle \sum_{i=1}^mx_iy_i \\
+\end{vmatrix}
+\end{array}\right.
+\]</span></p>
+<blockquote>
+<p><strong>Example</strong>. Measure the height of a tree <span class="math inline">\(m\)</span> times, the values are <span class="math inline">\(x_1, x_2, \ldots, x_m\)</span>, compute the hieght with least square error</p>
+<p>Let <span class="math inline">\(x\)</span> denote the height of tree, then the square error</p>
+<p><span class="math display">\[
+R(x) = \displaystyle \sum_{i=1}^m (x-x_i)^2
+\]</span></p>
+<p>The <span class="math inline">\(\min R(x)\)</span> requires</p>
+<p><span class="math display">\[
+R&#39;(x) = 2\sum_{i=1}^m(x-x_i) = 0
+\]</span></p>
+<p>That is, <span class="math inline">\(x = \displaystyle \frac{1}{m}\sum_{i=1}^m x_i\)</span>, which is the average of the <span class="math inline">\(m\)</span> times measurement.</p>
+</blockquote>
+<h5 id="square-fitting"># Square Fitting</h5>
+<p>If we want to fit the data into the quadratic function: <span class="math display">\[
+Q(a_0, a_1, a_2)
+= \sum_{i=1}^m (p(x_i) - y_i)^2
+= \sum_{i=1}^m (a_0 + a_1x_i + a_2x_i^2 - y_i)^2
+\]</span></p>
+<p>To achieve the minimal of <span class="math inline">\(Q(a,b)\)</span>:</p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+\displaystyle\pp{Q(a_0, a_1, a_2)}{a_0} = 0 \\
+\displaystyle\pp{Q(a_0, a_1, a_2)}{a_1} = 0 \\
+\displaystyle\pp{Q(a_0, a_1, a_2)}{a_2} = 0 \\
+\end{array}\right.
+\]</span></p>
+<p>The normal equations: <span class="math display">\[
+\begin{bmatrix}
+m &amp; \displaystyle \sum_{i=1}^m x_i &amp; \displaystyle \sum_{i=1}^m x_i^2 \\
+\displaystyle \sum_{i=1}^m x_i &amp; \displaystyle \sum_{i=1}^m x_i^2 &amp; \displaystyle \sum_{i=1}^m x_i^3 \\
+\displaystyle \sum_{i=1}^m x_i^2 &amp; \displaystyle \sum_{i=1}^m x_i^3 &amp; \displaystyle \sum_{i=1}^m x_i^4 \\
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\ a_1 \\ a_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+\displaystyle \sum_{i=1}^m y_i \\
+\displaystyle \sum_{i=1}^m x_iy_i \\
+\displaystyle \sum_{i=1}^m x_i^2y_i
+\end{bmatrix}
+\]</span></p>
+<blockquote>
+<p>Example. Fit the following data into curve <span class="math inline">\(f(x) = a + bx^2\)</span>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(2\)</span></th>
+<th><span class="math inline">\(3\)</span></th>
+<th><span class="math inline">\(5\)</span></th>
+<th><span class="math inline">\(7\)</span></th>
+<th><span class="math inline">\(8\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(y_i\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(6\)</span></td>
+<td><span class="math inline">\(22\)</span></td>
+<td><span class="math inline">\(46\)</span></td>
+<td><span class="math inline">\(61\)</span></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h5 id="solving-overdetermined-equation"># Solving Overdetermined Equation</h5>
+<p>For the given data sequences <span class="math inline">\((x_i, y_i), i=1,2,\ldots, m\)</span>, if the line <span class="math inline">\(p(x)=a_0+a_1x\)</span> is required to pass through all the points, we have <span class="math display">\[
+\begin{bmatrix}
+1 &amp; x_1 \\
+1 &amp; x_2 \\
+\vdots &amp; \vdots \\
+1 &amp; x_m \\
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_m \\
+\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+a_{11} &amp; a_{12} &amp;\cdots&amp; a_{1n}  \\
+a_{21} &amp; a_{22} &amp;\cdots&amp; a_{2n}  \\
+\vdots &amp; \vdots &amp;\ddots &amp; \vdots \\
+a_{m1} &amp; a_{m2} &amp;\cdots&amp; a_{mn}
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_m \\
+\end{bmatrix}
+\]</span></p>
+<p>We’ll prove that the solution <span class="math inline">\(A^{T}A\bx = A^{T}\b b\)</span> is exactly the solution in</p>
+<p><span class="math display">\[
+PA = \begin{bmatrix}
+\o A_n \\
+O_{m-n,n}
+\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+(PA)(PA)^{T} = \begin{bmatrix}
+\o A_n \\
+O_{m-n,n}
+\end{bmatrix}
+\begin{bmatrix}
+\o A_n &amp;
+O_{m-n,n}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\o A_n \o A^{T} &amp; O \\
+O &amp; O
+\end{bmatrix}
+\]</span></p>
+<p>and <span class="math inline">\((PA)(PA)^{T} = r(AA^T) = r(\o A {\o A}^{T}) = n\)</span>. Hence the solution of <span class="math inline">\((A^TA)\bx = A^T\bb\)</span> must be exist and unique.</p>
+<p>Assume the solution is <span class="math inline">\(\bx\)</span>, for another value <span class="math inline">\(\by = \bx + \b e\)</span>, then <span class="math display">\[
+\begin{align}
+\norm{A\by - \bb}_2^2
+&amp;= (A\bx - \bb + Ae)^T(A\bx - \bb + Ae) \\
+&amp;=  (A\bx - \bb)^T (A\bx - \bb) + 2(Ae)^T(A\bx - \bb) + (Ae)^T(Ae) \\
+&amp;= \norm{A\bx - \bb}_2^2 + \norm{Ae}_2^2 + 2e^T(A^TA\bx - A^T \bb) \\
+&amp;= \norm{A\bx - \bb}_2^2 + \norm{Ae}_2^2 \\
+&amp;\ge \norm{A\bx - \bb}_2^2
+\end{align}
+\]</span> which indicates that <span class="math inline">\(\bx\)</span> is exactly the value</p>
+<p>That is, it is equivalent to find the <span class="math inline">\(\min\norm{A\bx-\bb}_2^2\)</span> and solve the overdetermined equation <span class="math display">\[
+\begin{bmatrix}
+a_{11} &amp; a_{12} &amp;\cdots&amp; a_{1n}  \\
+a_{21} &amp; a_{22} &amp;\cdots&amp; a_{2n}  \\
+\vdots &amp; \vdots &amp;\ddots &amp; \vdots \\
+a_{m1} &amp; a_{m2} &amp;\cdots&amp; a_{mn}
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_m \\
+\end{bmatrix}
+\]</span></p>
+<blockquote>
+<p><strong>Example</strong>. Construct the quadratic function from following data</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(4.0\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(5.2\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(6.1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(7.3\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(8.6\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(f(x_i)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2.64117\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(7.21784\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(9.83745\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(10.9943\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(12.0859\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Solution</strong>. Let <span class="math inline">\(\varphi(x) = a_0 + a_1x + a_2x^2\)</span>, we have the overdetermined equation <span class="math inline">\(A\alpha = \by\)</span> <span class="math display">\[
+\begin{bmatrix}
+1 &amp; x_1 &amp; x_1^2 \\
+1 &amp; x_2 &amp; x_2^2 \\
+\vdots &amp; \vdots &amp; \vdots \\
+1 &amp; x_5 &amp; x_5^2
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_5
+\end{bmatrix}
+\]</span> The normal equations <span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1 &amp; \cdots &amp; 1   \\
+x_1 &amp; x_2 &amp; \cdots &amp; x_5   \\
+x_1^2 &amp; x_2^2 &amp; \cdots &amp; x_5^2   \\
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; x_1 &amp; x_1^2 \\
+1 &amp; x_2 &amp; x_2^2 \\
+\vdots &amp; \vdots &amp; \vdots \\
+1 &amp; x_5 &amp; x_5^2
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 1 &amp; \cdots &amp; 1 \\
+x_1 &amp; x_2&amp; \cdots &amp; x_5 \\
+x_1^2 &amp; x_2^2 &amp; \cdots &amp; x_5^2 \\
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_5
+\end{bmatrix}
+\]</span> That is, <span class="math display">\[
+\begin{bmatrix}
+5 &amp; \displaystyle \sum_{i=1}^5 x_i &amp; \displaystyle \sum_{i=1}^5 x_i^2 \\
+\displaystyle \sum_{i=1}^5 x_i &amp; \displaystyle \sum_{i=1}^5 x_i^2 &amp; \displaystyle \sum_{i=1}^5 x_i^3 \\
+\displaystyle \sum_{i=1}^5 x_i^2 &amp; \displaystyle \sum_{i=1}^5 x_i^3 &amp; \displaystyle \sum_{i=1}^5 x_i^4 \\
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\ a_1 \\ a_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+\displaystyle \sum_{i=1}^5 y_i \\
+\displaystyle \sum_{i=1}^5 x_iy_i \\
+\displaystyle \sum_{i=1}^5 x_i^2y_i
+\end{bmatrix}
+\]</span> Solve it, we have <span class="math display">\[
+\varphi(x) = -22.2394 + 8.21909x - 0.493794x^2
+\]</span></p>
+</blockquote>
+<blockquote>
+<p><strong>Example</strong>. Fit the data into form <span class="math inline">\(a+bx^2\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(2\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(3\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(5\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(7\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(8\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(y_i\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(6\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(22\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(46\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(61\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Let <span class="math inline">\(\varphi(x) = a + bx^2\)</span>, we have the overdetermined equation <span class="math inline">\(A\alpha = \by\)</span> <span class="math display">\[
+\begin{bmatrix}
+1 &amp; x_1^2 \\
+1 &amp; x_2^2 \\
+\vdots &amp; \vdots \\
+1 &amp; x_5^2
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_5
+\end{bmatrix}
+\]</span> The normal equation <span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1 &amp; \cdots &amp; 1 \\
+x_1^2 &amp; x_2^2&amp; \cdots &amp; x_5^2 \\
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; x_1^2 \\
+1 &amp; x_2^2 \\
+\vdots &amp; \vdots \\
+1 &amp; x_5^2
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 1 &amp; \cdots &amp; 1 \\
+x_1^2 &amp; x_2^2&amp; \cdots &amp; x_5^2 \\
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_5
+\end{bmatrix}
+\]</span> That is, <span class="math display">\[
+\begin{bmatrix}
+5 &amp; \displaystyle \sum_{i=1}^5 x_i^2 \\
+\displaystyle \sum_{i=1}^5 x_i^2 &amp; \displaystyle \sum_{i=1}^5 x_i^4 \\
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix}
+=
+\begin{bmatrix}
+\displaystyle \sum_{i=1}^5 y_i \\
+\displaystyle \sum_{i=1}^5 x_i^2y_i
+\end{bmatrix}
+\]</span> Hence <span class="math inline">\(\varphi(x) = -3 + x^2\)</span>.</p>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title> ```c
+  <title> `struct stat`
  </title>
   
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
@@ -14,22 +14,23 @@
 
 <p><a href="../"><< unix_file</a></p>
 
+<h1 id="struct-stat"><code>struct stat</code></h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">struct</span> stat {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    mode_t      st_mode;    <span class="co">// file type &amp; mode</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    ino_t       st_ino;     <span class="co">// i-node number</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    dev_t       st_dev;     <span class="co">// device number</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    dev_t       st_rdev;    <span class="co">// device number for special file</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    nlink_t     st_nlink;   <span class="co">// number of links</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    uid_t       st_uid;     <span class="co">// user ID of owner</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    gid_t       st_gid;     <span class="co">// group ID of owner</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    off_t       st_size;    <span class="co">// size in bytes for regular files</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_atim;<span class="co">// time of last access</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_mtim;<span class="co">// time of last modification</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_ctim;<span class="co">// time of last file status change</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    blksize_t   st_blksize; <span class="co">// best I/O block size</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    blkcnt_t    st_blocks;  <span class="co">// number of disk blocks allocated</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    mode_t      st_mode;        <span class="co">// file type &amp; mode</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    ino_t       st_ino;         <span class="co">// i-node number</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    dev_t       st_dev;         <span class="co">// device number</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    dev_t       st_rdev;        <span class="co">// device number for special file</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    nlink_t     st_nlink;       <span class="co">// number of links</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    uid_t       st_uid;         <span class="co">// user ID of owner</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    gid_t       st_gid;         <span class="co">// group ID of owner</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    off_t       st_size;        <span class="co">// size in bytes for regular files</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_atim;    <span class="co">// time of last access</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_mtim;    <span class="co">// time of last modification</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    <span class="kw">struct</span> timespec st_ctim;    <span class="co">// time of last file status change</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    blksize_t   st_blksize;     <span class="co">// best I/O block size</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    blkcnt_t    st_blocks;      <span class="co">// number of disk blocks allocated</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The interpretation about the <code>st_ino</code> field can be found at <a href="inode_number.md">inode_number</a>.</p>
+<p>The interpretation about the <code>st_ino</code> field can be found at <a href="http://revectores.com/skill/notes/engineering_science/computer_science/operating_system/unix/unix_file/inode_number/inode_number.md">inode_number</a>.</p>
 
 
 </body>

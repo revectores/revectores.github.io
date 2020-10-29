@@ -1,0 +1,211 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> SQL Data Type
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< sql</a></p>
+
+<h1 id="sql-data-type">SQL Data Type</h1>
+<h3 id="sql-fundamental-type">1. SQL Fundamental Type</h3>
+<h5 id="sql-fundamental-type-overview"># SQL Fundamental Type Overview</h5>
+<p>The basic data type supported by SQL:</p>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>char(n)</code>, <code>character(n)</code></td>
+<td>Fixed-length string with user-specified length <span class="math inline">\(n\)</span>.</td>
+</tr>
+<tr class="even">
+<td><code>varchar(n)</code>, <code>character varying(n)</code></td>
+<td>variable-length string with user-specified max length.</td>
+</tr>
+<tr class="odd">
+<td><code>int</code>, <code>integer</code></td>
+<td>An integer (the range is machine dependent).</td>
+</tr>
+<tr class="even">
+<td><code>smallint</code></td>
+<td>Small integer (the range is also machine dependent).</td>
+</tr>
+<tr class="odd">
+<td><code>numeric(p, d)</code></td>
+<td>A fixed-point number with user-specified precision. The number consists of <span class="math inline">\(p\)</span> digits in total, and <span class="math inline">\(d\)</span> of the <span class="math inline">\(p\)</span> digits are to the right of the decimal point.</td>
+</tr>
+<tr class="even">
+<td><code>real</code></td>
+<td>Floating-point, ==range is machine dependent(not specified by IEEE 754?)==</td>
+</tr>
+<tr class="odd">
+<td><code>double precision</code></td>
+<td>Double-precision floating-point.==range is machine dependent(not specified by IEEE 754?)==</td>
+</tr>
+<tr class="even">
+<td><code>float(n)</code></td>
+<td>A floating-point number with precision of <strong>at least</strong> <span class="math inline">\(n\)</span> digits.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="char-vs-varchar"># <code>char</code> vs <code>varchar</code></h5>
+<p>Conceptually, the <code>char</code> is fixed-sized string while <code>vachar</code> is variable sized. Refer to the <a href="https://dev.mysql.com/doc/refman/5.7/en/char.html">MySQL 5.7 Reference Manual / Data Types / String Data Types / The CHAR and VARCHAR Types</a> For details about comparison between <code>char</code> and <code>varchar</code> in MySQL.</p>
+<h3 id="sql-datetime-type">2. SQL Datetime Type</h3>
+<h5 id="sql-datetime-type-overview"># SQL Datetime Type Overview</h5>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 33%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type Name</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>date</code></td>
+<td><code>date '2020-10-24'</code></td>
+<td>A calendar date containing a four-digit year, month, and day.</td>
+</tr>
+<tr class="even">
+<td><code>time</code></td>
+<td><code>time '09:00:00.50'</code></td>
+<td>The time of day in hours, minutes and seconds. <code>time(p)</code> can be used to specify the number of fractional digits for seconds (the default being 0).</td>
+</tr>
+<tr class="odd">
+<td><code>timestamp</code></td>
+<td><code>timestamp '2020-10-24 09:00:00.50'</code></td>
+<td>The combination of date and time.</td>
+</tr>
+<tr class="even">
+<td><code>interval</code></td>
+<td><code>interval '1' day</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Comparison and arithmetic operation is supported for these types. interval is interpreted as the difference of date/time/datetime.</p>
+<p>The timezone information can be also stored in the <code>time</code> or <code>timestamp</code> fields with <code>time with timezone</code> and <code>timestamp with timezone</code> specified.</p>
+<h5 id="sql-datetime-part-extraction"># SQL Datetime Part Extraction</h5>
+<p>Extract some parts (<code>year</code>,<code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>, <code>timezone_hour</code>, <code>timezone_minute</code>) from <code>date</code> or <code>time</code> is supported by</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">extract</span> (<span class="op">&lt;</span>part<span class="op">-</span>name<span class="op">&gt;</span> <span class="kw">from</span> <span class="op">&lt;</span>field<span class="op">-</span>name<span class="op">&gt;</span>)</span></code></pre></div>
+<h5 id="sql-datetime-functions"># SQL Datetime Functions</h5>
+<p>Functions to retrive the current time (with or without timezone) is supported:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>current_date</code></td>
+<td>Return current date.</td>
+</tr>
+<tr class="even">
+<td><code>current_time</code></td>
+<td>Return current time.</td>
+</tr>
+<tr class="odd">
+<td><code>localtime</code></td>
+<td>Return current time without timezone.</td>
+</tr>
+<tr class="even">
+<td><code>current_timestamp</code></td>
+<td>Return current timestamp.</td>
+</tr>
+<tr class="odd">
+<td><code>localtimestamp</code></td>
+<td>Return current timestamp without timezone.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sql-large-object-type">3. SQL Large Object Type</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>blob</code></td>
+<td>binary big object. The binary object is not interpreted.</td>
+</tr>
+<tr class="even">
+<td><code>clob</code></td>
+<td>character big object. The object is recognized as the collection of characters.</td>
+</tr>
+</tbody>
+</table>
+<p>When the SQL query returns a big object, a <strong>locator</strong> instead the larget object is returned normally, then the locator is used to retrive the large object incrementally. This process works like returns a <a href="http://revectores.com/skill/notes/engineering_science/computer_science/operating_system/unix/unix_file/unix_file_intro/unix_file_intro.md#file-descriptor">file descriptor</a> and retrieve its content with <a href="http://revectores.com/skill/notes/engineering_science/computer_science/operating_system/unix/unix_file/unix_file_intro/unix_file_intro.md#read"><code>read()</code></a> system call incrementally.</p>
+<p>The pros and cons to use the large object type:</p>
+<ul>
+<li><p>Pros: There is no need to assign length to the large object, convient to use.</p></li>
+<li><p>Cons: Normally the target table need to be split into multiple tables, influence the profermance of database.</p></li>
+</ul>
+<h3 id="sql-type-conversion">4. SQL Type conversion</h3>
+<p>Explicit conversion can be done by <code>cast (&lt;field&gt; as &lt;target-type&gt;)</code>. For example, to sort the <code>id</code> with type <code>varchar(5)</code>, the default behaviour will be sort lexicographically, which cause ‘11111’ &lt; ‘9’.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">select</span> <span class="kw">id</span> <span class="kw">from</span> users <span class="kw">order</span> <span class="kw">by</span> <span class="kw">id</span>;</span></code></pre></div>
+<p>To compare them as integers, we can cast them into numeric type:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">select</span> <span class="fu">cast</span>(<span class="kw">id</span> <span class="kw">as</span> <span class="dt">numeric</span>(<span class="dv">5</span>)) <span class="kw">as</span> int_id <span class="kw">from</span> users <span class="kw">order</span> <span class="kw">by</span> int_id;</span></code></pre></div>
+<p>Operate the sqlite3 database <a href="src__type_cast_demo/type_cast_demo.db"><code>type_cast_demo.db</code></a> to check the cast operation works in this example.</p>
+<h3 id="sql-user-defined-type">5. SQL User Defined Type</h3>
+<p>Use the following syntax to create the user-defined type based basic type:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">type</span> [typename] <span class="kw">as</span> [basic<span class="op">-</span><span class="kw">type</span>] final;</span></code></pre></div>
+<p>Some implementation of SQL support the <code>final</code> to be ignored.</p>
+<p>The user-define type provides a mechanism for strict type system even stronger than modern programmning language. For exmaple, we define the type <code>Dollars</code> and type <code>Pounds</code> to indicate different currency unit in department table and person table:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">type</span> Dollars <span class="kw">as</span> <span class="dt">numeric</span>(<span class="dv">12</span>, <span class="dv">2</span>) final;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">type</span> Pounds <span class="kw">as</span> <span class="dt">numeric</span>(<span class="dv">12</span>, <span class="dv">2</span>) final;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">table</span> department (</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    dept_id     <span class="dt">int</span> <span class="kw">primary</span> <span class="kw">key</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    budget      Dollars</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">table</span> person (</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="kw">id</span>          <span class="dt">int</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>    dept_id     <span class="dt">int</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>    asset       Pounds</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>);</span></code></pre></div>
+<p>Both the <code>Dollars</code> and <code>Pounds</code> use <code>numeric(12, 2)</code> as basis type, but since they different user-defined types , the following query will raise a type error:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">select</span> department.budget <span class="op">+</span> <span class="fu">sum</span>(person.asset)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="kw">from</span> department <span class="kw">join</span> person</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="kw">group</span> <span class="kw">by</span> dept_id;</span></code></pre></div>
+<p>Use <code>drop type [typename]</code> to delete and <code>alter type [typename] ...</code> to alter the user defined type.</p>
+<h3 id="sql-user-defined-domain">6. SQL User Defined Domain</h3>
+<p>Constraint and default value can be applied to domain, like <code>not null</code> or create the <code>check</code> clause on it.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">create</span> <span class="kw">domain</span> degree_level <span class="dt">varchar</span>(<span class="dv">10</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>    <span class="kw">constraint</span> degree_level_test</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="kw">check</span>(<span class="fu">value</span> <span class="kw">in</span>(<span class="st">&#39;Bachelors&#39;</span>, <span class="st">&#39;Masters&#39;</span>, <span class="st">&#39;Doctorate&#39;</span>));</span></code></pre></div>
+<p>Domain is not the strong type. If the base type is compatible, values in different domains can be assigned to each other.</p>
+<p>Note that both user-defined type and user-defined domain are not supported either MySQL or SQLite3, hence not validation codes are provided here for these two topics.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

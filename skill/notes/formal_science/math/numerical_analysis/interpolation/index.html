@@ -15,11 +15,18 @@
 <p><a href="../"><< numerical_analysis</a></p>
 
 <h1 id="interpolation">Interpolation</h1>
+<h3 id="interpolation-introduction">1. Interpolation Introduction</h3>
 <p>For the continous function <span class="math inline">\(f(x)\)</span> defined in <span class="math inline">\([a,b]\)</span>, points <span class="math inline">\(x_0, x_1, \ldots , x_n\)</span> are <span class="math inline">\(n+1\)</span> different points in <span class="math inline">\([a,b]\)</span>, <span class="math inline">\(\varPhi\)</span> is some function class, if <span class="math inline">\(\phi(x)\in\varPhi\)</span> meets <span class="math display">\[
-\phi(x_i) = f(x_i), ~~~~i=0,1,\ldots, n
+\phi(x_i) = f(x_i), \quad i=0,1,\ldots, n
 \]</span> we say <span class="math inline">\(\phi(x)\)</span> is the <strong>interpolation function</strong> of <span class="math inline">\(f(x)\)</span> in <span class="math inline">\(\varPhi\)</span> about <span class="math inline">\(x_0, x_1, \ldots, x_n\)</span>.</p>
-<p>Polynomial function is smooth infinitely, the derivative and integral are easy to compute, hence we usually use the polynomial as the interpolation function.</p>
-<h3 id="lagrange-interpolation">1. Lagrange Interpolation</h3>
+<p>Polynomial function is continuous in infinite degree of derivative, and its derivative/integral are easy to compute, hence we usually use the polynomial as the interpolation function.</p>
+<h3 id="lagrange-interpolation">2. Lagrange Interpolation</h3>
+<h5 id="uniqueness-of-interpolation-polynomial"># Uniqueness of Interpolation Polynomial</h5>
+<p>The polynomial with <span class="math inline">\(n\)</span>-degree <span class="math display">\[
+P_n(x)
+= \sum_{i=0}^n a_ix^i
+= a_0 + a_1x + a_2x^2 + \cdots a_nx^n
+\]</span> is determined by the <span class="math inline">\(n+1\)</span> coefficients <span class="math inline">\(a_i(0\le i\le n)\)</span>. If <span class="math inline">\(n+1\)</span> points are given, the polynomial is determined by the equations</p>
 <p><span class="math display">\[
 \left\{\begin{array}{ll}
 a_0 + a_1x_0 + a_2x_0^2 + \cdots + a_nx_0^n = f(x_0) &amp; \\
@@ -27,7 +34,7 @@ a_0 + a_1x_1 + a_2x_1^2 + \cdots + a_nx_1^n = f(x_1) &amp; \\
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\cdots \\
 a_0 + a_1x_n + a_2x_n^2 + \cdots + a_nx_n^n = f(x_n)
 \end{array}\right.
-\]</span> The coefficient determinant <span class="math display">\[
+\]</span> To solve this equation, we compute its coefficient determinant, which happens to be the <a href="http://revectores.com/skill/notes/formal_science/math/algebra/linear_algebra/determinant/Vandermonde_determinant/Vandermonde_determinant.md">Vandermonde determinant</a>: <span class="math display">\[
 V(x_0, x_1, \ldots, x_n) =
 \begin{vmatrix}
 1 &amp; x_0 &amp; x_0^2 &amp; \cdots &amp; x_0^n \\
@@ -36,7 +43,9 @@ V(x_0, x_1, \ldots, x_n) =
 1 &amp; x_n &amp; x_n^2 &amp; \cdots &amp; x_n^n \\
 \end{vmatrix}
 = \prod_{0\le k\le i\le n}(x_i - x_j)
-\]</span> For different <span class="math inline">\(x_i, 0\le i\le n\)</span>, the value of determinant <span class="math inline">\(\prod_{0\le k\le i\le n}(x_i - x_j) \neq 0\)</span>, hence there’s one and only one solution. <span class="math display">\[
+\]</span> For different <span class="math inline">\(x_i, 0\le i\le n\)</span>, the value of determinant <span class="math inline">\(\prod_{0\le k\le i\le n}(x_i - x_j) \neq 0\)</span>, hence there’s one and only one solution. That is, the <strong>interpolation polynomial is unique</strong>.</p>
+<h5 id="general-form-of-lagrange-interpolation"># General Form of Lagrange Interpolation</h5>
+<p>This approach requires solving the equations, with complexity <span class="math inline">\(O(n^3)\)</span>. Instead, it is possible to construct the polynomial directly from the points, one proven method is the Lagrange interpolation (the proof is omitted here): <span class="math display">\[
 l_i(x)
 = \prod_{j=0\\j\neq i}^n \frac{x-x_j}{x_i-x_j}
 = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}
@@ -45,14 +54,18 @@ l_i(x)
 L_n(x)
 = \sum_{i=0}^n l_i(x)f(x_i)
 = \sum_{i=0}^n \prod_{j=0\\j\neq i}^n \frac{x-x_j}{x_i-x_j}f(x_i)
-\]</span> The base function are orthogonal, <span class="math display">\[
+\]</span> The <strong>base function</strong> are orthogonal: <span class="math display">\[
 l_i(x_j) = \delta_{ij} =
 \left\{\begin{array}{ll}
 1,&amp; i=j &amp; \\
 0,&amp; i\neq j&amp;
 \end{array}\right.
 \]</span></p>
-<p>For the linear Lagrange interpolation, <span class="math display">\[
+<p>Refer to <a href="src__Lagrange_interpolation/Lagrange_interpolation.cpp">Lagrange_interpolation.cpp</a> for the C++ implementation of Lagrange interpolation.</p>
+<h5 id="special-form-of-lagrange-interpolation"># Special Form of Lagrange Interpolation</h5>
+<p>Specically, For the linear Lagrange interpolation, we have <span class="math display">\[
+L_1(x) = \frac{x-x_1}{x_0-x_1}f(x_0) + \frac{x-x_1}{x_0-x_0}f(x_1)
+\]</span> The remainder term <span class="math display">\[
 R(x) = f(x) - L_1(x) = \frac{f&#39;&#39;(\xi)}{2!}(x-x_0)(x-x_1), ~~~~ \xi\in[a,b]
 \]</span></p>
 <blockquote>
@@ -71,13 +84,17 @@ k(x) &amp;= \frac{f&#39;&#39;(\xi)}{2!}
 R(x) = f(x) - L_1(x) = \frac{f&#39;&#39;(\xi)}{2!}(x-x_0)(x-x_1)
 \]</span></p>
 </blockquote>
-<p>For the quadratic Lagrange interpolation, <span class="math display">\[
+<p>For the quadratic Lagrange interpolation, we have <span class="math display">\[
+L_2(x) = \frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}f(x_0)
++ \frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)}f(x_1)
++ \frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)}f(x_2)
+\]</span> The remainder term <span class="math display">\[
 R(x) = f(x) - L_1(x) = \frac{f^{(3)}(\xi)}{3!}(x-x_0)(x-x_1)(x-x_2),~~~~ \xi\in[a,b]
 \]</span> Generally, <span class="math display">\[
 R_n(x) = f(x) - L_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n(x-x_i),~~~~\xi\in[a, b]
 \]</span></p>
 <blockquote>
-<p><span class="math display">\[
+<p><strong>Example</strong>. To contsruct the function values table of <span class="math inline">\(\sin x\)</span> with 4-decimal precision, and the truncation error of linear interpolation shall be less than the rounding error, determine the maximum step length. <span class="math display">\[
 \begin{align}
 |R(x)|
 &amp;= \left| \frac{f&#39;&#39;(\xi)}{2!}(x-x_{i-1})(x-x_i) \right| \\
@@ -87,11 +104,11 @@ R_n(x) = f(x) - L_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n(x-x_i),~~~~\
 &amp;= \frac{1}{8}|(x_{i-1}-x_i)(x_i-x_{i-1})| \\
 &amp;= \frac{h^2}{8} \le \frac{1}{2}\times 10^{-4}
 \end{align}
-\]</span> Hence <span class="math inline">\(h\le 0.02\)</span></p>
+\]</span> Hence <span class="math inline">\(h\le 0.02\)</span>.</p>
 </blockquote>
-<h3 id="newtons-interpolation">2. Newton’s Interpolation</h3>
+<h3 id="newtons-interpolation">3. Newton’s Interpolation</h3>
 <h5 id="difference-quotient"># Difference Quotient</h5>
-<p>Define the <span class="math inline">\(k\)</span>-th difference quotient as <span class="math display">\[
+<p>Define the <span class="math inline">\(k\)</span>-th difference quotient recursively as <span class="math display">\[
 f[x_0, x_1, \ldots, x_k] = \frac{f[x_1, x_2, \ldots, x_k] - f[x_0, x_1, \ldots, x_{k-1}]}{x_k - x_0}
 \]</span> Specially, the 1st, 2nd and 3rd difference quotients are <span class="math display">\[
 f[x_0] = f(x_0)
@@ -103,28 +120,32 @@ f[x_0, x_1] = \frac{f(x_1)-f(x_0)}{x_1-x_0}
 f[x_0, x_1, x_2] = \frac{f[x_1, x_2] - f[x_0, x_1]}{x_2 - x_0}
 \]</span></p>
 <h5 id="property-of-difference-quotient"># Property of Difference Quotient</h5>
-<p>Property 1. The <span class="math inline">\(k-\)</span>th difference quotient is the linear combination of function value <span class="math inline">\(f(x_0), f(x_1), \ldots, f(x_k)\)</span>. <span class="math display">\[
-f[x_0, x_1, \ldots, x_k] = \sum_{i=0}^k \frac{1}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_i)\cdots(x_i-x_k)}f(x_i)
+<p>Property 1. The <span class="math inline">\(k\)</span>-th difference quotient <span class="math inline">\(f[x_0, x_1, \ldots, x-k]\)</span> can be expressed as the linear combination of <span class="math inline">\(f(x_0), f(x_1), \ldots, f(x_k)\)</span>: <span class="math display">\[
+f[x_0, x_1, \ldots, x_k] = \sum_{i=0}^k \frac{f(x_i)}{\displaystyle\prod_{j=0\\j\neq i}^{k}(x_i-x_j)}
 \]</span> Property 2. For any permutations <span class="math inline">\(i_0, i_1, \ldots, i_k\)</span> of <span class="math inline">\(0,1,\ldots, k\)</span>, we have <span class="math display">\[
 f[x_0, x_1, \ldots, x_k] = f[x_{i_0}, x_{i_1}, \ldots, x_{i_k}]
 \]</span> Property 3. If <span class="math inline">\(f(x)\)</span> has the <span class="math inline">\((n-1)\)</span>-th continous derivative and <span class="math inline">\(f^{(n)}(x)\)</span> exists, <span class="math display">\[
 f[x_0, x_1, \ldots, x_k] = \frac{f^{(n)}(\xi)}{n!}
 \]</span></p>
 <blockquote>
-<p>Example. Compute <span class="math inline">\(f[1,2,3,4]\)</span> and <span class="math inline">\(f[1,2,3,4,5]\)</span> for the function <span class="math inline">\(f(x) = 10x^3 - 100x + 1\)</span>. <span class="math display">\[
-f[x_0, x_1, x_2, x_3] = \frac{f^{(3)}(\xi)}{3!} = 10 \\
-f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
+<p><strong>Example</strong>. Compute <span class="math inline">\(f[1,2,3,4]\)</span> and <span class="math inline">\(f[1,2,3,4,5]\)</span> for the function <span class="math inline">\(f(x) = 10x^3 - 100x + 1\)</span>. <span class="math display">\[
+\begin{align}
+&amp; f[x_0, x_1, x_2, x_3] = \frac{f^{(3)}(\xi)}{3!} = 10 \\
+&amp; f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
+\end{align}
 \]</span></p>
 </blockquote>
-<p>Difference quotient table:</p>
+<p>In practice, there are two approaches to compute the difference quotient, one is compute directly from property 1, and the other is compute recursively based on the definition, a difference quotient table can be constructed for this propose:</p>
 <table>
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 16%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
+<col style="width: 12%" />
+<col style="width: 19%" />
 <col style="width: 25%" />
-<col style="width: 34%" />
+<col style="width: 5%" />
+<col style="width: 19%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -134,6 +155,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <th style="text-align: center;"><span class="math inline">\(f[x_{i-1}, x_i]\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(f[x_{i-2}, x_{i-1}, x_i]\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(f[x_{i-3}, x_{i-2}, x_{i-1}, x_i]\)</span></th>
+<th></th>
+<th><span class="math inline">\(f[x_0, x_1, \ldots, x_i]\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -144,6 +167,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">1</td>
@@ -152,6 +177,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"><span class="math inline">\(f[x_0, x_1]\)</span></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">2</td>
@@ -160,6 +187,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"><span class="math inline">\(f[x_1, x_2]\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(f[x_0, x_1, x_2]\)</span></td>
 <td style="text-align: center;"></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">3</td>
@@ -168,6 +197,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"><span class="math inline">\(f[x_2, x_3]\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(f[x_1, x_2, x_3]\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(f[x_0, x_1, x_2, x_3]\)</span></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
@@ -176,6 +207,8 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\ddots\)</span></td>
+<td></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><span class="math inline">\(n\)</span></td>
@@ -184,23 +217,32 @@ f[x_0, x_1, x_2, x_3, x_4] = \frac{f^{(4)}(\xi)}{4!} = 0
 <td style="text-align: center;"><span class="math inline">\(f[x_{n-1}, x_n]\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(f[x_{n-2}, x_{n-1}, x_n]\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(f[x_{n-3}, x_{n-2}, x_{n-1}, x_n]\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(f[x_0, x_1, \ldots, x_n]\)</span></td>
 </tr>
 </tbody>
 </table>
 <h5 id="newtons-interpolation-1"># Newton’s Interpolation</h5>
-<p>The <span class="math inline">\(n\)</span>-th newton’s interpolation. <span class="math display">\[
+<p>The <span class="math inline">\(n\)</span>-th newton’s interpolation formula (the proof is omitted): <span class="math display">\[
 \begin{align}
-N_n(x) =
-&amp; f(x_0) + \sum_{k=1}^n f[x_0, x_1, \ldots, x_k]\prod_{i=0}^{k-1}(x-x_i)
+N_n(x)
+&amp;= f(x_0) + \sum_{k=1}^n f[x_0, x_1, \ldots, x_k]\prod_{i=0}^{k-1}(x-x_i)
 \\
-=&amp; f[x_0] + f[x_0, x_1](x-x_0) + f[x_0, x_1, x_2](x-x_0)(x-x_1) + \cdots \\
-&amp;+ f[x_0, x_1, \ldots , x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
+&amp;= f[x_0] + f[x_0, x_1](x-x_0) + f[x_0, x_1, x_2](x-x_0)(x-x_1) + \cdots \\
+&amp;~~~~~~~~~~~~~~+ f[x_0, x_1, \ldots , x_n](x-x_0)(x-x_1)\cdots(x-x_{n-1})
 \end{align}
 \]</span> Reminder term <span class="math display">\[
-R_n(x) = (x-x_0)(x-x_1)\cdots(x-x_n)f[x, x_0, x_1, \ldots, x_n]
+\begin{align}
+R_n(x)
+&amp;= f[x, x_0, x_1, \ldots, x_n](x-x_0)(x-x_1)\cdots(x-x_n) \\
+&amp;= \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)(x-x_1)\cdots(x-x_n)
+\end{align}
 \]</span></p>
-<h3 id="hermite-interpolation">3. Hermite Interpolation</h3>
-<p>If the interpolation requires not only the the function value itself but also its derivatives (for some points and orders), it’s called <strong>Hermite interpolation</strong>. <span class="math display">\[
+<p>Refer to <a href="src__Newton_interpolation/Newton_interpolation.cpp">Newton_interpolation.cpp</a> for the C++ implementation of Newton’s interpolation.</p>
+<p>Refer to the <a href="#uniqueness-of-interpolation-polynomial">unqiueness of interpolation polynomial</a>, the Netwon’s interpolation shall be the same as the Lagrange interpolation, but the Netwon’s form make it easier for the incrementally computing: when a new point arrives, we will not be required to compute all the terms from the head but only one new term.</p>
+<h3 id="hermite-interpolation">4. Hermite Interpolation</h3>
+<p>==TODO: Complete Section: Hermite Interpolation==</p>
+<p>If the interpolation requires not only the the function value itself but also its derivatives (for some points and orders), it’s called <strong>Hermite interpolation</strong> or <strong>osculating polynomial interpolation</strong>. <span class="math display">\[
 \begin{align}
 H_3(x) =&amp; \left( 1 + 2\frac{x-x_0}{x_1-x_0} \right)\left( \frac{x - x_1}{x_0 - x_1} \right)^2 y_0 + \left( 1 + 2\frac{x-x_1}{x_0-x_1} \right)\left( \frac{x - x_0}{x_1 - x_0} \right)^2 y_1
 \\
@@ -214,7 +256,7 @@ z_0 = x_0, z_1 = x_0, z_2 = x_1, z_3 = x_1
 H_{2n+1}(x) = f[x_0] + \sum_{k=1}^{2n+1}f[z_0, z_1, \ldots, z_k](x-z_0)\cdots(x-z_{k-1})
 \]</span></p>
 <blockquote>
-<p>Example. Given <span class="math inline">\(f(x_0), f(x_1), f(x_0)\)</span>, construct quadratic interpolation polynomial <span class="math inline">\(H(x)\)</span>.</p>
+<p><strong>Example</strong>. Given <span class="math inline">\(f(x_0), f(x_1), f(x_0)\)</span>, construct quadratic interpolation polynomial <span class="math inline">\(H(x)\)</span>.</p>
 </blockquote>
 <table>
 <colgroup>
@@ -263,26 +305,58 @@ H_{2n+1}(x) = f[x_0] + \sum_{k=1}^{2n+1}f[z_0, z_1, \ldots, z_k](x-z_0)\cdots(x-
 &amp; R(x) = \frac{f&#39;&#39;&#39;(\xi)}{3!}(x-x_0)^2(x-x_1), ~~~~\xi\in[x_0, x_1]
 \end{align}
 \]</span></p>
-<h3 id="subsection-interpolation">4. Subsection Interpolation</h3>
-<h3 id="cubic-spline-function">5. Cubic Spline Function</h3>
+<h3 id="segmented-interpolation">5. Segmented Interpolation</h3>
+<h5 id="runge-phenomenon"># Runge Phenomenon</h5>
+<p>The value of high order polynomial is unstable, the shape polynomial might oscillate in a wide range in order to fit the given points, which is named as <strong>Runge phenomenon</strong>:</p>
+<blockquote>
+<p><strong>Example</strong>. Interpolate <span class="math inline">\(f(x) = \dfrac{1}{1+12x^2}\)</span> at evenly spaced poitns in <span class="math inline">\([-3, 3]\)</span>:</p>
+<p><img src="Runge_phenomenon.png" alt="Screen Shot 2020-10-29 at 10.57.31" style="zoom:25%;" /></p>
+</blockquote>
+<h5 id="segmented-interpolation-steps"># Segmented Interpolation Steps</h5>
+<p>To avoid Runge’s phenomenon, the <strong>segmented interpolation</strong> is introduced. We devide the interpolation interval into multiple small intervals, and simply apply Lagrange or Newton’s method (or other complex methods) to each interval, since there will be less points in each interval, the degree of interpolation polynomial must be reduced.</p>
+<p>The critical disvantage of segmented interpolation is that, the derivatives of function is discontinuous in the edge of interval. The <a href="#spline-interpolation">spline interpolation</a>, however, add constraints to the polynomials in segments, to add continuity of the edges.</p>
+<h3 id="spline-interpolation">6. Spline Interpolation</h3>
+<h5 id="spline-interpolation-introduction"># Spline Interpolation Introduction</h5>
 <p>Given the <span class="math inline">\(n+1\)</span> points <span class="math display">\[
 f(x_i) = y_i, 0\le i\le n
-\]</span> Construct cubic polynomial <span class="math display">\[
-S(x) = a_ix^3 + b_ix^2 + c_ix + d_i,~ i= 0, 1,\ldots, n-1
+\]</span> We say <span class="math inline">\(S(x)\)</span> is <strong>cubic spline interpolation function</strong> of <span class="math inline">\(f(x)\)</span>, if <span class="math inline">\(S(x)\)</span> is a cubic polynomial in each interval <span class="math inline">\([x_i, x_{i+1}]\)</span> and the second derivative of <span class="math inline">\(S(x)\)</span> in <span class="math inline">\([a, b]\)</span> in continuous. Since humans can hardly tell the discontinuity of third level derivative, the cubic spline interpolation are widely applied in industry.</p>
+<p>To construct the cubic spline polynomial, we denote the cubic polynomials in each small interval as <span class="math display">\[
+S(x) = a_ix^3 + b_ix^2 + c_ix + d_i, ~~~~ i= 0, 1,\ldots, n-1
 \]</span></p>
-<p>and we enforce the zero, first, and second derivatives of adjacent interval continuous: <span class="math display">\[
+<p>The coefficients of all the polynomials must be determined by at least <span class="math inline">\(4n\)</span> conditions(equations), the function value gives <span class="math inline">\(n\)</span> equations, and we enforce the zero, first, and second derivatives of adjacent interval continuous: <span class="math display">\[
 \left\{\begin{array}{ll}
 S_{i-1}(x_i) = S_i(x_i)  \\
 S&#39;_{i-1}(x_i) = S&#39;_i(x_i)  \\
 S&#39;&#39;_{i-1}(x_i) = S&#39;&#39;_i(x_i)
 \end{array}\right.
 \]</span></p>
-<h5 id="m-relation"># M Relation</h5>
-<p>Denote <span class="math inline">\(M_i = f&#39;&#39;()\)</span> <span class="math display">\[
-S&#39;&#39;(x) =
+<p>Now there are <span class="math inline">\(n + (3n -3) = 4n-2\)</span> equations in total, hence <span class="math inline">\(4n - (4n -2) = 2\)</span> more boundary conditions must be given to get the spline function.</p>
+<p>We discuss how to construct the spline function with second derivatives or first derivatives in addition to the function values in each points given.</p>
+<h5 id="spline-function-expressed-by-second-derivatives"># Spline Function Expressed by Second Derivatives</h5>
+<p>Denote <span class="math inline">\(M_i = f&#39;&#39;(x_i),~~i = 0, 1, \ldots, n\)</span>. We construct the spline function from the second derivatives of points.</p>
+<p>Since the spline function is cubic in particular interval, the second derivative of it is linear function: <span class="math display">\[
+S&#39;&#39;(x) = \frac{x-x_{i+1}}{x_{i}-x_{i+1}}M_i + \frac{x-x_{i}}{x_{i+1}-x_{i}}M_{i+1}
 \]</span></p>
-<p>Finally we have <span class="math display">\[
-\mu_i M_{i-1} + 2M_i + \lambda_i M_{i+1} = d_i, ~~i=1,2,\ldots, n-1
+<p>Denote <span class="math inline">\(h_i = x_{i+1} - x_i\)</span>: <span class="math display">\[
+S&#39;&#39;(x) = \frac{x_{i+1}-x}{h_i}M_i + \frac{x-x_{i}}{h_i}M_{i+1}
+\]</span> Integrate this twice: <span class="math display">\[
+\begin{align}
+&amp; S&#39;(x) = \frac{-(x_{i+1}-x)^2}{2h_i}M_i + \frac{(x-x_{i})^2}{2h_i}M_{i+1} + c \\
+&amp; S(x) = \frac{-(x_{i+1}-x)^3}{6h_i}M_i + \frac{(x-x_{i})^3}{6h_i}M_{i+1} + cx + d
+\end{align}
+\]</span> To simplify the final expression, we use the form <span class="math inline">\((x_{i+1}-x)\)</span> and <span class="math inline">\((x-x_i)\)</span> to represent the linear component: <span class="math display">\[
+S(x) = \frac{-(x_{i+1}-x)^3}{6h_i}M_i + \frac{(x-x_{i})^3}{6h_i}M_{i+1} + C(x_{i+1}-x) + D(x-x_i)
+\]</span> Substitute <span class="math inline">\(S(x_i) = y_i, S(x_{i+1}) = y_{i+1}\)</span>, we have <span class="math display">\[
+C = \frac{y_i}{h_i} - \frac{h_iM_i}{6}, ~~~~
+D = \frac{y_i+1}{h_i} - \frac{h_iM_{i+1}}{6}
+\]</span> Hence <span class="math display">\[
+\begin{align}
+S(x) =
+&amp;\frac{(x_{i+1}-x)^3M_i + (x-x_i)^3M_{i+1}}{6h_i} + \frac{(x_{i+1}-x)y_i + (x-x_i)y_{i+1}}{h_i} \\
+&amp;- \frac{h_i}{6}[(x_{i+1}-x)M_i - (x-x_i)M_{i+1}], ~~~~ x\in[x_i, x_{i+1}], i = 1, 2, \ldots, n
+\end{align}
+\]</span> and utilize condition of first derivative <span class="math inline">\(S&#39;_{i-1}(x_i) = S&#39;_i(x_i)\)</span> we have <span class="math display">\[
+\mu_iM_{i-1} + 2M_i + \lambda_iM_{i+1} = d_i, ~~~~i = 1, 2, \ldots, n-1
 \]</span> where <span class="math display">\[
 \left\{\begin{array}{ll}
 h_i = x_{i+1} - x_i \\
@@ -290,9 +364,67 @@ h_i = x_{i+1} - x_i \\
 \mu_i = 1 - \lambda_i \\
 d_i = 6y[x_{i-1}, x_i, x_{i+1}]
 \end{array}\right.
-\]</span></p>
+\]</span> Now there are <span class="math inline">\(n-1\)</span> equations with <span class="math inline">\(n+1\)</span> variables (<span class="math inline">\(M_0, M_1, \ldots, M_n\)</span>), as mentioned before, two more boundary conditions are required to get the final solution. We give two kinds of boundary conditions, as the example:</p>
+<ol type="1">
+<li>Given <span class="math inline">\(M_0 = f&#39;&#39;(x_0), M_n = f&#39;&#39;(x_n)\)</span>. Now there are only <span class="math inline">\(n-1\)</span> variables left, the equations is <span class="math display">\[
+\begin{bmatrix}
+2 &amp; \lambda_1\\
+\mu_2 &amp; 2 &amp; \lambda_2 \\
+&amp; \ddots &amp; \ddots &amp; \ddots \\
+&amp; &amp; \mu_{n-2} &amp; 2 &amp; \lambda_{n-2} \\
+&amp; &amp; &amp; \mu_{n-1} &amp; 2
+\end{bmatrix}
+\begin{bmatrix}
+M_1 \\
+M_2 \\
+\vdots \\
+M_{n-2} \\
+M_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+d_1 - \mu_1M_0 \\
+d_2 \\
+\vdots \\
+d_{n-2} \\
+d_{n-1} - \mu_{n-1}M_n
+\end{bmatrix}
+\]</span></li>
+<li>Given <span class="math inline">\(S&#39;(x_0)=m_0, S&#39;(x_n) = m_n\)</span>, we get two more equations: <span class="math display">\[
+\begin{align}
+&amp; 2M_0 + M_1 = \frac{6}{h_0}(y[x_0, x_1] - m_0) = d_0 \\
+&amp; M_{n-1} + 2M_n = \frac{6}{h_{n-1}}(m_n - y[x_{n-1}, x_n]) = d_n
+\end{align}
+\]</span> Now the equations become <span class="math display">\[
+\begin{bmatrix}
+2 &amp; 1\\
+\mu_1 &amp; 2 &amp; \lambda_1 \\
+&amp; \mu_2 &amp; 2 &amp; \lambda_2 \\
+&amp; &amp; \ddots &amp; \ddots &amp; \ddots \\
+&amp; &amp; &amp; \mu_{n-1} &amp; 2 &amp; \lambda_{n-1} \\
+&amp; &amp; &amp; &amp; 1 &amp; 2
+\end{bmatrix}
+\begin{bmatrix}
+M_0 \\
+M_1 \\
+M_2 \\
+\vdots \\
+M_{n-2} \\
+M_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+d_0 \\
+d_1 \\
+d_2 \\
+\vdots \\
+d_{n-1} \\
+d_n
+\end{bmatrix}
+\]</span></li>
+</ol>
 <blockquote>
-<p>Example. Given the points</p>
+<p><strong>Example</strong>. Given the points</p>
 <table>
 <thead>
 <tr class="header">
@@ -313,19 +445,20 @@ d_i = 6y[x_{i-1}, x_i, x_{i+1}]
 </tr>
 </tbody>
 </table>
-<p>Let <span class="math inline">\(M_0=M3\)</span>, construct the <span class="math inline">\(M\)</span> Relationship of cubic spline function and compute <span class="math inline">\(f(1.25)\)</span>. <span class="math display">\[
+<p>Let <span class="math inline">\(M_0 = M_3\)</span>, construct the <span class="math inline">\(M\)</span> Relationship of cubic spline function and compute <span class="math inline">\(f(1.25)\)</span>. <span class="math display">\[
 \begin{align}
-&amp; h_0 = x_1 - x_0 =  \\
-&amp; h_1 = x_2 - x_1 =  \\
-&amp; h_2 = x_3 - x_2 =  \\
-&amp; \lambda_1 = \frac{h_1}{h_1+h_0} = \\ 
-&amp; \lambda_2 = \frac{h_2}{h_2+h_1} = \\
-&amp; \mu_1 = 1-\lambda_1 \\
-&amp; d_1 =  \\
-&amp; d_2 =  \\
+&amp; h_0 = x_1 - x_0 = 0.1 \\
+&amp; h_1 = x_2 - x_1 = 0.2 \\
+&amp; h_2 = x_3 - x_2 = 0.1 \\
+&amp; \lambda_1 = \frac{h_1}{h_1+h_0} = 0.6667 \\ 
+&amp; \lambda_2 = \frac{h_2}{h_2+h_1} = 0.3333 \\
+&amp; \mu_1 = 1 - \lambda_1 = 0.3333 \\
+&amp; \mu_2 = 1 - \lambda_2 = 0.6667 \\
+&amp; d_1 = 6y[x_0, x_1, x_2] = 5 \\
+&amp; d_2 = 6y[x_1, x_2, x_3] = -55  \\
 \end{align}
 \]</span></p>
-<p>Since <span class="math inline">\(M_0 = M_3\)</span> <span class="math display">\[
+<p>Since <span class="math inline">\(M_0 = M_3\)</span>, we have <span class="math display">\[
 \begin{bmatrix}
 2 &amp; 0.6667 \\
 0.6667 &amp; 2
@@ -340,12 +473,36 @@ M2
 -55
 \end{bmatrix}
 \]</span></p>
-<p>The solution <span class="math inline">\(M_1=13.125, M_2=-31.875\)</span>,</p>
+<p>The solution <span class="math inline">\(M_1=13.125, M_2=-31.875\)</span>, hence the cubic spline function is</p>
 <p><span class="math display">\[
 S(x) =
+\left\{\begin{array}{ll}
+-32.875 + 83.1875x - 72.1875x^2 + 21.875x^3, x\in[1.1, 1.2] \\
+69.725 - 173.3125x + 141.5625x^2 - 37.5x^3, x\in [1.2, 1.4] \\
+-178.95 + 359.5625x - 239.0625x^2 + 53.125x^3, x\in[1.4, 1.5]
+\end{array}\right.
 \]</span></p>
+<p><span class="math inline">\(f(1.25) \approx S(1.25) = 1.0336\)</span>.</p>
 </blockquote>
-<p>Advantage: The second derivatives are continuous, and human cannot notice the discontinuity of third level derivative.</p>
+<h5 id="spline-function-expressed-by-first-derivatives"># Spline Function Expressed by First Derivatives</h5>
+<p>Given points <span class="math inline">\((x_i, y_i), i=0, 1, \ldots, n\)</span> and <span class="math inline">\(S&#39;(x_i) = m_i, i=0,1,\ldots,n\)</span>, we have <span class="math display">\[
+\lambda_i m_{i-1} + 2m_i + \mu_i m_{i+1} = c_i, ~~~~ i = 1,  2, \ldots, n-1
+\]</span> where <span class="math display">\[
+\begin{align}
+&amp; h_i = x_{i+1} - x_i \\
+&amp; \lambda_i = \frac{h_i}{h_i+h_{i-1}} \\
+&amp; \mu_i = 1 - \lambda_i \\
+&amp; c_i = 3(\lambda_iy[x_{i-1}, x_i] + \mu_iy[x_i, x_{i+1}])
+\end{align}
+\]</span></p>
+<p>With two boundary conditions added, we get $$ <span class="math display">\[\begin{align}
+S(x) = &amp;\left( 1 + 2\frac{x-x_i}{x_{i+1}-x_i} \right)\left( \frac{x-x_{i+1}}{x_i-x_{i+1}} \right)^2y_i + (x-x_i)\left( \frac{x-x_{i+1}}{x_i-x_{i+1}} \right)m_i \\
+&amp;+ \left(1 + 2\frac{x-x_{i+1}}{x_i-x_{i+1}} \right)\left( \frac{x-x_i}{x_{i+1}-x_i} \right)y_{i+1} + (x-x_{i+1})\left(\frac{x-x_i}{x_{i+1}-x_i}\right)^2m_{i+1} \\
+&amp; \quad x\in [x_i, x_{i+1}], i = 1, 2, \ldots, n
+
+\end{align}\]</span> $$</p>
+<h3 id="bézier-curves">7. Bézier Curves</h3>
+<p>==TODO: Complete Topic: Bézier Curves==</p>
 
 
 </body>

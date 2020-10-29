@@ -15,10 +15,56 @@
 <p><a href="../"><< unix_command</a></p>
 
 <h1 id="linux-command-ls">Linux Command <code>ls</code></h1>
-<p><code>-a</code>. Include directory entries whose names begin with a dot <code>.</code></p>
-<p><code>-A</code>. List all entries except <code>.</code> and <code>..</code>. This is always set for the super-user.</p>
-<p>The difference: <code>-a</code> option will list all files, while <code>-A</code> will ignore the <code>.</code>/<code>..</code></p>
-<p><code>-d</code>. List the information of directory itself instead of list all contents.</p>
+<h5 id="ls-usage"># <code>ls</code> Usage</h5>
+<p><code>ls</code> list directory contents, by default list the current directory.</p>
+<h5 id="ls-sort"># <code>ls</code> Sort</h5>
+<p><code>ls</code> sort files alphabetically by default. <code>--sort</code> and multiple equivalent options is provided to specify the sort method:</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>--sort</code> method</th>
+<th style="text-align: center;">Option Equivalent</th>
+<th style="text-align: left;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--sort=none</code></td>
+<td style="text-align: center;"><code>-U</code></td>
+<td style="text-align: left;">Do not sort. list the entry in directory order.</td>
+</tr>
+<tr class="even">
+<td><code>--sort=size</code></td>
+<td style="text-align: center;"><code>-S</code></td>
+<td style="text-align: left;">Sort by file size.</td>
+</tr>
+<tr class="odd">
+<td><code>--sort=time</code></td>
+<td style="text-align: center;"><code>-t</code></td>
+<td style="text-align: left;">Sort by modification time, newest first.</td>
+</tr>
+<tr class="even">
+<td><code>--sort=version</code></td>
+<td style="text-align: center;"><code>-v</code></td>
+<td style="text-align: left;">Natural sort of version numbers within text.</td>
+</tr>
+<tr class="odd">
+<td><code>--sort=extension</code></td>
+<td style="text-align: center;"><code>-X</code></td>
+<td style="text-align: left;">Sort alphabetically by entry extension</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ls-filter"># <code>ls</code> Filter</h5>
+<p>By default, the <code>ls</code> command does not list those hidden files starting with a dot. Use <code>-A</code> List all entries except <code>.</code> and <code>..</code>, and <code>-a</code> includes them all.</p>
+<p><code>-d</code> list the information of directory itself instead of list all contents.</p>
+<h5 id="ls-filename-escape"># <code>ls</code> Filename Escape</h5>
+<p>If there are non-printable(nongraphic) characters in filename, by default <code>?</code> will be display, use <code>-b</code> or <code>--escape</code> to print them as the C-style escape characters.</p>
+<blockquote>
+<p>Note that FreeBSD (and macOS) support <code>-b</code> as the same interpretation but not <code>--escape</code>, and a extra option <code>-B</code> print directly the octal code instead of C-style escaping. For instance, display <code>\012</code> instead of <code>\n</code>.</p>
+<p>Instead, for Linux <code>-B</code> is used to exclude the backup files (files tailing with <code>~</code>).</p>
+</blockquote>
+<p>Use <a href="src__create_nonprintable_filename/create_nonprintable_filename.c">create_nonprintable_filename.c</a> to create a file containing nonprintable character to check this.</p>
 
 
 </body>

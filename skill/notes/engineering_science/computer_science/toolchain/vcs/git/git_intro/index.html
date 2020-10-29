@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Git
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< git</a></p>
+
+<h1 id="git">Git</h1>
+<h3 id="core-workflow">1. Core Workflow</h3>
+<h5 id="core-workflow-1"># Core Workflow</h5>
+<p>The typical scenario in git workflow:</p>
+<pre class="mermaid"><code>graph LR;
+init --&gt; add --&gt; commit --&gt; push</code></pre>
+<ol type="1">
+<li><code>git init</code> initialize the current dictionary into a git repository.</li>
+<li><code>git add [filename]</code> add make given files under version tracking. The added files will be at <strong>stage</strong>.</li>
+<li><code>git commit</code> submit the modifications in stage.</li>
+<li><code>git push</code> push the current repository into remote server. You need to configure the corresponding git repository on the server before <code>git push</code>.</li>
+</ol>
+<h5 id="status-query"># Status Query</h5>
+<p>Use <code>git status</code> to query the current status of git repository. There are several possible states:</p>
+<ol type="1">
+<li><p>Clean. The message looks like</p>
+<pre class="git"><code>On branch master
+Your branch is up to date with &#39;origin/master&#39;.
+
+nothing to commit, working tree clean</code></pre></li>
+<li><p>There is change in working space but has not been staged.</p></li>
+<li><p>All the change in working space has been staged.</p></li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -21,13 +21,13 @@
 \newcommand{\ddx}{\dfrac{\d}{\d x}}
 \]</span></p>
 <h3 id="differentiation-approximation-by-difference-quotient">1. Differentiation Approximation By Difference Quotient</h3>
-<p>As known, the derivative from right/left/both sides are defined as the limit of forward/backward/central difference quotients: <span class="math display">\[
+<p>As definition, the derivative from right/left/both sides are defined as the limit of forward/backward/central difference quotients: <span class="math display">\[
 \begin{align}
 &amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0+h)-f(x_0)}{h} \\
 &amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0)-f(x_0-h)}{h} \\
 &amp; f&#39;(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0+h)-f(x_0-h)}{2h}
 \end{align}
-\]</span> respectively, and they are equivalent if the function <span class="math inline">\(f(x)\)</span> is derivative at <span class="math inline">\(x_0\)</span>, hence we just use the difference quotients to approximate those derivatives: <span class="math display">\[
+\]</span> respectively, and they are equivalent if the function <span class="math inline">\(f(x)\)</span> is derivative at <span class="math inline">\(x_0\)</span>, hence we can use the difference quotients to approximate those derivatives for particular small <span class="math inline">\(h\)</span>: <span class="math display">\[
 \begin{align}
 &amp; f&#39;(x_0) \approx \frac{f(x_0+h)-f(x_o)}{h} \\
 &amp; f&#39;(x_0) \approx \frac{f(x_0)-f(x_0-h)}{h} \\
@@ -63,17 +63,31 @@ R(x)
 \]</span></p>
 </blockquote>
 <h3 id="numerical-differentiation-by-interpolation">2. Numerical Differentiation by Interpolation</h3>
-<p>For the given function values, construct Lagrange intropolation polynomials <span class="math display">\[
-f(x) \approx L_n(x) = \sum_{i=0}^n l_i(x)f(x_i) \\
+<p>For the given function values, construct <a href="http://revectores.com/skill/notes/formal_science/math/numerical_analysis/interpolation/interpolation.md#lagrange-interpolation">Lagrange intropolation</a> polynomials <span class="math display">\[
+f(x) \approx L_n(x) = \sum_{i=0}^n l_i(x)f(x_i)
 \]</span> The derivative <span class="math display">\[
 f&#39;(x) \approx L&#39;_n(x) = \sum_{i=0}^n l&#39;_i(x)f(x_i)
 \]</span></p>
+<p>The remainder term</p>
 <p><span class="math display">\[
 R(x) = \ddx \left( \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n(x-x_i) \right)
 \]</span></p>
-<p><span class="math display">\[
-R(x_j) = \prod_{i=0\\i\neq j}^n (x_j-x_i)\frac{f^{(n+1)}(\xi)}{(n+1)!}
+<blockquote>
+<p><strong>Example</strong>. Given <span class="math inline">\((x_i, f(x_i)), i=0,1,2\)</span>, Denote <span class="math inline">\(x_2-x_1 = x_1-x_0 =h\)</span>, compute <span class="math inline">\(f&#39;(x_0), f&#39;(x_1), f&#39;(x_2)\)</span></p>
+<p><strong>Solution</strong>. Apply the Lagrange interpolation: <span class="math display">\[
+L_2(x) = \frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}f(x_0)
++ \frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)}f(x_1)
++ \frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)}f(x_2)
 \]</span></p>
+<p>Hence <span class="math display">\[
+\begin{align}
+f&#39;(x)
+\approx L_2&#39;(x)
+&amp;= \frac{f(x_0)}{2h^2}(x-x_1+x-x_2) - \frac{f(x_1)}{h^2}(x-x_0+x-x_2) \\
+&amp;~~~~+ \frac{f(x_2)}{2h^2}(x-x_0+x-x_1)
+\end{align}
+\]</span> Substitute <span class="math inline">\(x=x_i, i=0,1,2\)</span>, we have</p>
+</blockquote>
 <p><span class="math display">\[
 \begin{align}
 &amp; f&#39;(x_0) = \frac{1}{2h}(-3f(x_0) + 4f(x_1) - f(x_2)) \\

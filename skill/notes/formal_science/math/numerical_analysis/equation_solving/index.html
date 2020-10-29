@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title> Newton's Method
+  <title> Equation Solving
  </title>
   
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
@@ -14,10 +14,30 @@
 
 <p><a href="../"><< numerical_analysis</a></p>
 
-<h5 id="newtons-method">Newton’s Method</h5>
+<h1 id="equation-solving">Equation Solving</h1>
+<h3 id="equation-solving-by-bisection">1. Equation Solving by Bisection</h3>
+<p>Recall the intermediate value theorem, which says for the continuous function <span class="math inline">\(f(x)\)</span> in <span class="math inline">\([a, b]\)</span> and <span class="math inline">\(f(a)f(b) &lt; 0\)</span> indicates there is at least one zero point in interval <span class="math inline">\([a, b]\)</span>.</p>
+<p>Algorithm description:</p>
+<p>Input: initial interval <span class="math inline">\([a, b]\)</span>, precision <span class="math inline">\(\varepsilon\)</span>.</p>
+<h3 id="equation-solving-by-iteration">2. Equation Solving by Iteration</h3>
+<p>Express the function <span class="math inline">\(f(x)\)</span> by the form <span class="math inline">\(x=\varphi(x)\)</span>. Construct the iteration sequences <span class="math inline">\(x_{k+1} = \varphi(x_k), k=1,2,\cdots\)</span> based on <span class="math inline">\(x_0\)</span>, if the iteration converges, that is, <span class="math display">\[
+\lim_{k\to x_{k+1}} x_{k+1} = \lim_{k\to\infty} \varphi(x_k) = \alpha
+\]</span> we have <span class="math inline">\(\alpha = \varphi(\alpha)\)</span>, then <span class="math inline">\(\alpha\)</span> is the root of <span class="math inline">\(f(x)\)</span>. When <span class="math inline">\(|x_{k+1}-x_k|\)</span> less than the given precision, we recognize <span class="math inline">\(x_{k+1}\)</span> as the root of function <span class="math inline">\(f(x)\)</span>.</p>
+<blockquote>
+<p><strong>Example</strong>. List the equivalent of function <span class="math inline">\(x^3-2x-5=0\)</span> and its iteration form. <span class="math display">\[
+\begin{align}
+&amp; x = \sqrt[3]{2x+5},~~ x_{k+1} = \sqrt[3]{2x_k + 5} \\
+&amp; x = \frac{x^3-5}{2},~~ x_{k+1} = \frac{x_k^3-5}{2} \\
+&amp; x = \frac{2x+5}{x^2},~~ x_{k+1} = \frac{2x_k+5}{x_k^2}
+\end{align}
+\]</span></p>
+</blockquote>
+<p><strong>Theorem</strong>. If <span class="math inline">\(\varphi(x) \in [a, b]\)</span> satisfies</p>
+<h3 id="equation-solving-by-newtons-method">3. Equation Solving by Newton’s Method</h3>
 <p>The Newton’s method starts from guessing a point <span class="math inline">\(x_0\)</span>, update using the intersection of the tangent line <span class="math inline">\(l\)</span> of function <span class="math inline">\(f(x)\)</span> at point <span class="math inline">\(x_0\)</span> with x-axis, where <span class="math display">\[
 l: y - f(x_0) = f&#39;(x_0)(x - x_0)
 \]</span> Let <span class="math inline">\(y=0\)</span> we have the update</p>
+<h3 id="equation-solving-by-secant-method">4. Equation Solving by Secant Method</h3>
 
 
 </body>

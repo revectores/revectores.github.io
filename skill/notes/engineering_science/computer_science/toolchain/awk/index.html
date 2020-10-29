@@ -17,9 +17,9 @@
 <h1 id="awk">awk</h1>
 <h5 id="usage"># Usage</h5>
 <p>awk is a interpreted programming language that processing text file line-by-line, which usually used in the shell to accomplish simple field-based text processing task. There are two common usages of awk command</p>
-<pre class="shell"><code>awk &#39;program&#39; file
-awk -f program-file file</code></pre>
-<p>By providing the option <code>-f</code>, we provide the awk script through a file, which avoid some compatibility problems when using the first inline form, the details is provided in <a href="awk_inline_problems.md">awk_inline_problems.md</a>. ==TODO: Create this.==</p>
+<pre class="shell"><code>awk &#39;program&#39; [file]
+awk -f [program-file] [file]</code></pre>
+<p>By providing the option <code>-f</code>, we provide the awk script through a file, which avoid some compatibility problems when using the first inline form, the details is provided in <a href="awk_inline_problems">awk_inline_problems</a>. ==TODO: Create this.==</p>
 <p>Another common approach is processing the output of some shell command through piping:</p>
 <pre class="shell"><code>cmd | awk &#39;program&#39;</code></pre>
 <h5 id="format"># Format</h5>

@@ -20,22 +20,21 @@
 \newcommand{\dp}{\d p}
 \newcommand{\dt}{\d t}
 \]</span></p>
-<h5 id="definition"># Definition</h5>
-<p><strong>集合种群(metapopulation)</strong>是指局域种群通过某种程度的个体迁移而连接在一起的局域种群. 本质上集合种群就是种群的种群. 这一概念近年来被重视的原因在于人类活动导致的生境斑块化.</p>
-<p><strong>周转</strong>指的是局域种群的灭绝以及从现存局域种群中扩散处的个体在尚未被占据的生境斑块内建立起新的局域种群的过程. 周转的速率随斑块面积减小和现存局域种群隔离程度的增加而下降.</p>
-<p>我们定义集合种群在某一时刻<span class="math inline">\(t\)</span>的大小为生境斑块的总数占已被占据的生境斑块的数量的比例: <span class="math display">\[
+<h5 id="metapopulation-definition"># Metapopulation Definition</h5>
+<p>The <strong>metapopulation</strong> consists of a group of spatially separated populations of the same species which interact at some level. Metapopulation is the population of population. The processing of <a href="https://en.wikipedia.org/wiki/Habitat_fragmentation">habitat fragmentation</a> makes humans attach importance to this concept.</p>
+<p>The <strong>metapopulation size</strong> is defined as the numbe of habitat patches that has been occupied and the total number of habitat patches: <span class="math display">\[
 p(t) = \frac{h(t)}{H}
-\]</span> 这里有<span class="math inline">\(0\le p\le 1\)</span>, 当<span class="math inline">\(p=0\)</span>时集合种群灭绝, <span class="math inline">\(p=1\)</span>时所有生境斑块都已经被占领.</p>
+\]</span> where <span class="math inline">\(0\le p\le 1\)</span>, <span class="math inline">\(p=0\)</span> indicates the extinction of metapopulation, and <span class="math inline">\(p=1\)</span> indicates that all the patches have been occupied.</p>
+<h5 id="turnover"># Turnover</h5>
+<p><strong>Turnover</strong> is the event when a habitat patch becomes unoccupied through extinction and is then recolonized by individuals from other local populations. The speed of turnover decreases if the area of path decreases or the isolation degree increases.</p>
 <h5 id="levins-model"># Levins Model</h5>
-<p><span class="math display">\[
+<p>Levins Model describe the growth of metapopulation: <span class="math display">\[
 \frac{\dp}{\dt} = mp(1-p)-ep
 \]</span></p>
-<p>式中<span class="math inline">\(m\)</span>表迁移率(新的局域种群的建立速度), <span class="math inline">\(e\)</span>表示灭绝率.</p>
-<p>令<span class="math inline">\(\dp/\dt = 0\)</span>得集合种群处于平衡状态时的集合种群大小<span class="math inline">\(p = 1-e/m\)</span>. 因而若<span class="math inline">\(m&lt;e\)</span>, 种群将走向灭绝, 若<span class="math inline">\(m&gt;e\)</span>, 则种群会继续存在.</p>
-<p>Levins模型实际上可以改写成</p>
-<p><span class="math display">\[
+<p>where <span class="math inline">\(m\)</span> is the migration rate, and <span class="math inline">\(e\)</span> is the extinction rate. The balance state is given by <span class="math inline">\(\dfrac{\dp}{\dt} = 0\)</span>, that is <span class="math inline">\(p_0 = 1-e/m\)</span>. If <span class="math inline">\(p &lt; p_0(m &lt; e)\)</span>, the metapopulation will become extinct eventually, if <span class="math inline">\(p&gt;p_0(m&gt;e)\)</span> the metapopulation continues to exist.</p>
+<p>The Levins model can be written as the form <span class="math display">\[
 \frac{\dp}{\dt} = (m-e)p\left( 1 - \frac{p}{1-e/m} \right)
-\]</span> 事实上该模型等价于<a href="">Logistic模型</a>. <span class="math inline">\((m-e)\)</span>可以理解成种群的瞬时增长率, <span class="math inline">\((1-e/m)\)</span>(平衡时的种群大小)可以理解成K值.</p>
+\]</span> which indicates that Levins model is equivalent to <a href="http://revectores.com/skill/notes/nature_science/biology/ecology/population_ecology/population_growth_model/population_growth_model.md#logistic-equation">Logistic equation</a>, where the <span class="math inline">\((m-e)\)</span> can be intepreted as the instant growth rate and <span class="math inline">\(\left(1-\dfrac{e}{m}\right)\)</span> is the <span class="math inline">\(K\)</span>-value.</p>
 
 
 </body>

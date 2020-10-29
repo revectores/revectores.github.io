@@ -15,25 +15,25 @@
 <p><a href="../"><< Lotka-Volterra_model</a></p>
 
 <h1 id="lotka-volterra-predation-model">Lotka-Volterra Predation Model</h1>
+<blockquote>
+<p>Predators run for their dinner. Prey run for their lives.</p>
+<p align="right">
+—Old Ecologist’s Proverb
+</p>
+</blockquote>
 <p><span class="math display">\[
 \newcommand{\d}{\text d}
 \newcommand{\dt}{\d t}
 \newcommand{\dN}{\d N}
 \newcommand{\dP}{\d P}
 \]</span></p>
-<p>Let <span class="math inline">\(N\)</span> denotes the number</p>
-<p>设猎物种群数量为<span class="math inline">\(N\)</span>, 捕食者种群数量为<span class="math inline">\(P\)</span>, 假设猎物种群在没有捕食者的存在下指数增长, 捕食者种群在没有猎物的条件下指数减少, 捕食者和猎物之间的相遇概率取决于二者种群数量之积, 则有<strong>Lotka-Volterra捕食者-猎物模型(Lotka-Volterra predation model)</strong>. <span class="math display">\[
+<p>Denote <span class="math inline">\(N\)</span> as the population size of pery and <span class="math inline">\(P\)</span> as the population size of predator. Assume the pery population grows exponentially if there is no predator, and the population decrease exponentially if there is no prey, and assume the probability they meet depends on the production of both sizes. <strong>Lotka-Volterra predation model</strong> can be inferred:</p>
+<p><span class="math display">\[
 \left\{\begin{array}{ll}\begin{align}
 &amp; \frac{\dN}{\dt} = r_1N - \varepsilon PN \\
 &amp; \frac{\dP}{\dt} = -r_2P + \theta PN
 \end{align}\end{array}\right.
-\]</span> 式中<span class="math inline">\(\varepsilon\)</span>为捕食者进攻效率, <span class="math inline">\(\theta\)</span>为捕食者常数<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. 两式分别称为<strong>猎物方程</strong>和<strong>捕食者方程</strong>.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr />
-<ol>
-<li id="fn1" role="doc-endnote"><p>捕食者利用猎物而转变为更多捕食者的效率.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
+\]</span> where the <span class="math inline">\(\varepsilon\)</span> is the <strong>predator attack effeciency</strong>, and <span class="math inline">\(\theta\)</span> is the <strong>predator constant</strong>, which indicates the effeciency of conversion from prey to predator (depends on the energy effeciency).</p>
 
 
 </body>
