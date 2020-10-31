@@ -93,11 +93,11 @@
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>);</span></code></pre></div>
 <p>How to insert a tuple in this case?</p>
 <ul>
-<li><p>Set the spouse into <code>null</code> at first, and latter update it until the corresponding spouse record is inserted.</p></li>
-<li><p>Defer the integrity condition until the transaction is committed:</p>
+<li>Set the spouse into <code>null</code> at first, and latter update it until the corresponding spouse record is inserted.</li>
+<li>Defer the integrity condition until the transaction is committed:
 <ul>
-<li><p>Add <code>initially deferred</code> after the constraint declaration.</p></li>
-<li><p>Add <code>set constraints &lt;constraint-list&gt; deferred</code>.</p></li>
+<li>Add <code>initially deferred</code> after the constraint declaration.</li>
+<li>Add <code>set constraints &lt;constraint-list&gt; deferred</code>.</li>
 </ul></li>
 </ul>
 <h3 id="assertion">4. Assertion</h3>

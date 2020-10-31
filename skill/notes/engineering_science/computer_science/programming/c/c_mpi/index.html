@@ -15,36 +15,93 @@
 <p><a href="../"><< c</a></p>
 
 <h1 id="c-mpi">C MPI</h1>
-<h5 id="demo-mpi-code"># Demo MPI Code</h5>
-<h5 id="init-and"># Init and</h5>
-<h5 id="configuration-retriving"># Configuration Retriving</h5>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_size(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="dt">int</span>*        comm_sz_p   <span class="co">/* out */</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_rank(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="dt">int</span>*        my_rank_p   <span class="co">/* out */</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>)</span></code></pre></div>
+<h3 id="c-mpi-introduction">1. C MPI Introduction</h3>
+<h5 id="c-mpi-demo-code"># C MPI Demo Code</h5>
+<p>The <a href="src__mpi_demo/mpi_demo.c">mpi_demo.c</a> is given to illustrate the fundamental structure of a C MPI program.</p>
+<h5 id="c-mpi-compiling"># C MPI Compiling</h5>
+<p>To compile the MPI program, use <code>mpicc</code>, a wrapper of <code>gcc</code>, which links to the headers and libraries that MPI required automatically:</p>
+<pre class="shell "><code>mpicc -g -Wall -o mpi_demo mpi_demo.c</code></pre>
+<p>Use <code>mpiexec</code> to run the MPI program:</p>
+<pre class="shell"><code>mpiexec -n &lt;number-of-processes&gt; ./mpi_demo</code></pre>
+<p>here <code>-n</code> option sets the the number of processes it establishes.</p>
+<h5 id="naming-convention"># Naming Convention</h5>
+<p>The object name defined by MPI obey the two form:</p>
+<ul>
+<li><p>Start by <code>MPI_</code>.</p></li>
+<li><p>For variables and functions, the first character of name is captalized, for macros and constants, all of the characters are captalized.</p></li>
+</ul>
+<p>By following the naming convention, one can easily tell whether an object is defined by MPI.</p>
+<h3 id="c-mpi-fundamental-workflow">2. C MPI Fundamental Workflow</h3>
+<h5 id="mpi_init-and-mpi_finalize"># <code>MPI_Init</code> and <code>MPI_Finalize</code></h5>
+<p><code>MPI_Init</code> initialize the MPI system:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Init(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="dt">int</span>*        argc_p      <span class="co">/* in/out */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">char</span>***     argv_p      <span class="co">/* in/out */</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>);</span></code></pre></div>
+<p>The parameters <code>argc_p</code>, <code>argv_p</code> are pointers to <code>argc</code> and <code>argv</code>. Set <code>NULL</code> if not used.</p>
+<p>After all MPI operations finished, use <code>MPI_Finalize</code> to do the clean up:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Finalize(<span class="dt">void</span>);</span></code></pre></div>
+<p>All MPI operations should be invoked only between <code>MPI_Init</code> and <code>MPI_Finalize</code>.</p>
+<h5 id="mpi-communicator"># MPI Communicator</h5>
+<p>A <strong>MPI communicator</strong> is a collection of processes that can send messages to each other. The special global communicator <code>MPI_COMM_WORLD</code> consists all of the running programs, which is craeted by <code>MPI_Init</code>.</p>
+<p>The communicator must be specified when send or receive messages. The propose of MPI communicator is creating a “communication space”, avoiding accidentally send or receive to wrong processes.</p>
+<h5 id="communicator-configuration-retriving"># Communicator Configuration Retriving</h5>
+<p>The functions <code>MPI_Comm_size</code> and <code>MPI_Comm_rank</code> get number of processes and the rank of current process of given communicator <code>comm</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_size(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="dt">int</span>*        comm_sz_p   <span class="co">/* out */</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>);</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Comm_rank(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    MPI_Comm    comm        <span class="co">/* in */</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>    <span class="dt">int</span>*        my_rank_p   <span class="co">/* out */</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>);</span></code></pre></div>
+<p>For example, the <a href="src__mpi_demo/mpi_demo.c">mpi_demo.c</a> use</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>MPI_Comm_size(MPI_COMM_WORLD, &amp;comm_sz);</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>MPI_Comm_rank(MPI_COMM_WORLD, &amp;my_rank);</span></code></pre></div>
+<p>to the number of processes and current process rank in global communicator <code>MPI_COMM_WORLD</code>.</p>
 <h5 id="mpi_send"># <code>MPI_Send</code></h5>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Send(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="dt">void</span>* msg_buf_p,                <span class="co">/* in */</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">int</span> msg_size,                   <span class="co">/* in */</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    MPI_Datatype msg_type,          <span class="co">/* in */</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="dt">int</span> dest,                       <span class="co">/* in */</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    <span class="dt">int</span> tag,                        <span class="co">/* in */</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    MPI_Comm communicator           <span class="co">/* in */</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Recv(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">void</span>*           msg_buf_p,      <span class="co">/* out */</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">int</span>             buf_size,       <span class="co">/* in */</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    MPI_Datatype    buf_type,       <span class="co">/* in */</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">int</span>             source,         <span class="co">/* in */</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="dt">int</span>             tag,            <span class="co">/* in */</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    MPI_Comm        communicator,   <span class="co">/* in */</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    MPI_Status*     status_p        <span class="co">/* out */</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>)</span></code></pre></div>
-<p>The <code>MPI_Datatype</code></p>
+<p>The <code>MPI_Send</code> and <code>MPI_Recv</code> is a pair for communication. <code>MPI_Send</code> send message to the recevier:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Send(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    <span class="dt">void</span>* msg_buf_p,                <span class="co">/* in */</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    <span class="dt">int</span> msg_size,                   <span class="co">/* in */</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    MPI_Datatype msg_type,          <span class="co">/* in */</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>    <span class="dt">int</span> dest,                       <span class="co">/* in */</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>    <span class="dt">int</span> tag,                        <span class="co">/* in */</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>    MPI_Comm communicator           <span class="co">/* in */</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>);</span></code></pre></div>
+<p>The first three parameters <code>msg_buf_p</code>, <code>msg_size</code> and <code>msg_type</code> determine the connect of message, and the last three parameters <code>dest</code>, <code>tag</code> and <code>communicator</code> determine the determination of message.</p>
+<ul>
+<li><p><code>msg_buf_p</code> is a pointer to the message content.</p></li>
+<li><p><code>msg_size</code> and <code>mg_type</code> specify how many bytes in memory should be sent. For instance, in <a href="src__mpi_demo/mpi_demo.c">mpi_demo.c</a> <code>msg_size=strlen(greeting)+1</code>, <code>msg_type=MPI_CHAR</code>, which tell the MPI program to send <code>strlen(greeting)+1</code> bytes.</p>
+<p>Since it’s not possible for the MPI function to use the C keyword as the argument, MPI provides the predefined constants in type <a href="#mpi_datatype"><code>MPI_Datatype</code></a> to represent type.</p></li>
+<li><p><code>communicator</code> and <code>dest</code> set which recevier (by specifying communicator and the rank) should receive the message.</p></li>
+<li><p><code>tag</code> is used to distinguish message sent by the same source.</p></li>
+</ul>
+<p><code>MPI_Recv</code> receive the message sent by <code>MPI_Send</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Recv(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="dt">void</span>*           msg_buf_p,      <span class="co">/* out */</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    <span class="dt">int</span>             buf_size,       <span class="co">/* in */</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    MPI_Datatype    buf_type,       <span class="co">/* in */</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="dt">int</span>             source,         <span class="co">/* in */</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    <span class="dt">int</span>             tag,            <span class="co">/* in */</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    MPI_Comm        communicator,   <span class="co">/* in */</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>    MPI_Status*     status_p        <span class="co">/* out */</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>);</span></code></pre></div>
+<p>To receive from specific source/tag, the parameters shall be set properly corespondingly in the receiver side. While there may be some cases that multiple senders might send messages in unpredicatable sequence, that is, we do not know which sender might send the message first.</p>
+<p>In such case the wildcard constants <code>MPI_ANY_SOURCE</code> and <code>MPI_ANY_TAG</code> can be filled to the <code>source</code> and <code>tag</code> parameter, which allows messages from any sources or any tags (in specified communicator) to be received. There is no a wildcard for communicator, that is, the communicator must always be specified.</p>
+<p>When we filled source/tag with wildcard, <code>status_p</code> can be used to get the information about the source/tag, by examing its properties:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>MPI_Status status;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>status.MPI_SOURCE;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>status.MPI_TAG;</span></code></pre></div>
+<p>The retrieve of data size requires a function invocation:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Get_count (</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>    MPI_Status      status_p    <span class="co">/* in */</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>    MPI_Datatype    type        <span class="co">/* in */</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>    <span class="dt">int</span>*            count_p     <span class="co">/* out */</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>);</span></code></pre></div>
+<h5 id="mpi_datatype"># <code>MPI_Datatype</code></h5>
+<p><code>MPI_Datatype</code> use to represent the type in C:</p>
 <table>
 <thead>
 <tr class="header">
@@ -111,10 +168,172 @@
 </tr>
 </tbody>
 </table>
-<h5 id="mpi-from-any-source"># MPI From any source</h5>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Get_count(){</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="c-mpi-io">3. C MPI IO</h3>
+<p>The output file descriptor is avaliable for all the processors, while the input can only be read by process with rank <code>0</code>(the “controller” process). Some functions must be defined by the user to pass the input from process <code>0</code> into other processes.</p>
+<h3 id="c-mpi-collective-communication">4. C MPI Collective Communication</h3>
+<h5 id="mpi-data-reduction"># MPI Data Reduction</h5>
+<p><code>MPI_Reduce</code> collects the data in all the processes and reduce them by predefined <code>operator</code>, which encapsulates the process about manually construct propogation tree:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Reduce(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>    <span class="dt">void</span>*           input_data_p,   <span class="co">/* in */</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>    <span class="dt">void</span>*           output_data_p,  <span class="co">/* out */</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>    <span class="dt">int</span>             count,          <span class="co">/* in */</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>    MPI_Datatype    datatype,       <span class="co">/* in */</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>    MPI_Op          operator,       <span class="co">/* in */</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>    <span class="dt">int</span>             dest_process,   <span class="co">/* in */</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>    MPI_Comm        comm            <span class="co">/* in */</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>);</span></code></pre></div>
+<p>To use the collective communication properly, note the following rules:</p>
+<ul>
+<li>All the processes in the same communicator must invoke the collective communication function.</li>
+<li>The <code>dest_process</code> must be set as the same.</li>
+</ul>
+<p>Since no <code>tag</code> is provided in the collective communication, if multiple communication are called, the mapping is simply depends on the order, for example:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Time</th>
+<th style="text-align: center;">Process 0</th>
+<th style="text-align: center;">Process 1</th>
+<th style="text-align: center;">Process 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"><code>a = 1, c = 2</code></td>
+<td style="text-align: center;"><code>a = 1, c = 2</code></td>
+<td style="text-align: center;"><code>a = 1, c = 2</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;a, &amp;b, ...)</code></td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;c, &amp;d, ...)</code></td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;a, &amp;b, ...)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;c, &amp;d, ...)</code></td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;a, &amp;b, ...)</code></td>
+<td style="text-align: center;"><code>MPI_Reduce(&amp;c, &amp;d, ...)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Assume process 0 is configured as the destination, the final output will be <code>b=1+2+1=4</code> and <code>d=2+1+2=5</code>.</p>
+<p>When using <code>MPI_Reduce</code>, the <code>output_data_p</code> is only avaliable for the one process that set to be the <code>dest_process</code>. To make all the processes get the output, use <code>MPI_Allreduce</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Allreduce(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>    <span class="dt">void</span>*           input_data_p,   <span class="co">/* in */</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>    <span class="dt">void</span>*           output_data_p,  <span class="co">/* out */</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>    <span class="dt">int</span>             count,          <span class="co">/* in */</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    MPI_Datatype    datatype,       <span class="co">/* in */</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>    MPI_Op          operator        <span class="co">/* in */</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>    MPI_Comm        comm            <span class="co">/* in */</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>)</span></code></pre></div>
+<p>The only difference in the argument list is that <code>Allreduce</code> does not require <code>dest_process</code> since all processes shall get the output.</p>
+<h5 id="mpi_op"># <code>MPI_Op</code></h5>
+<p>The list of operators supported by <code>MPI</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Operator</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_MAX</code></td>
+<td style="text-align: center;">maximum</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_MIN</code></td>
+<td style="text-align: center;">minimum</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_SUM</code></td>
+<td style="text-align: center;">sum</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_PROD</code></td>
+<td style="text-align: center;">product</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_LAND</code></td>
+<td style="text-align: center;">logical and</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_BAND</code></td>
+<td style="text-align: center;">bitwise and</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_LOR</code></td>
+<td style="text-align: center;">logical or</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_BOR</code></td>
+<td style="text-align: center;">bitwise or</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_LXOR</code></td>
+<td style="text-align: center;">logical exclusive or</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_BXOR</code></td>
+<td style="text-align: center;">bitwise exclusive or</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>MPI_MAXLOC</code></td>
+<td style="text-align: center;">maximum and location of maximum</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>MPI_MINLOC</code></td>
+<td style="text-align: center;">minimum and location of mimimum</td>
+</tr>
+</tbody>
+</table>
+<h5 id="data-distribution"># Data Distribution</h5>
+<p>There are two basic approaches to distribute components of data into processes:</p>
+<ul>
+<li><p><strong>Block partition</strong>, which compute how many data a process should have, and then devides the processes into blocks containing continuous data. For exmaple, if we devides data with id 1~12 into 3 processes, the block partition first compute each process got 4 data, and then devide from the start:</p></li>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Process ID</th>
+<th style="text-align: center;">Process 1</th>
+<th style="text-align: center;">Process 2</th>
+<th style="text-align: center;">Process 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Data</td>
+<td style="text-align: center;">1, 2, 3, 4</td>
+<td style="text-align: center;">5, 6, 7, 8</td>
+<td style="text-align: center;">9, 10, 11, 12</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Cyclic partition</strong>, which</p></li>
+</ul>
+<h5 id="mpi-data-distribution"># MPI Data Distribution</h5>
+<p>Distribution is simply the reverse of reduction, boardcast is simply the reverse of reduce:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Bcast (</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>    <span class="dt">void</span>*           data_p,     <span class="co">/* in/out */</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>    <span class="dt">int</span>             count,      <span class="co">/* in */</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>    MPI_Datatype    datatype,   <span class="co">/* in */</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>    <span class="dt">int</span>             source_proc,<span class="co">/* in */</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>    MPI_Comm        comm,       <span class="co">/* in */</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>)</span></code></pre></div>
+<p>which boardcast the <code>data_p</code> into all process in communicator <code>comm</code>.</p>
+<p><code>Bcast</code> just simply send all the processes with the same data, to distribute the data to processes as different components, the <code>MPI_Scatter</code> function is designated:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="dt">int</span> MPI_Scatter (</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>    <span class="dt">void</span>*           send_buf_p, <span class="co">/* in */</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>    <span class="dt">int</span>             send_count, <span class="co">/* in */</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>    MPI_Datatype    send_type,  <span class="co">/* in */</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>    <span class="dt">void</span>*           recv_buf_p, <span class="co">/* out */</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>    <span class="dt">int</span>             recv_count, <span class="co">/* in */</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a>    MPI_Datatype    recv_type,  <span class="co">/* in */</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>    <span class="dt">int</span>             src_proc,   <span class="co">/* in */</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>    MPI_Comm        comm        <span class="co">/* in */</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a>)</span></code></pre></div>
 
 
 </body>

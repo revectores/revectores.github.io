@@ -1,0 +1,206 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Redis
+ </title>
+  
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+  
+</head>
+<body>
+
+<p><a href="../"><< redis</a></p>
+
+<h1 id="redis">Redis</h1>
+<h3 id="redis-introduction">1. Redis Introduction</h3>
+<h5 id="what-is-redis"># What is Redis</h5>
+<p><strong>Redis</strong> is one of the key-value database (formally classfied as NoSQL database). That is, you store the key-value pair in the database, and use the key to retrieve value in the future:</p>
+<pre class="redis"><code>&gt; set person:name &quot;robert&quot;
+(OK)
+&gt; get person:name
+&quot;robert&quot;</code></pre>
+<p>Redis provides bulit-in support for complex data structure.</p>
+<p>All the Redis operations are <strong>atomic</strong>.</p>
+<h5 id="redis-object-types"># Redis Object Types</h5>
+<p>Redis supports five types of objects:</p>
+<ul>
+<li>String object.</li>
+<li>List object.</li>
+<li>Hash object.</li>
+<li>Set object.</li>
+<li>Ordered set object.</li>
+</ul>
+<p>The distinguishment of objects provide the ability to check whether a given command is valid on that key.</p>
+<p>Note that the object interfaces are not the real data structure of the internal implementation:</p>
+<ul>
+<li>Different values in the same object might be stored as different data structure internally to improve efficiency. For instance, there are no explicit integer object in Redis, but if a string is a numerical string in range of <code>long</code>, that string object will be stored as integer type. Refer to <a href="http://revectores.com/skill/notes/engineering_science/computer_science/database/redis/redis_string_object/redis_string_object.md">redis_string_object</a> for more details about implementation of string object.</li>
+<li>Values in different object types might share the same data structure, reusing the general design.</li>
+</ul>
+<p>Another benefit raises for the backward compatibility. The implementation of object might be modified but the interface kept. For example, before Redis 3.2 the list object is implemented by <code>ziplist</code> or <code>linkedlist</code>, depending on the values in list, but Redis 3.2 create a general data structure <code>quicklist</code> in place of both. Refer to <a href="http://revectores.com/skill/notes/engineering_science/computer_science/database/redis/redis_list_object/redis_list_object.md">redis_list_object</a> for more details about implementation of list object.</p>
+<p>The naming of commands are based on the type, except the most basic object type <code>string</code>(which can be the members of other objects), for the <code>list</code>, <code>hash</code>, <code>set</code> and <code>oredered set</code>, a leading <code>l</code>, <code>h</code>, <code>s</code>, and <code>z</code> is prepended to (most of) the name to distinguish the operation target object.</p>
+<h3 id="redis-string">2. Redis String</h3>
+<h5 id="redis-numerical-string-increment-and-decrement"># Redis Numerical String Increment and Decrement</h5>
+<p>Use <code>incr &lt;key&gt;</code> and <code>decr &lt;key&gt;</code> to increase/decrease the value by 1. The returned value is the new value in the key after increment/decrement:</p>
+<pre class="redis"><code>&gt; set connections 10
+&gt; incr connections
+(integer) 11
+&gt; decr connections
+(integer) 10</code></pre>
+<p>It can be applied to unexists key, in this case a new key will be created:</p>
+<pre class="redis"><code>&gt; exists counts
+(integer) 0
+&gt; incr coutns
+(integer) 1</code></pre>
+<p>Generally, use <code>incrby &lt;key&gt; &lt;value&gt;</code> and <code>decrby &lt;key&gt; &lt;value&gt;</code> to increase/decrease the key by given values.</p>
+<p>Note that the stored value itself is always a string object, not integer, since there is no integer object in Redis. you can check this by <code>type</code>:</p>
+<pre><code>&gt; get connections
+&quot;10&quot;
+&gt; type connections
+string</code></pre>
+<p>Float Increment is also supported, by <code>incrbyfloat</code>:</p>
+<pre class="redis"><code>&gt; set pi 3.14
+&gt; incrbyfloat pi 0.001
+&quot;3.141&quot;</code></pre>
+<p>You won’t need <code>decrbyfloat</code>, since you can set the addend as negative.</p>
+<h5 id="redis-string-operation"># Redis String Operation</h5>
+<p>Some string operation is also supported by Redis, the most useful two are <code>append</code> and <code>strlen</code>:</p>
+<pre class="redis"><code>&gt; set greeting &quot;Hello&quot;
+&gt; strlen greeting
+(integer) 5
+&gt; append greeting &quot; World!&quot;
+(integer) 12</code></pre>
+<p>The append operation returns the length of new string.</p>
+<h5 id="redis-string-internal-implementation"># Redis String Internal Implementation</h5>
+<p>Refer to <a href="http://revectores.com/skill/notes/engineering_science/computer_science/database/redis/redis_string_object/redis_string_object.md">redis_string_object</a> for the implementation of Redis string object.</p>
+<h3 id="redis-list">3. Redis List</h3>
+<p>We create a list by push items from left/right directly:</p>
+<pre><code>&gt; rpush editors sublime clion
+(integer) 2
+&gt; lpush editors vim
+(integer) 3</code></pre>
+<p>and we list the items by <code>lrange</code> or <code>lrange</code>, get the length of list by <code>llen</code>:</p>
+<pre class="redis"><code>&gt; lrange editors 0 -1
+1) &quot;vim&quot;
+2) &quot;sublime&quot;
+3) &quot;clion&quot;
+
+&gt; lrange editors 0 1
+1) &quot;vim&quot;
+2) &quot;sublime&quot;
+
+&gt; llen editors
+(integer) 3</code></pre>
+<p>Note that the range does includes the last index.</p>
+<p>Correspondingly, use <code>lpop</code> or <code>rpop</code> to pop item from the left/right and return it:</p>
+<pre class="redis"><code>&gt; lpop editors
+&quot;vim&quot;
+&gt; rpop editros
+&quot;clion&quot;
+&gt; llen editors
+(integer) 1</code></pre>
+<p>Refer to <a href="http://revectores.com/skill/notes/engineering_science/computer_science/database/redis/redis_list_object/redis_list_object.md">redis_list_object</a> for the implementation of Redis list object.</p>
+<h3 id="redis-hash">4. Redis Hash</h3>
+<p>Hash is associative list.</p>
+<pre class="redis"><code>&gt; hset user:1000 name &quot;robert&quot;
+(integer) 1
+&gt; hmset user:1000 pwd &quot;password&quot; email &quot;robert@gmail.com&quot;
+(integer) 1
+
+&gt; hget user:1000 name
+&quot;robert&quot;
+&gt; hgetall user:1000
+1) &quot;name&quot;
+2) &quot;robert&quot;
+3) &quot;pwd&quot;
+4) &quot;password&quot;
+5) &quot;email&quot;
+6) &quot;robert@gmail.com&quot;</code></pre>
+<p>To increase/decrease the number in hash value, use <code>hincrby</code>. There is no <code>hincr</code>/<code>hdecr</code>/<code>hdecrby</code>, and you do not need them.</p>
+<pre class="redis"><code>&gt; hset user:1000 visits 10
+(integer) 1
+&gt; hincrby user:1000 visits 1
+(integer) 11</code></pre>
+<h3 id="redis-set">5. Redis Set</h3>
+<p>Use <code>SADD</code> to add elements to set (since it is set, duplicated iterms will be automatically removed), and list the members by <code>SMEMBERS</code>, check whether value is a member by <code>SISMEMBER</code>:</p>
+<pre class="redis"><code>&gt; sadd langs c c++
+(integer) 2
+&gt; sadd langs c go
+(integer) 1
+&gt; smembers langs
+1) &quot;go&quot;
+2) &quot;c&quot;
+3) &quot;c++&quot;
+&gt; sismember langs java
+(integer) 0</code></pre>
+<p>remove elements by <code>SREM</code>, the return value indicates whether the value is in the set:</p>
+<pre class="redis"><code>&gt; srem langs go
+(integer) 1
+&gt; srem langs java
+(integer) 0</code></pre>
+<p>We can union two set by <code>SUNION</code>:</p>
+<pre class="redis"><code>&gt; sadd alphabet a b c
+&gt; sunion langs alphabet
+1) &quot;a&quot;
+2) &quot;c&quot;
+3) &quot;go&quot;
+4) &quot;c++&quot;
+5) &quot;b&quot;</code></pre>
+<p>Since the set is unordered data structure, no direction can be specified by <code>SPOP</code>, so random element will be popped and returned. The difference to list pop is, we can specify how many elements should be popped:</p>
+<pre class="redis"><code>&gt; spop langs
+&quot;c&quot;
+&gt; spop alphabet 2
+1) &quot;a&quot;
+2) &quot;b&quot;
+&gt; spop alphabet 3
+1) &quot;c&quot;
+&gt; spop alphabet 3
+(empty array)</code></pre>
+<p>As shown, if the number is larger than the elements in the set, no error will raise and the set only returnes all it can.</p>
+<p>There is another method returns the random elements in set but not delete them, called <code>SRANDMEMBER</code>, the interesting part of this command is, a negative number can be used to accept duplicated items:</p>
+<pre class="redis"><code>&gt; sadd alphabet a b c
+&gt; srandmember alphabet
+1) &quot;b&quot;
+&gt; srandmember alphabet -5
+1) &quot;a&quot;
+2) &quot;c&quot;
+3) &quot;c&quot;
+4) &quot;b&quot;
+5) &quot;c&quot;</code></pre>
+<h3 id="redis-ordered-set">6. Redis Ordered Set</h3>
+<p>The set structure would be handy in some cases if its ordered, that’s why Redis 1.2 introduced the sorted sets. A ordered set is ordered by the associated score:</p>
+<pre class="redis"><code>&gt; zadd tasks 0 homework
+(integer) 1
+&gt; zadd tasks 10 running
+(integer) 1
+&gt; zadd tasks -5 sleep
+(integer) 1
+&gt; zrange tasks 0 -1
+1) &quot;sleep&quot;
+2) &quot;homework&quot;
+3) &quot;running&quot;</code></pre>
+<h3 id="redis-expire-mechanism">7. Redis Expire Mechanism</h3>
+<p>We can set the expire time of a key-value pair use <code>expire</code> (in seconds) and <code>pexpire</code> (in milliseconds), or by the additional argument in <code>set</code>:</p>
+<pre class="redis"><code>set resource:temp &quot;Temporary value&quot;
+expire resource:temp 10
+set resource:temp2 &quot;Another temporary value&quot; ex 100</code></pre>
+<p>Use <code>ttl</code> (in seconds) or <code>pttl</code> (in milliseconds) to check the left avaliable:</p>
+<pre class="redis"><code>ttl resource:temp =&gt; 2
+// after 2 seconds
+ttl resource:temp =&gt; -2
+exists resource:temp =&gt; 0
+
+set resource:permanent &quot;Permanent value&quot;
+ttl resource:permanent =&gt; -1</code></pre>
+<p>The <code>-2</code> indicates that the key no longer exists, as if it is never created, and <code>-1</code> indicates the value is permanent (when no expire time is assigned).</p>
+<p>Command <code>persist</code> makes the key permanent:</p>
+<pre class="redis"><code>persist resource:temp2
+ttl resource:temp2 =&gt; -1</code></pre>
+<p>The <code>set</code> operation will override the expire time set before (make it persist by default or based on the <code>ex</code> in set).</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
