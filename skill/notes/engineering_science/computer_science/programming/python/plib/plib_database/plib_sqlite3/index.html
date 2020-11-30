@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> SQLite3 with Python
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_database</a></p>
+
+<h2 id="sqlite3-with-python">SQLite3 with Python</h2>
+<p>In order to execute SQL commands to a database, you must connect to it first, we can use <code>connect</code> method to get the <code>Connection</code> object and use this as a context (so after everything is done it’s closed automatically) then get the <code>Cursor</code> object to it.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> sqlite3</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&#39;/Users/rex/test.db&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="co"># The database will be created if it&#39;s not exist. Actually that&#39;s the way we create it.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co"># If you just need to create it in memeory but persistence, use</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co"># sqlite.connect(&#39;:memory:&#39;)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="cf">with</span> conn:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    cur <span class="op">=</span> conn.curser()</span></code></pre></div>
+<p>Then the SQL commands execute through the <code>cursor</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">with</span> conn:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  cur <span class="op">=</span> conn.cursor()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  sql <span class="op">=</span> <span class="st">&#39;&#39;&#39;CREATE TABLE &quot;person&quot;(</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="st">    &quot;name&quot; TEXT,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="st">    &quot;age&quot; INTEGER</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="st">  )</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="st">  &#39;&#39;&#39;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    cur.execute(sql)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>  <span class="bu">print</span>(cur.lastrowid)</span></code></pre></div>
+<p>That’s all you need. The SQL commands will take you further.</p>
+<h2 id="sqlite3-with-flask">SQLite3 with Flask</h2>
+<h5 id="an-universal-database-achieve-process">An universal Database achieve process</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="im">import</span> sqlite3</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="im">from</span> flask <span class="im">import</span> g</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>DATABASE <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">def</span> get_db():</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>  db <span class="op">=</span> <span class="bu">getattr</span>(g, <span class="st">&#39;_database&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>  <span class="cf">if</span> db <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    db <span class="op">=</span> g._database <span class="op">=</span> sqlite3.<span class="ex">connect</span>(DATABASE)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>  <span class="cf">return</span> db</span></code></pre></div>
+<p>Basically <code>g</code> a object which lived through the whole <code>request</code>, and the <code>_database</code> indicates the database of this request. If the database has been properly created, that’s it, otherwise we have to access the original database to make it fine.</p>
+<p>When the application context is teared down, we need to close it:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">@app.teardown_appcontext</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">def</span> close_connection(exception):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  db <span class="op">=</span> <span class="bu">getattr</span>(g, <span class="st">&#39;_database&#39;</span>, <span class="va">None</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  <span class="cf">if</span> db <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    db.close()</span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

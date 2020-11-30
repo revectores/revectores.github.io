@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Jinja
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_formatting</a></p>
+
+<h1 id="jinja">Jinja</h1>
+<h3 id="basic-syntax">1. Basic Syntax</h3>
+<h5 id="typical-structure"># Typical Structure</h5>
+<p>Here is the typical content of a jinja template</p>
+<pre class="jinja2"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;My Webpage&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ul id=&quot;navigation&quot;&gt;
+    {% for item in navigation %}
+        &lt;li&gt;&lt;a href=&quot;{{ item.href }}&quot;&gt;{{ item.caption }}&lt;/a&gt;&lt;/li&gt;
+    {% endfor %}
+    &lt;/ul&gt;
+
+    &lt;h1&gt;My Webpage&lt;/h1&gt;
+    {{ a_variable }}
+
+    {# a comment #}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>There are four types of symbols in Jinja.</p>
+<ul>
+<li><code>{% %}</code> for statement, like <code>for, while</code> statement.</li>
+<li><code>{{ }}</code> for expression, <code>{{ a_variable }}</code> for example.</li>
+<li><code>{# #}</code> for comment.</li>
+<li><code># ##</code> for line statement.</li>
+</ul>
+<h5 id="variable"># Variable</h5>
+<p>The variable can be accessed by <code>{{ var_name }}</code> syntax. Use</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

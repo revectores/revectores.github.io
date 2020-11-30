@@ -4,11 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title> Numerical Integration
  </title>
-  
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
-  
 </head>
 <body>
 
@@ -25,9 +23,9 @@
 \]</span></p>
 <h3 id="numerical-integration-introduction">1. Numerical Integration Introduction</h3>
 <h5 id="numerical-integration-general-form"># Numerical Integration General Form</h5>
-<p>Recall <a href="">Newton-Leibniz theorem</a>, from which we compute the integral of continuous function from the primitive function: <span class="math display">\[
+<p>Recall <a href="">Newton-Leibniz theorem</a>, based on which we compute the integral of continuous function from the primitive function: <span class="math display">\[
 \int_a^b f(x)\dx = F(b) - F(a)
-\]</span> while it is difficult if the integrand is not primary elementary function, and it is impossible if the function is given by points.</p>
+\]</span> However this approach could be unrealistic if the integrand is not primary elementary function, and it is even not possbile if the function is given by points.</p>
 <p>By definition, the integral is defined as the limit of Riemann sum: <span class="math display">\[
 \int_a^b f(x)\dx = \lim_{\Delta x_i\rightarrow0}\sum_{i=0}^{n-1}f(x_i)\Delta x_i
 \]</span> Hence we can use the sum of finite terms to approxmiate the limit. Denote <span class="math display">\[
@@ -36,7 +34,7 @@
 &amp; I_n(f) = \sum_{i=0}^n \alpha_i f(x_i)
 \end{align}
 \]</span></p>
-<p>where <span class="math inline">\(I(f)\)</span> is the precise value of integral, and <span class="math inline">\(I_n(f)\)</span> is the approximate of <span class="math inline">\(I(f)\)</span>, <span class="math inline">\(x_i\)</span> is <strong>integral point</strong>, and <span class="math inline">\(\alpha_i\)</span> is <strong>integral coffieient</strong>. The subscript <span class="math inline">\(n\)</span> represents that there are <span class="math inline">\(n+1\)</span> known points. We compute the <span class="math inline">\(I_n(f)\)</span> by finding the <span class="math inline">\(\alpha_i(0\le i\le n)\)</span>.</p>
+<p>where <span class="math inline">\(I(f)\)</span> is the precise value of integral, and <span class="math inline">\(I_n(f)\)</span> is the approximation of <span class="math inline">\(I(f)\)</span>, <span class="math inline">\(x_i\)</span> is <strong>integral point</strong>, and <span class="math inline">\(\alpha_i\)</span> is <strong>integral coffieient</strong>. The subscript <span class="math inline">\(n\)</span> represents that there are <span class="math inline">\(n+1\)</span> points. We compute the <span class="math inline">\(I_n(f)\)</span> by finding those <span class="math inline">\(\alpha_i(0\le i\le n)\)</span>.</p>
 <h5 id="algebraic-precision"># Algebraic Precision</h5>
 <p>if <span class="math inline">\(I_n(f)\)</span> meets <span class="math display">\[
 \begin{align}
@@ -44,7 +42,7 @@
 &amp; E_n(x^{m+1}) = I(x^{m+1}) - I_n(x^{m+1}) \neq 0
 \end{align}
 \]</span></p>
-<p>then we say the algebraic precision of <span class="math inline">\(I_n(f)\)</span> has <span class="math inline">\(m\)</span>-degree algebraic precision.</p>
+<p>then we say <span class="math inline">\(I_n(f)\)</span> has <span class="math inline">\(m\)</span>-degree <strong>algebraic precision</strong>.</p>
 <blockquote>
 <p><strong>Example</strong>. Validate this numerical intergration formula has 3-degree algebraic precision. <span class="math display">\[
 \int_0^{3h} f(x)\dx = \frac{3}{8}h[f(0)+3f(h)+3f(2h)+f(3h)]
@@ -87,12 +85,8 @@
 &amp;= \sum_{i=0}^n \left(\int_a^b l_i(x)\dx \right) f(x_i)
 \end{align}
 \]</span></p>
-<p>Denotes <span class="math inline">\(\alpha_i = \displaystyle \int_a^b l_i(x)\dx\)</span>, we have <span class="math display">\[
-I_n(f)
-= \int_a^b L_n(x)\dx
-= \sum_{i=0}^n \alpha_i f(x_i)
-\]</span></p>
-<p>The error of integration interpolation is the integral of the interpolation remainder term: <span class="math display">\[
+<p>which gives the integral coffieients <span class="math inline">\(\alpha_i = \displaystyle \int_a^b l_i(x)\dx\)</span>.</p>
+<p>The error of integration by interpolation is the integral of the remainder term: <span class="math display">\[
 E_n(f) = \int_a^b R_n(x)\dx = \int_a^b \frac{f^{(n+1)}(\xi(x))}{(n+1)!}\prod_{i=0}^n(x-x_i)\dx
 \]</span> For the polynomial with degree less than <span class="math inline">\(n\)</span>, <span class="math inline">\(E_n(f) = 0\)</span>, hence the integral of interpolation polynomial with <span class="math inline">\(n\)</span>-degree has at least <span class="math inline">\(n\)</span>-degree algebraic precision.</p>
 <blockquote>
@@ -114,27 +108,23 @@ I_2(f) = \frac{1}{9}[-3f(0) + 16f(0.5) + 5f(2)]
 </blockquote>
 <h3 id="newton-cotes-integration">3. Newton-Cotes Integration</h3>
 <h5 id="general-form-of-netwon-cotes-integration"># General Form of Netwon-Cotes Integration</h5>
-<p>Devide the integration interval <span class="math inline">\([a, b]\)</span> into <span class="math inline">\(n\)</span> equal intervals. Denote <span class="math inline">\(h=\dfrac{b-a}{n}\)</span>. Use the <span class="math inline">\(x_i = a + ih, i=0,1,\ldots, n\)</span> to construct Lagrange polynomial: <span class="math display">\[
+<p>Devide the integration interval <span class="math inline">\([a, b]\)</span> into <span class="math inline">\(n\)</span> equal intervals, each has length <span class="math inline">\(h=\dfrac{b-a}{n}\)</span>. Use each interval edge <span class="math inline">\(x_i = a + ih, i=0,1,\ldots, n\)</span> to construct Lagrange polynomial: <span class="math display">\[
 \begin{align}
-\int_a^b f(x)\dx
-&amp;\approx \int_a^b L_n(x)\dx \\
-&amp;= \int_a^b \sum_{i=0}^nl_i(x)f(x_i)\dx \\
-&amp;= \sum_{i=0}^n \left(\int_a^b l_i(x)\dx \right) f(x_i) \\
-&amp;= \sum_{i=0}^n \alpha_i f(x_i)
+\int_a^b f(x)\dx \approx \int_a^b L_n(x)\dx  = \sum_{i=0}^n \alpha_i f(x_i)
 \end{align}
 \]</span> where <span class="math display">\[
 \alpha_i = \int_a^b l_i(x)\dx = \int_a^b \prod_{j=0\\j\neq i}^n \frac{x-x_j}{x_i-x_j}\dx
-\]</span> Let <span class="math inline">\(x = a + th, x_i = a +ih\)</span>, we have <span class="math display">\[
+\]</span> To compute cofficients, Let <span class="math inline">\(x = a + th, x_i = a +ih\)</span>, we have <span class="math display">\[
 \frac{x-x_j}{x_i-x_j} = \frac{a+th-(a+jh)}{a+ih-(a+jh)}= \frac{t-j}{i-j}
 \]</span> Hence <span class="math display">\[
 \begin{align}
 \alpha_i
 &amp;= \int_0^n \frac{t(t-1)\cdots(t-i+1)(t-i-1)\cdots(t-n)}{i!(n-i)!(-1)^{n-1}}h\dt \\
-&amp;= \frac{(b-a)}{n}\frac{(-1)^{n-1}}{i!(n-i)!}\int_0^nt(t-1)(t-i+1)(t-i-1)(t-n)\dt
+&amp;= \frac{b-a}{n}\frac{(-1)^{n-1}}{i!(n-i)!}\int_0^nt(t-1)(t-i+1)(t-i-1)(t-n)\dt
 \end{align}
 \]</span> Denote <span class="math display">\[
 c_i^{(n)} = \frac{(-1)^{n-1}}{i!(n-i)!n}\int_0^nt(t-1)(t-i+1)(t-i-1)(t-n)\dt
-\]</span> then <span class="math inline">\(\alpha = (b-a)c_i^{(n)}\)</span> only depends on <span class="math inline">\(n\)</span> but the value of <span class="math inline">\(x_i\)</span>. The cofficients <span class="math inline">\(c_i^{(n)}\)</span> is called the <strong>Newton-Cotes cofficient</strong>.</p>
+\]</span> then <span class="math inline">\(\alpha = (b-a)c_i^{(n)}\)</span> only depends on <span class="math inline">\(n\)</span> regardless of <span class="math inline">\(x_i\)</span>. The cofficients <span class="math inline">\(c_i^{(n)}\)</span> is called the <strong>Newton-Cotes cofficient</strong>. The Newton-Cotes cofficients with <span class="math inline">\(n=0, 1, \ldots, 6\)</span> are given in the following list.</p>
 <table>
 <thead>
 <tr class="header">
@@ -211,6 +201,7 @@ c_i^{(n)} = \frac{(-1)^{n-1}}{i!(n-i)!n}\int_0^nt(t-1)(t-i+1)(t-i-1)(t-n)\dt
 </tr>
 </tbody>
 </table>
+<p>Note that we have <span class="math inline">\(c_i^{(n)}&gt; 0\)</span> for <span class="math inline">\(n\le7\)</span>, hence the approximation of integral is stable, while <span class="math inline">\(c_i^{(n)}\)</span> can be negative for <span class="math inline">\(n &gt; 8\)</span>, the approximate could be unstable.</p>
 <h5 id="trapezoidal-rule"># Trapezoidal Rule</h5>
 <p>Specically, when <span class="math inline">\(n=1\)</span>, that is, we use the linear interpolation to approximate the integral, we get the <strong>trapezoidal rule</strong>: <span class="math display">\[
 \int_a^b f(x)\dx
@@ -218,53 +209,50 @@ c_i^{(n)} = \frac{(-1)^{n-1}}{i!(n-i)!n}\int_0^nt(t-1)(t-i+1)(t-i-1)(t-n)\dt
 \]</span> <span class="math display">\[
 L_1(f) = T(f) = \frac{b-a}{2}(f(a)+f(b))
 \]</span></p>
-<p>The geometric interpretation of trapezoidal rule is using the trapezoid area under <span class="math inline">\(f(a), f(b)\)</span> to approximate the area under curve.</p>
-<p>Truncatation error: <span class="math display">\[
-f(x) = L_1(x) + \frac{f&#39;&#39;(\xi)}{2!}(x-a)(x-b), a\le\xi\le b
+<p>The geometric interpretation of trapezoidal rule is using the trapezoid area under the edge points of function to approximate the area under curve.</p>
+<p>Truncation error of trapezoidal rule: <span class="math display">\[
+\begin{align}
+E_1(f)
+&amp;= \int_a^b \frac{f&#39;&#39;(\xi)}{2!}(x-a)(x-b) \\
+&amp;= \frac{f&#39;&#39;(\xi)}{2!} \int_a^b (x-a)(x-b) \\
+&amp;= -\frac{f&#39;&#39;(\xi)}{12}(b-a)^3, \quad a\le\xi\le b
+\end{align}
 \]</span></p>
-<h6 id="simpsons-rule"># SimpSon’s Rule</h6>
-<p>Specically, when <span class="math inline">\(n=2\)</span>, that is, we use the quadratic interpolation to approximate the integral, we get the <strong>Simpson’s rule</strong>: <span class="math display">\[
+<h6 id="simpsons-rule"># Simpson’s Rule</h6>
+<p>Specically, when <span class="math inline">\(n=2\)</span>, that is, we use the quadratic interpolation to approximate the integral, by which we get the <strong>Simpson’s rule</strong>: <span class="math display">\[
 \int_a^b f(x)\dx
 \approx \int_a^b L_2(x)\dx
 \]</span></p>
 <p><span class="math display">\[
 L_2(f) = S(f) = \frac{b-a}{6}\left(f(a) + 4f\left(\frac{a+b}{2}\right) + f(b)\right)
 \]</span></p>
-<p>The geometric interpretation of SimpSon’s rule is using the quadratic function determined by three points to approximate the area under curve.</p>
+<p>The geometric interpretation of Simpson’s rule is using the quadratic function determined by three given points to approximate the area under curve.</p>
+<p>Truncation error of Simpson’s Rule: <span class="math display">\[
+E_2(f) = -\frac{(b-a)^5}{2880}f^{(4)}(\eta), \quad a\le\eta\le b
+\]</span></p>
 <h3 id="composite-integration">4. Composite Integration</h3>
 <h5 id="composite-integration-introduction"># Composite Integration Introduction</h5>
-<p>The existence of <a href="http://revectores.com/skill/notes/formal_science/math/numerical_analysis/interpolation/interpolation.md#runge-phenomenon">Runge Phenomenon</a> make it is not possible to gurantee the convergence of Netwon-Cotes formula in higher order, and the compuation of Netwon-Cotes formula with high order is unstable (proof of both predicates are omitted). To avoid the Runge phenomenon, <a href="http://revectores.com/skill/notes/formal_science/math/numerical_analysis/interpolation/interpolation.md#segmented-interpolation">segmented interpolation</a> shall be applied, and the integation are computed as the sum of integral in each intervals. This approach is called the <strong>composite integration</strong>.</p>
+<p>The existence of <a href="http://revectores.com/skill/notes/formal_science/math/numerical_analysis/interpolation/interpolation.md#runge-phenomenon">Runge Phenomenon</a> make it is not possible to gurantee the convergence of Netwon-Cotes formula with high order, and the compuation of Netwon-Cotes formula with high order is unstable (proof of both predicates are omitted). To avoid the Runge phenomenon, <a href="http://revectores.com/skill/notes/formal_science/math/numerical_analysis/interpolation/interpolation.md#segmented-interpolation">segmented interpolation</a> shall be applied, and the integation in the entire interval are computed as the sum of integrals in each devided intervals. This approach is named the <strong>composite integration</strong>.</p>
 <h5 id="composite-trapezoid-integration"># Composite Trapezoid Integration</h5>
-<p>Devide the interval <span class="math inline">\([a, b]\)</span> into equal intervals, <span class="math inline">\(x_i = a + ih, ~ i = 0,1,\ldots, n\)</span>, <span class="math inline">\(h = \dfrac{b-a}{n}\)</span>. For the interval <span class="math inline">\([x_i, x_{i+1}]\)</span>, we have <span class="math display">\[
+<p>Devide the interval <span class="math inline">\([a, b]\)</span> into equal intervals, <span class="math inline">\(x_i = a + ih, ~ i = 0,1,\ldots, n\)</span>, <span class="math inline">\(h = \dfrac{b-a}{n}\)</span>. For one of the small interval <span class="math inline">\([x_i, x_{i+1}]\)</span>, we have <span class="math display">\[
 \int_{x_i}^{x_{i+1}}f(x)\dx = \frac{h}{2}(f(x_i) + f(x_{i+1})) - f&#39;&#39;(\xi_i)\frac{h^3}{12}
 \]</span></p>
-<p>and <span class="math display">\[
+<p>then <span class="math display">\[
 I(f)
 = \int_a^b f(x)\dx
 = \sum_{i=0}^{n-1}\int_{x_i}^{x_{i+1}} f(x)\dx, \quad x\in[x_{i}, x_{i+1}]
-\]</span> Sum up: <span class="math display">\[
+\]</span> Sum up all the small intervals: <span class="math display">\[
 \begin{align}
 I(f) &amp;= \sum_{i=0}^{n-1}\left[ \frac{h}{2}(f(x_i)+f(x_{i+1})) - f&#39;&#39;(\xi_i)\frac{h^3}{12} \right] \\
 &amp;= h\left[ \frac{1}{2}f(a) + \sum_{i=1}^{n-1}f(x_i) + \frac{1}{2}f(b) \right] - \frac{h^3}{12}\sum_{i=1}^{n-1}f&#39;&#39;(\xi_i)
 \end{align}
-\]</span> <span class="math inline">\(I(f)\)</span> constructs of the integral term and remainder term, that is <span class="math inline">\(I(f) = T(h) + E_n(f)\)</span> , where <span class="math display">\[
+\]</span> <span class="math inline">\(I(f) = T(h) + E_n(f)\)</span>, contains the integral term and remainder term , where <span class="math display">\[
 T(h) = T_n(f) = h\left[ \frac{1}{2}f(a) + \sum_{i=1}^{n-1} f(x_i) + \frac{1}{2}f(b) \right]
 \]</span></p>
 <p><span class="math display">\[
 E_n(f) = -\frac{h^3}{12}\sum_{i=0}^{n-1}f&#39;&#39;(\xi_i)
 \]</span></p>
-<blockquote>
-<p><strong>Proof</strong>. <span class="math display">\[
-E_n(f) = I(f) - T_n(f) =
-\]</span> Denote <span class="math display">\[
-M_2 = \max_{a\le x\le b} |f&#39;&#39;(x)|
-\]</span> then we have <span class="math display">\[
-|E_n(f)| \le \frac{(b-a)^3}{12n^2}(b-a)M_2 = O\left(\frac{1}{n^2}\right)
-\]</span> If <span class="math inline">\(N_2\)</span> is known, for any error control <span class="math inline">\(\varepsilon &gt; 0\)</span>, we have <span class="math display">\[
-|E_n(f)| = &lt; \varepsilon
-\]</span></p>
-</blockquote>
-<p>Shortcut table:</p>
+<p>We can also use a table to compute and memorize coefficients of composite trapezoid integration:</p>
 <table>
 <thead>
 <tr class="header">
@@ -313,7 +301,7 @@ S_n(f) = \frac{h}{3}\left[ f(a) + 4\sum_{i=0}^{m-1}f(x_{2i+1}) + 2\sum_{i=1}^{n-
 <p><span class="math display">\[
 E_n(f) = -\frac{(2h)^5}{2880}f^{(4)}(\xi_i), ~ x_{2i}\le\zeta_i\le x_{2i+2}
 \]</span></p>
-<p>Shortcut table:</p>
+<p>We can also use a table to compute and memorize coefficients of composite Simpson integration:</p>
 <table>
 <thead>
 <tr class="header">
@@ -393,30 +381,83 @@ E_n(f) = -\frac{(2h)^5}{2880}f^{(4)}(\xi_i), ~ x_{2i}\le\zeta_i\le x_{2i+2}
 </tbody>
 </table>
 <blockquote>
-<p>Example. Compute <span class="math inline">\(\displaystyle \int_0^1 \e^x\dx\)</span> to 5 decimal percision, how many points should be computed?</p>
+<p><strong>Example</strong>. Compute <span class="math inline">\(\displaystyle \int_0^1 \e^x\dx\)</span> to 5 decimal percision, how many points should be computed?</p>
 </blockquote>
 <blockquote>
-<p>Compute <span class="math inline">\(\displaystyle \int_0^{1.2}\sin x^2\dx\)</span> based on Newton-Cotes formula, composite trapezoid integration, and composite Simpson integration.</p>
+<p><strong>Example</strong>. Compute <span class="math inline">\(\displaystyle \int_0^{1.2}\sin x^2\dx\)</span> based on Newton-Cotes formula, composite trapezoid integration, and composite Simpson integration.</p>
 </blockquote>
 <h5 id="automatic-precision-control"># Automatic Precision Control</h5>
-<p>Compute integral using Romberg algorithm:</p>
+<p>The truncation error decreases as the number of divided intervals grows, to control the precision we must find the interval counts <span class="math inline">\(n\)</span>.</p>
+<p>In practice, we use <span class="math inline">\(|T_{2n}(f) - T_n(f)|\)</span> to approxiamte the current precision, the series <span class="math inline">\(T_n(f), T_{2n}(f), \ldots\)</span> is computed sequentially until for some <span class="math inline">\(m\)</span> which meets <span class="math display">\[
+|T_{2m}(f) - T_m(f)| &lt; \varepsilon
+\]</span> or <span class="math display">\[
+\left|\frac{T_{2m}(f) - T_m(f)}{T_{2m}(f)}\right| &lt; \varepsilon
+\]</span> and use the <span class="math inline">\(T_{2m}(f)\)</span> as the approximation of <span class="math inline">\(I(f)\)</span>.</p>
 <h5 id="romberg-integration"># Romberg Integration</h5>
-<p><span class="math display">\[
+<p>The composite Newton-Cotes interpolation with higher order can be computed by those with lower order by adding the error term, for instance, the Simpson integration <span class="math inline">\(S_n(f)\)</span> can be comptued by the combination of trapezoidal <span class="math inline">\(T_n(f), T_{2n}(f)\)</span> by adding the error term.</p>
+<p>To illustrate the principle, consider the error of <span class="math inline">\(T_n(f)\)</span> and <span class="math inline">\(T_{2n}(f)\)</span>: <span class="math display">\[
 \begin{align}
 &amp; I(f) - T_n(f) = -\frac{1}{12}f&#39;&#39;(\xi)h^2 = ch^2 \\
-&amp; I(f) - T_{2n}(f) = -\frac{1}{12}f&#39;&#39;(\xi)\left(\frac{h}{2}\right)^2 = ch^2
+&amp; I(f) - T_{2n}(f) = -\frac{1}{12}f&#39;&#39;(\xi)\left(\frac{h}{2}\right)^2 = c\left(\frac{h}{2}\right)^2
 \end{align}
 \]</span></p>
+<p>Notice the differences above are approximately proportionate, we can use the difference between trapezoidal integration with different intervals to approximate the error to the precise value: <span class="math display">\[
+3(I(f) - T_{2n}(f)) = T_{2n}(f) - T_n(f)
+\]</span> If we use the difference <span class="math inline">\(T_{2n}(f) - T_n(f)\)</span> to “correct” <span class="math inline">\(I(f)\)</span>: <span class="math display">\[
+\begin{align}
+I(f) &amp;= T_{2n}(f) + \frac{1}{3}(T_{2n}(f) - T_n(f)) \\
+&amp;= \frac{4}{3}T_{2n} - \frac{1}{3}T_n = S_n
+\end{align}
+\]</span> This approach reduce the truncation error from <span class="math inline">\(O(h^2)\)</span> to <span class="math inline">\(O(h^4)\)</span> without extra computation complexity.</p>
+<p>Generally, we can use this approach to reduce the truncation by correct with the error terms repeatedly, this is <strong>Romberg method</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(R_{1,1}\)</span></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(R_{2,1}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(R_{2,2}\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(R_{3,1}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(R_{3,2}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(R_{3,3}\)</span></td>
+<td style="text-align: center;"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\vdots\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\ddots\)</span></td>
+<td></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(R_{m, 1}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(R_{m, 2}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(R_{m,3}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(R_{m,m}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>where</p>
 <p><span class="math display">\[
-R_{k,j} = R_{k, j-1} + \frac{R_{k, j-1}-R_{k-1,j-1}}{4^{j-1}-1}, ~~~~ k = 2, 3, \ldots
-\]</span> Compute until the <span class="math inline">\(|R_{k,k}-R_{k-1,k-1}|\)</span> is less than given precision.</p>
-<h3 id="multiple-integral">6. Multiple Integral</h3>
-<p>Compute double integral <span class="math inline">\(\displaystyle \int_0^1\int_0^2 \sin(x^2+y)\d y\dx\)</span>.</p>
-<h3 id="guass-legendre-integral">7. Guass-Legendre Integral</h3>
-<p>The Newton-Cotes integration require the steps to be equal, <span class="math display">\[
-\int_{-1}^1 f(x)\dx
-= f\left(-\frac{1}{\sqrt3 }\right) + f\left(\frac{1}{\sqrt3 }\right)
-\]</span></p>
+\begin{align}
+&amp; R_{k, 1} = T\left(\frac{h}{2^{k-1}}\right) \\
+&amp; R_{k,j} = R_{k, j-1} + \frac{R_{k, j-1}-R_{k-1,j-1}}{4^{j-1}-1}, ~~~~ k \ge 2, j \ge 2 
+\end{align}
+\]</span> Compute repeatedly until the <span class="math inline">\(|R_{k,k}-R_{k-1,k-1}|\)</span> meets the required precision.</p>
 
 
 </body>

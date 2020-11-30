@@ -4,11 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title> Domain Name System
  </title>
-  
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
-  
 </head>
 <body>
 
@@ -108,7 +106,7 @@
 <p>However, since there are so many hosts in the entire Internet and the network structure varies day by day, it’s not unrealistic to implement DNS as a local file, or use a few fixed servers to response DNS requests. Instead, it is designed as a distributed query system.</p>
 <p>The DNS servers are designed a hierarchic system corresponding to the hierarchy of domain names. The top level servers are <strong>root name server</strong>, which manage DNS of entire network, then <strong>top level name server(TLD server)</strong>, which manages one of the top level domain, and then are the hierarchy of <strong>authoritative domain name servers</strong>.</p>
 <p>There are 13 <strong>logical</strong> root domain name servers, denoted as A~M.</p>
-<p><img src="root_domain_name_servers_map.png" alt="root_domain_name_servers_map"/></p>
+<p><img src="root_domain_name_servers_map.png" alt="root_domain_name_servers_map" style="zoom:20%;" /></p>
 <p>The topology of authoritative name servers is determined by the institution manages that domain. For example, if one company applied for the domain name <code>abc.com</code>, to make the Internet know where its domain name and its subdomain names are, the company should equip a DNS server to provide resolution service. All the domains under one authoritative DNS server constructs a <strong>zone</strong>.</p>
 <h5 id="domain-name-of-domain-name-server"># Domain Name of Domain Name Server</h5>
 <p>Name servers are servers, which have there own domain names as well, while the interpretations of domain name hierarchy is not applied to them. For example, the domain name of root A is <code>a.root-servers.net</code> and the gltd server domain name <code>a.gltd-servers.net</code>.</p>
@@ -118,7 +116,7 @@
 <p>Local domain name server first sends DNS query to root DNS server, who will tells the local DNS server where to find the corresponding TLD DNS server(that is, the IP address of it), then it sends request to the TLD DNS server, who will tells the DNS server where to find the authoritative DNS server. Now the authoritative DNS server, or the interface of servers, returns the IP address to local DNS server. After receiving the resolution result, the local DNS server will use it as the answer to the client.</p>
 <p>If iterative lookup is applied, the local DNS server takes all the responsibilities to finish the entire lookup, while the recursive lookup is different: each DNS server only do one request/response. Identically, the client server sends requests to the local domain name server, and the local DNS server sends request to root, and then, root DNS server takes the responsiblity, and send request to TLD DNS server, and TLD DNS server sends requests to authoritative DNS server. Then the response messages return back through the requests chain.</p>
 <p>The lookup approach depends on the setting on local DNS server, which usually set to be iterative.</p>
-<p><img src="dns_lookup_iterative.png" alt="dns_lookup_iterative" style="zoom:30%;" /></p>
+<p><img src="dns_lookup_iterative.png" alt="dns_lookup_iterative" style="zoom:25%;" /></p>
 <h5 id="dig-command"># <code>dig</code> Command</h5>
 <p><a href="https://linux.die.net/man/1/dig"><code>dig</code></a>, formally named <strong>domain information groper</strong>, is a cli tool to create and track DNS lookup process. Domain name servers, DNS records cache, and many relavent information can be achieved by <code>dig</code>.</p>
 <pre class="shell"><code>&gt; dig www.google.com

@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Python Library `xml.etree.ElementTree`
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_data_structure</a></p>
+
+<h1 id="python-library-xml.etree.elementtree">Python Library <code>xml.etree.ElementTree</code></h1>
+<p>We parse the XML by <code>ET.parse()</code> method from file or <code>ET.fromstring()</code> method from string.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> xml.etree.ElementTree <span class="im">as</span> ET</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>tree <span class="op">=</span> ET.parse(<span class="st">&#39;xml.xml&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>root <span class="op">=</span> tree.getroot()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>root <span class="op">=</span> ET.fromstring(<span class="st">&quot;&quot;&quot;&lt;langs&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="st">    &lt;c rank=&quot;1&quot;&gt;&lt;/c&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="st">    &lt;python rank=&quot;2&quot;&gt;&lt;/python&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="st">    &lt;go rank=&quot;10&quot;&gt;&lt;/go&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="st">&lt;/langs&gt;&quot;&quot;&quot;</span>)</span></code></pre></div>
+<p>Note that the returned value of <code>ET.parse()</code> is the ElementTree object <code>&lt;class 'xml.etree.ElementTree.ElementTree'&gt;</code>, while <code>ET.fromstring()</code> returns the root element with type <code>&lt;class 'xml.etree.ElementTree.Element'&gt;</code>.</p>
+<p>The tag label and atttibutes of XML tag can be accessed by the <code>tag</code> and <code>attrib</code> property.</p>
+<p><code>for</code> loop is supported to iterate the children of element:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="cf">for</span> lang <span class="kw">in</span> root:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="bu">print</span>(lang.tag, lang.attrib)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="co">c {&#39;rank&#39;: &#39;1&#39;}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co">python {&#39;rank&#39;: &#39;2&#39;}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">go {&#39;rank&#39;: &#39;10&#39;}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">&quot;&quot;&quot;</span></span></code></pre></div>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

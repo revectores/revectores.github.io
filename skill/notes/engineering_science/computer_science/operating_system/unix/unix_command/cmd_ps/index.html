@@ -1,0 +1,424 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Linux Command `ps`
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< unix_command</a></p>
+
+<h1 id="linux-command-ps">Linux Command <code>ps</code></h1>
+<h3 id="ps-introduction">1. <code>ps</code> Introduction</h3>
+<p><code>ps</code> displays information about a selection of the active processes. Use <code>top(1)</code> instead if you want a repetitive update of the selection and the displayed information.</p>
+<p><code>ps</code> accepts several kinds of options:</p>
+<ol type="1">
+<li>Unix options, which may be grouped and must be preceded by a dash.</li>
+<li>BSD options, which may be grouped and must not be used with a dahsh.</li>
+<li>GNU long options, which aer preceded by two dashes.</li>
+</ol>
+<h5 id="ps-default-output"># <code>ps</code> Default Output</h5>
+<p>By default, <code>ps</code> selects all processes with</p>
+<ul>
+<li>The same effective user ID as the current user (euid = $EUID).</li>
+<li>The same terminal as the invoker.</li>
+</ul>
+<p>and display four fields:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pid</code></td>
+<td>process ID</td>
+</tr>
+<tr class="even">
+<td><code>tname</code></td>
+<td>terminal associated with the process</td>
+</tr>
+<tr class="odd">
+<td><code>time</code></td>
+<td>cumulated CPU time</td>
+</tr>
+<tr class="even">
+<td><code>ucmd</code></td>
+<td>executable name</td>
+</tr>
+</tbody>
+</table>
+<p>The output is unsorted by default.</p>
+<h3 id="ps-options">2. <code>ps</code> Options</h3>
+<h5 id="ps-process-selection-options"># <code>ps</code> Process Selection Options</h5>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 89%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>OPtion</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-e/-A</code></td>
+<td>Select all processes.</td>
+</tr>
+<tr class="even">
+<td><code>-a</code></td>
+<td>Select all processes except both session leaders and processes not associated with a terminal.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-output-format-options"># <code>ps</code> Output Format Options</h5>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-o</code></td>
+<td>user-defined format.</td>
+</tr>
+<tr class="even">
+<td><code>-O</code></td>
+<td>like <code>-o</code> but preloaded with some default columns.</td>
+</tr>
+<tr class="odd">
+<td><code>-f</code></td>
+<td>full-format listing, includes: UID, PID, PPID, C, STIME, TTY, TIME, CMD</td>
+</tr>
+<tr class="even">
+<td><code>-F</code></td>
+<td>extra full format. includes all fields in <code>-f</code> and SZ, RSS, PSR.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standard-format-specifiers">3. Standard Format Specifiers</h3>
+<h5 id="ps-fields-environment"># <code>ps</code> Fields: Environment</h5>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>args, cmd, command</td>
+<td>COMMAND</td>
+<td>command with all its argument as a string.</td>
+</tr>
+<tr class="even">
+<td>tname, tt, tty</td>
+<td>TTY</td>
+<td>controlling tty (terminal)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-identifiers"># <code>ps</code> Fields: Identifiers</h5>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pid, tgid</td>
+<td>PID</td>
+<td>process ID</td>
+</tr>
+<tr class="even">
+<td>ppid</td>
+<td>PPID</td>
+<td>parent process ID</td>
+</tr>
+<tr class="odd">
+<td>uid, euid</td>
+<td>UID</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>user, euser, uname</td>
+<td>USER</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-timing"># <code>ps</code> Fields: Timing</h5>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 6%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>start, lstart, start_time, stime, bsdstart</td>
+<td>STARTED</td>
+<td>time the command started. The format depends on the code you use. For <code>start</code>, if the process was started less than 24 hours ago, the output format is “HH:MM:SS”, else it is " Mmm dd".</td>
+</tr>
+<tr class="even">
+<td>etime</td>
+<td>ELAPSED</td>
+<td>elapsed time since the process was started in the form <code>[[DD-]hh:]mm:ss</code></td>
+</tr>
+<tr class="odd">
+<td>etimes</td>
+<td>ELAPSED</td>
+<td>elapsed time since the process was started in seconds.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-cpu-usage"># <code>ps</code> Fields: CPU Usage</h5>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 7%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>%cpu, pcpu</td>
+<td>%CPU</td>
+<td>CPU utilization of the process in “##.#” format. CPU time used devided by the time of the process has been running.</td>
+</tr>
+<tr class="even">
+<td>cputime, time</td>
+<td>TIME</td>
+<td>cumulative CPU time. “[DD-]hh:mm:ss” format</td>
+</tr>
+<tr class="odd">
+<td>psr</td>
+<td>PSR</td>
+<td>processor that process is currently assigned to</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-memory-usage"># <code>ps</code> Fields: Memory Usage</h5>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 7%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>%mem, pmem</td>
+<td>%MEM</td>
+<td>ratio of the process’s resident set size to the physical memory on the machine.</td>
+</tr>
+<tr class="even">
+<td>sz</td>
+<td>SZ</td>
+<td>size in physical pages of the core image of the process. This includes text, data, and stack space. Device mappings are currenly excluded. This is subject to change.</td>
+</tr>
+<tr class="odd">
+<td>vsize, vsz</td>
+<td>VSZ</td>
+<td>virtual memory size of the process in KiB. Device mappings are currently excluded. This is subject to change.</td>
+</tr>
+<tr class="even">
+<td>maj_flt</td>
+<td>MAJFLT</td>
+<td>the number of major page faults that have occured with this process.</td>
+</tr>
+<tr class="odd">
+<td>min_flt</td>
+<td>MINFLT</td>
+<td>the number of minor page faults that have occured with this process.</td>
+</tr>
+<tr class="even">
+<td>trs</td>
+<td>TRS</td>
+<td>Text resident set size, the amount of physical memory devoted to executable code.</td>
+</tr>
+<tr class="odd">
+<td>drs</td>
+<td>DRS</td>
+<td>Data resident set size, the amount of physical memory devoted to other than executable code.</td>
+</tr>
+<tr class="even">
+<td>size</td>
+<td>SIZE</td>
+<td>approximate amount of swap space that would be required if the process were to dirty all writable pages and then be swapped out.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-pointer"># <code>ps</code> Fields: Pointer</h5>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>eip</td>
+<td>EIP</td>
+<td>instruction pointer</td>
+</tr>
+<tr class="even">
+<td>esp</td>
+<td>ESP</td>
+<td>stack pointer</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-process-scheduing"># <code>ps</code> Fields: Process Scheduing</h5>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 7%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ni, nice</td>
+<td>NI</td>
+<td>nice value, ranges from 19 (nicest) to -20 (not nice to others)</td>
+</tr>
+<tr class="even">
+<td>class, cls, policy</td>
+<td>CLS</td>
+<td>scheduling class of the process.</td>
+</tr>
+</tbody>
+</table>
+<p>The list of scheduling class supported by Linux:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Scheduling policy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TS</td>
+<td>SCHED_OTHER</td>
+</tr>
+<tr class="even">
+<td>FF</td>
+<td>SCHED_FIFO</td>
+</tr>
+<tr class="odd">
+<td>RR</td>
+<td>SCHED_RR</td>
+</tr>
+</tbody>
+</table>
+<p>Refer to <a href="">linux_scheduling_policy</a> for details.</p>
+<h5 id="ps-fields-signals"># <code>ps</code> Fields: Signals</h5>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 7%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>HeadeR</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>blocked, sig_block, sigmask</td>
+<td>BLOCKED</td>
+<td>mask of the blocked signals. 32-bits or 64-bit mask in hexadecimal format.</td>
+</tr>
+<tr class="even">
+<td>caught, sig_caught, sigcatch</td>
+<td>CAUGHT</td>
+<td>mask of the caught singals.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ps-fields-multithreading"># <code>ps</code> Fields: Multithreading</h5>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Header</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nlwp, thcount</td>
+<td>NLWP</td>
+<td>number of lwps (threads) in the process.</td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

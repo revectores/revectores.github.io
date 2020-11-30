@@ -4,11 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title> Equation Solving
  </title>
-  
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
-  
 </head>
 <body>
 
@@ -16,12 +14,11 @@
 
 <h1 id="equation-solving">Equation Solving</h1>
 <h3 id="equation-solving-by-bisection">1. Equation Solving by Bisection</h3>
-<p>Recall the intermediate value theorem, which says for the continuous function <span class="math inline">\(f(x)\)</span> in <span class="math inline">\([a, b]\)</span> and <span class="math inline">\(f(a)f(b) &lt; 0\)</span> indicates there is at least one zero point in interval <span class="math inline">\([a, b]\)</span>.</p>
-<p>Algorithm description:</p>
-<p>Input: initial interval <span class="math inline">\([a, b]\)</span>, precision <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Recall the intermediate value theorem, the continuous function <span class="math inline">\(f(x)\)</span> in <span class="math inline">\([a, b]\)</span> with <span class="math inline">\(f(a)f(b) &lt; 0\)</span> indicates there is at least one zero point in interval <span class="math inline">\([a, b]\)</span>. To find the zero point between, all we have to do is to squeeze (normally halving for each step) the size of interval until the length of interval is less then precision requirement, since we can use any point in that interval as the solution.</p>
 <h3 id="equation-solving-by-iteration">2. Equation Solving by Iteration</h3>
-<p>Express the function <span class="math inline">\(f(x)\)</span> by the form <span class="math inline">\(x=\varphi(x)\)</span>. Construct the iteration sequences <span class="math inline">\(x_{k+1} = \varphi(x_k), k=1,2,\cdots\)</span> based on <span class="math inline">\(x_0\)</span>, if the iteration converges, that is, <span class="math display">\[
-\lim_{k\to x_{k+1}} x_{k+1} = \lim_{k\to\infty} \varphi(x_k) = \alpha
+<h5 id="iteration-method-definition"># Iteration Method Definition</h5>
+<p>Transform <span class="math inline">\(f(x)\)</span> by the form <span class="math inline">\(x=\varphi(x)\)</span>. Construct the iteration sequences <span class="math inline">\(x_{k+1} = \varphi(x_k), k=1,2,\cdots\)</span> based on <span class="math inline">\(x_0\)</span>, if the iteration converges, that is, <span class="math display">\[
+\lim_{k\to \infty} x_{k+1} = \lim_{k\to\infty} \varphi(x_k) = \alpha
 \]</span> we have <span class="math inline">\(\alpha = \varphi(\alpha)\)</span>, then <span class="math inline">\(\alpha\)</span> is the root of <span class="math inline">\(f(x)\)</span>. When <span class="math inline">\(|x_{k+1}-x_k|\)</span> less than the given precision, we recognize <span class="math inline">\(x_{k+1}\)</span> as the root of function <span class="math inline">\(f(x)\)</span>.</p>
 <blockquote>
 <p><strong>Example</strong>. List the equivalent of function <span class="math inline">\(x^3-2x-5=0\)</span> and its iteration form. <span class="math display">\[
@@ -32,12 +29,84 @@
 \end{align}
 \]</span></p>
 </blockquote>
+<h5 id="converges-condition-of-iteration-method"># Converges Condition of Iteration Method</h5>
 <p><strong>Theorem</strong>. If <span class="math inline">\(\varphi(x) \in [a, b]\)</span> satisfies</p>
+<ol type="1">
+<li><span class="math inline">\(a\le \varphi(x) \le b\)</span> for all <span class="math inline">\(x\in[a, b]\)</span>.</li>
+<li><span class="math inline">\(\varphi(x)\)</span> is differentiable in <span class="math inline">\([a,b]\)</span>, and there exists <span class="math inline">\(0&lt;L&lt;1\)</span>, <span class="math inline">\(\left| \varphi&#39;(x) \right| \le L\)</span> for all <span class="math inline">\(x\in [a, b]\)</span>.</li>
+</ol>
+<p>Then there exists unique one <span class="math inline">\(x^*\)</span> that satifies <span class="math inline">\(x^* = \varphi(x^*)\)</span>, <span class="math inline">\(x^*\)</span> is the <strong>fixed point</strong>. The interation <span class="math inline">\(x_{k+1} = \varphi(x_k)\)</span> for any initial value <span class="math inline">\(x_0\in[a, b]\)</span> converges to <span class="math inline">\(x^*\)</span>, and <span class="math display">\[
+|x^* - x_k| \le \frac{L^k}{1-L}|x_1 - x_0|
+\]</span></p>
+<blockquote>
+<p><strong>Proof</strong>. <strong>Existency</strong>. Let <span class="math inline">\(\psi(x) = x - \varphi(x)\)</span>, we have <span class="math display">\[
+\begin{align}
+\psi(a) = a - \varphi(a) \le 0 \\
+\psi(b) = b - \varphi(b) \ge 0 \\
+\end{align}
+\]</span> The intermediate value theorem gives, for some <span class="math inline">\(a\le x^* \le b\)</span>, we have <span class="math inline">\(\psi(x^*) = x^* - \varphi(x^*) = 0\)</span>.</p>
+<p><strong>Uniqueness</strong>. If there exists another <span class="math inline">\(x^{**}\)</span> which makes <span class="math inline">\(x^{**} = \varphi(x^{**})\)</span>, then we check their difference <span class="math display">\[
+|x^{*} - x^{**}|
+= |\varphi(x^*) - \varphi(x^{**})| 
+= |\varphi&#39;(\xi)(x^* - x^{**})|
+\le L|x^* - x^{**}|
+\]</span> Since <span class="math inline">\(L &lt; 1\)</span>, we have <span class="math inline">\(x^* = x^{**}\)</span>. That is, the fixed point is unique.</p>
+<p><strong>Convergence</strong>. When <span class="math inline">\(x_0\in [a, b]\)</span>, differential mean value theorem gives <span class="math display">\[
+x_{k+1} - x^* = \varphi(x_k) - \varphi(x^*) = \varphi&#39;(\xi_k)(x_k - x^*), \quad\xi_k \in [a,b]
+\]</span> Note that <span class="math inline">\(|\varphi&#39;(x)| \le L\)</span>, <span class="math display">\[
+\begin{align}
+|x_{k-1} - x^*|
+&amp;= |\varphi(x_k) - \varphi(x^*)| \\
+&amp;\le L|x_k - x^*| \\
+&amp;\le L^2|x_{k-1}-x^*| \\
+&amp;\le \ldots \\
+&amp;\le L^{k+1}|x_0 - x^*|
+\end{align}
+\]</span> Since <span class="math inline">\(L &lt; 1\)</span>, we have <span class="math inline">\(L^{k+1}\rightarrow 0, x_{k+1}\rightarrow x^*\)</span>. That is, the iteration form <span class="math inline">\(x_{k+1} = \varphi(x_k)\)</span> converges.</p>
+<p><strong>Error Estimation</strong>. <span class="math inline">\(|x_{k-1} - x^*| \le L^{k+1}|x_0 - x^*|\)</span>, with fixed <span class="math inline">\(k\)</span>, for any positive integer <span class="math inline">\(p\)</span> we have <span class="math display">\[
+\begin{align}
+|x_{k+p} - x_k|
+&amp;= |x_{k+p} - x_{k+p-1} + x_{k+p-1} - x_{k+p-2} + \cdots + x_{k+1} - x_k | \\
+&amp;\le |x_{k+p} - x_{k+p-1}| + |x_{k+p} - x_{k+p-1}| + \cdots + |x_{k+1} - x_{k}| \\
+&amp;\le (L^{k+p-1} + L^{k+p-2} + \cdots + L^k)|x_1-x_0| \\
+&amp;= \frac{L^k(1-L^p)}{1-L}|x_1-x_0|
+\end{align}
+\]</span></p>
+</blockquote>
+<h5 id="order-of-interation-method"># Order of Interation Method</h5>
+<p>If the iteration form <span class="math inline">\(x_{k+1} = \varphi(x_k)\)</span> converges, <span class="math inline">\(\alpha\)</span> is the root, if <span class="math display">\[
+\lim_{k\rightarrow\infty}\frac{|x_{k+1}-\alpha|}{|x_k - \alpha|^n} = M
+\]</span> then we define the order of the interation method as <span class="math inline">\(n\)</span>.</p>
 <h3 id="equation-solving-by-newtons-method">3. Equation Solving by Newton’s Method</h3>
-<p>The Newton’s method starts from guessing a point <span class="math inline">\(x_0\)</span>, update using the intersection of the tangent line <span class="math inline">\(l\)</span> of function <span class="math inline">\(f(x)\)</span> at point <span class="math inline">\(x_0\)</span> with x-axis, where <span class="math display">\[
+<p>As shown in previous section, there are multiple iteration form <span class="math inline">\(x_{k+1} = \varphi(x_k)\)</span> for an equation <span class="math inline">\(f(x) = 0\)</span>. The Newton’s iteration utilize Taylor series: <span class="math display">\[
+f(x) = f(x_0) + f&#39;(x_0)(x-x_0) + \frac{f&#39;&#39;(x_0)}{2!}(x-x_0)^2 + \cdots
+\]</span></p>
+<p>Use the linear part as the approximation of <span class="math inline">\(f(x)\)</span>: <span class="math display">\[
+f(x_0) + f&#39;(x_0)(x-x_0) \approx 0
+\]</span></p>
+<p>if <span class="math inline">\(f&#39;(x_0) \neq 0\)</span>, <span class="math display">\[
+x = x_0 - \frac{f(x_0)}{f&#39;(x_0)}
+\]</span> The Newton iteration is defined as form <span class="math display">\[
+x_{k+1} = x_k - \frac{f(x_k)}{f&#39;(x_k)}
+\]</span></p>
+<p>the corresponding equation <span class="math display">\[
+x = \varphi(x) = x - \frac{f(x)}{f&#39;(x)}
+\]</span></p>
+<p><span class="math display">\[
+\varphi&#39;(x) = 1 - \left( \frac{f&#39;(x)}{f&#39;(x)} - \frac{f(x)f&#39;&#39;(x)}{(f&#39;(x))^2}  \right) = \frac{f(x)f&#39;&#39;(x)}{(f&#39;(x))^2}
+\]</span></p>
+<p>If the root <span class="math inline">\(\alpha\)</span> is single root, <span class="math inline">\(f(\alpha) = 0, f&#39;(\alpha)\neq 0\)</span>, we have <span class="math inline">\(|\varphi&#39;(\alpha)| = 0\)</span>, if the distance of initial value <span class="math inline">\(x_0\)</span> and <span class="math inline">\(\alpha\)</span> is small enough, there must be <span class="math inline">\(\varphi&#39;(x) &lt; 1\)</span>, that is, the Newton iteration converges in the neighbourhood of root.</p>
+<p>We can prove that if the root <span class="math inline">\(\alpha\)</span> is single root, Newton’s interation is second-order, and if <span class="math inline">\(\alpha\)</span> is multiple root, the iteration converges but it degenerates to first-order, but if we modify the iteration form to <span class="math display">\[
+x_{k+1} = x_k - p\frac{f(x_k)}{f&#39;(x_k)}
+\]</span> this is a second-order method again.</p>
+<p>The geometry interpretation of Newton’s method is update using the intersection of the tangent line <span class="math inline">\(l\)</span> of function <span class="math inline">\(f(x)\)</span> at point <span class="math inline">\(x_0\)</span> with x-axis, where <span class="math display">\[
 l: y - f(x_0) = f&#39;(x_0)(x - x_0)
-\]</span> Let <span class="math inline">\(y=0\)</span> we have the update</p>
+\]</span> The essence of the Newton’s method is using line to approximate the non-liner curve by applying Taylor series.</p>
 <h3 id="equation-solving-by-secant-method">4. Equation Solving by Secant Method</h3>
+<p>In Newton’s interation form <span class="math inline">\(x_{k+1} = x_k - \dfrac{f(x_k)}{f&#39;(x_k)}\)</span>, if we use the difference <span class="math inline">\(f[x_{k-1}, x_k] = \dfrac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}\)</span> to approximate the derivative <span class="math inline">\(f&#39;(x_k)\)</span>, we have <span class="math display">\[
+x_{k+1} = x_k - \frac{(x_k-x_{k-1})f(x_k)}{f(x_k) - f(x_{k-1})}
+\]</span> This iteration form is called <strong>chord method</strong>. The geometry interpretation of chord method is updating <span class="math inline">\(x\)</span> using the intersection of the secant line determined by <span class="math inline">\((x_k, f(x_k)), (x_{k+1}, f(x_{k+1}))\)</span> and <span class="math inline">\(x\)</span>-axis.</p>
+<p>The order of chord method is 1.618, hence the converge speed of chord method is less than Newton’s method.</p>
 
 
 </body>

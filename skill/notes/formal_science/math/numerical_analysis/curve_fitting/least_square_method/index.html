@@ -4,11 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title> Least Squares Method
  </title>
-  
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
-  
 </head>
 <body>
 
@@ -24,16 +22,22 @@
 \newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\o}{\overline}
 \]</span></p>
-<h5 id="indicator-of-fitting"># Indicator of fitting</h5>
-<p>The distance(norm) between <span class="math inline">\(\Phi(\b{x}), \by\)</span> shall be minimum, that is <span class="math inline">\(\min\norm{\Phi(\bx) - \by}\)</span>.</p>
-<p>The norm can be defined by multiple ways:</p>
-<p>If we use the 2-norm (square root of sum of squares) as the indicator, the gitting method is called <strong>least squares method</strong>: <span class="math display">\[
-\min\sqrt{\sum_{i=1}^m(\varphi(x_i)-y_i)^2}
-\]</span></p>
-<h5 id="linear-fitting"># Linear Fitting</h5>
-<p>If we want to fit the data into the linear function:</p>
+<h5 id="curve-fitting"># Curve Fitting</h5>
+<p>Interpolation and fitting are two methods that utilizing known points to approximate the unknown function. If it is not possible to make all the points pass the given form of function, we can at least find that function with best approximation under some <strong>indicator</strong>.</p>
+<p>Normally, the target is defined to minimize the distance(norm) between <span class="math inline">\(\Phi(\b{x})\)</span> and <span class="math inline">\(\by\)</span>, that is, find <span class="math inline">\(\displaystyle\text{argmin}_{f(x)\in \Phi(x)}\norm{\Phi(\bx) - \by}\)</span>.</p>
+<p>If we use 1-norm, the indicator is <span class="math display">\[
+R_1 = \sum_{i=1}^m |\varphi(x_i) - y_i|
+\]</span> If we use infinite-norm, the indicator is <span class="math display">\[
+R_{\infty} =  \max_{1\le i\le m}|\varphi(x_i) - y_i|
+\]</span> If we use 2-norm, the indicator is <span class="math display">\[
+R_2 = \sqrt{\sum_{i=1}^m (\varphi(x_i) - y_i)^2}
+\]</span> To minimize <span class="math inline">\(R_2\)</span>, it is equivalent to minimize the square of it: <span class="math display">\[
+R = \sum_{i=1}^m (\varphi(x_i) - y_i)^2
+\]</span> Method use <span class="math inline">\(R\)</span> as the indicator to implement curve fitting is <strong>least squares method</strong>.</p>
+<h5 id="fitting-linear-function"># Fitting Linear Function</h5>
+<p>If we want to fit points into linear function:</p>
 <p><span class="math display">\[
-Q(a, b) = \sum_{i=1}^m(p(x_i)-y_i)^2 = \sum(a+bx_i-y_i)^2
+Q(a, b) = \sum_{i=1}^m(p(x_i)-y_i)^2 = \sum_{i=1}^m(a+bx_i-y_i)^2
 \]</span></p>
 <p>To achieve the minimal of <span class="math inline">\(Q(a,b)\)</span>:</p>
 <p><span class="math display">\[
@@ -42,7 +46,7 @@ Q(a, b) = \sum_{i=1}^m(p(x_i)-y_i)^2 = \sum(a+bx_i-y_i)^2
 \displaystyle\pp{Q(a,b)}{b} = 0
 \end{array}\right.
 \]</span></p>
-<p>Solve it, we have</p>
+<p>Solve these equations, we have</p>
 <p><span class="math display">\[
 \left\{\begin{array}{ll}
 \displaystyle a
@@ -63,19 +67,19 @@ m &amp; \displaystyle \sum_{i=1}^my_i \\
 \end{array}\right.
 \]</span></p>
 <blockquote>
-<p><strong>Example</strong>. Measure the height of a tree <span class="math inline">\(m\)</span> times, the values are <span class="math inline">\(x_1, x_2, \ldots, x_m\)</span>, compute the hieght with least square error</p>
+<p><strong>Example</strong>. Measure the height of a tree <span class="math inline">\(m\)</span> times, those approximate values are <span class="math inline">\(x_1, x_2, \ldots, x_m\)</span>, compute the height of the tree with least square error.</p>
 <p>Let <span class="math inline">\(x\)</span> denote the height of tree, then the square error</p>
 <p><span class="math display">\[
 R(x) = \displaystyle \sum_{i=1}^m (x-x_i)^2
 \]</span></p>
-<p>The <span class="math inline">\(\min R(x)\)</span> requires</p>
+<p>To minimize <span class="math inline">\(R(x)\)</span>,</p>
 <p><span class="math display">\[
 R&#39;(x) = 2\sum_{i=1}^m(x-x_i) = 0
 \]</span></p>
-<p>That is, <span class="math inline">\(x = \displaystyle \frac{1}{m}\sum_{i=1}^m x_i\)</span>, which is the average of the <span class="math inline">\(m\)</span> times measurement.</p>
+<p>That is, <span class="math inline">\(x = \displaystyle \frac{1}{m}\sum_{i=1}^m x_i\)</span>, which is the average of the measurements.</p>
 </blockquote>
-<h5 id="square-fitting"># Square Fitting</h5>
-<p>If we want to fit the data into the quadratic function: <span class="math display">\[
+<h5 id="fitting-quadratic-function"># Fitting Quadratic Function</h5>
+<p>If we want to fit points into quadratic function: <span class="math display">\[
 Q(a_0, a_1, a_2)
 = \sum_{i=1}^m (p(x_i) - y_i)^2
 = \sum_{i=1}^m (a_0 + a_1x_i + a_2x_i^2 - y_i)^2
@@ -129,27 +133,8 @@ a_0 \\ a_1 \\ a_2
 </tbody>
 </table>
 </blockquote>
-<h5 id="solving-overdetermined-equation"># Solving Overdetermined Equation</h5>
-<p>For the given data sequences <span class="math inline">\((x_i, y_i), i=1,2,\ldots, m\)</span>, if the line <span class="math inline">\(p(x)=a_0+a_1x\)</span> is required to pass through all the points, we have <span class="math display">\[
-\begin{bmatrix}
-1 &amp; x_1 \\
-1 &amp; x_2 \\
-\vdots &amp; \vdots \\
-1 &amp; x_m \\
-\end{bmatrix}
-\begin{bmatrix}
-a_0 \\
-a_1
-\end{bmatrix}
-=
-\begin{bmatrix}
-y_1 \\
-y_2 \\
-\vdots \\
-y_m \\
-\end{bmatrix}
-\]</span></p>
-<p><span class="math display">\[
+<h5 id="solving-overdetermined-equations"># Solving Overdetermined Equations</h5>
+<p>For overdetermined equation <span class="math inline">\(A\bx = \bb\)</span> <span class="math display">\[
 \begin{bmatrix}
 a_{11} &amp; a_{12} &amp;\cdots&amp; a_{1n}  \\
 a_{21} &amp; a_{22} &amp;\cdots&amp; a_{2n}  \\
@@ -170,14 +155,15 @@ y_2 \\
 y_m \\
 \end{bmatrix}
 \]</span></p>
-<p>We’ll prove that the solution <span class="math inline">\(A^{T}A\bx = A^{T}\b b\)</span> is exactly the solution in</p>
-<p><span class="math display">\[
+<p>with <span class="math inline">\(r(A, \bb)\neq r(A)\)</span>, there is no solution, and this equation is <strong>contradictory</strong> or <strong>overdetermined</strong>. Although it is not possible to give a solution that meets all the conditions, we can still give a best solution under particular indicator. Minimizing the sum of square of errors is the most common target.</p>
+<p>We’ll prove that, the solution of normal equation <span class="math inline">\(A^{T}A\bx = A^{T}\b b\)</span> is exactly the solution which minimize sum of square of errors <span class="math inline">\(R = \displaystyle \sum_{i=1}^m (y_i - y&#39;_i)^2\)</span>.</p>
+<blockquote>
+<p><strong>Proof</strong>. <strong>Existence</strong>. Apply primary transformation <span class="math inline">\(P\)</span> to <span class="math inline">\(A\)</span>: <span class="math display">\[
 PA = \begin{bmatrix}
 \o A_n \\
 O_{m-n,n}
 \end{bmatrix}
-\]</span></p>
-<p><span class="math display">\[
+\]</span> then <span class="math display">\[
 (PA)(PA)^{T} = \begin{bmatrix}
 \o A_n \\
 O_{m-n,n}
@@ -192,8 +178,11 @@ O_{m-n,n}
 O &amp; O
 \end{bmatrix}
 \]</span></p>
-<p>and <span class="math inline">\((PA)(PA)^{T} = r(AA^T) = r(\o A {\o A}^{T}) = n\)</span>. Hence the solution of <span class="math inline">\((A^TA)\bx = A^T\bb\)</span> must be exist and unique.</p>
-<p>Assume the solution is <span class="math inline">\(\bx\)</span>, for another value <span class="math inline">\(\by = \bx + \b e\)</span>, then <span class="math display">\[
+<p><span class="math display">\[
+r((PA)(PA)^T) = r(AA^T) = r(\o A\o A^T) = n
+\]</span></p>
+<p>which indicates that there is unique solution of equation <span class="math inline">\((A^TA)\bx = A^T\bb\)</span>.</p>
+<p><strong>Uniqueness</strong>. Denote the solution as <span class="math inline">\(\bx\)</span>, to that <span class="math inline">\(\bx\)</span> minimizes the 2-norm, consider another value <span class="math inline">\(\by = \bx + \b e\)</span>, then <span class="math display">\[
 \begin{align}
 \norm{A\by - \bb}_2^2
 &amp;= (A\bx - \bb + Ae)^T(A\bx - \bb + Ae) \\
@@ -202,28 +191,13 @@ O &amp; O
 &amp;= \norm{A\bx - \bb}_2^2 + \norm{Ae}_2^2 \\
 &amp;\ge \norm{A\bx - \bb}_2^2
 \end{align}
-\]</span> which indicates that <span class="math inline">\(\bx\)</span> is exactly the value</p>
-<p>That is, it is equivalent to find the <span class="math inline">\(\min\norm{A\bx-\bb}_2^2\)</span> and solve the overdetermined equation <span class="math display">\[
-\begin{bmatrix}
-a_{11} &amp; a_{12} &amp;\cdots&amp; a_{1n}  \\
-a_{21} &amp; a_{22} &amp;\cdots&amp; a_{2n}  \\
-\vdots &amp; \vdots &amp;\ddots &amp; \vdots \\
-a_{m1} &amp; a_{m2} &amp;\cdots&amp; a_{mn}
-\end{bmatrix}
-\begin{bmatrix}
-x_1 \\
-x_2 \\
-\vdots \\
-x_n
-\end{bmatrix}
-=
-\begin{bmatrix}
-y_1 \\
-y_2 \\
-\vdots \\
-y_m \\
-\end{bmatrix}
-\]</span></p>
+\]</span> which indicates that <span class="math inline">\(\bx\)</span> is exactly the value that minimize the 2-norm.</p>
+</blockquote>
+<p>That is, it is equivalent to:</p>
+<ul>
+<li>Find <span class="math inline">\(\min\norm{A\bx-\bb}_2^2\)</span></li>
+<li>Solve overdetermined equation <span class="math inline">\(A\bx = \bb\)</span> by normal equation <span class="math inline">\(A^{T}A\bx = A^{T}\b b\)</span>.</li>
+</ul>
 <blockquote>
 <p><strong>Example</strong>. Construct the quadratic function from following data</p>
 <table>
@@ -311,7 +285,7 @@ a_0 \\ a_1 \\ a_2
 \displaystyle \sum_{i=1}^5 x_iy_i \\
 \displaystyle \sum_{i=1}^5 x_i^2y_i
 \end{bmatrix}
-\]</span> Solve it, we have <span class="math display">\[
+\]</span> Solve this, we get <span class="math display">\[
 \varphi(x) = -22.2394 + 8.21909x - 0.493794x^2
 \]</span></p>
 </blockquote>

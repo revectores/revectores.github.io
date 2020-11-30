@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> C Dynamic Memory 
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< c</a></p>
+
+<h1 id="c-dynamic-memory">C Dynamic Memory</h1>
+<h3 id="introduction">1. Introduction</h3>
+<p>Any variables can be stored in two types of memory: normal variable declaration and function parameters passing will be stored in <strong>stack memory</strong>, the allocation and deallocation of which will be automatically handled by the complier implicitly based on variable scopes. On the contrary, for the <strong>heap memory</strong>, all of these management must be done explicitly by the programmer. <code>malloc</code> and <code>free</code>, are the two library functions designed for this purpose.</p>
+<p>However, since these <code>glibc</code> memory management library are designed for general-purpose, indicating it is highly possible for them to be inefficient in specific task. Many of the applications that require high performace like <a href="http://revectores.com/skill/notes/engineering_science/computer_science/database/redis/redis_mm/redis_mm.md">Redis</a> and <a href="">Firefox</a> use the nonstandard implementation <code>malloc(3)</code> such as <code>jemalloc</code>, or implement their own memory management libraries.</p>
+<p>Refer to <a href=""></a> for the implementation of <code>malloc</code> in <code>glibc</code> and <a href=""></a> for the nonstandard implementations.</p>
+<p>As we’ll shown, the manual memory management is absolutely the source of errors. Most of modern languages do not trust the programmers to deal with memory by themselves but garbage collection mechanism, see <a href="">python_garbage_collection</a> and <a href="">java_garbage_collection</a> for GC implementation in Python and Java respectively. C++11 introduces <a href="http://revectores.com/skill/notes/engineering_science/computer_science/programming/c++/stl/stl_memory/c++_smart_pointer/c++_smart_pointer.md">smart pointer</a> to partically manage the memory by standard library. As a practice to get better understanding about memory management, we’ve implement our own memory management library rrmalloc, refer to <a href=""></a> for the source code and <a href=""></a> for design consideration.</p>
+<h3 id="dynamic-memory-library-function">2. Dynamic Memory Library Function</h3>
+<h5 id="malloc-and-free"># <code>malloc</code> and <code>free</code></h5>
+<p><code>malloc</code> takes <code>size</code> as the parameter and returns a pointer to the allocated space, with enough adequate memory after, the prototype is</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">void</span>* malloc(<span class="dt">size_t</span> size); </span></code></pre></div>
+<p>As a typical instance, consider allocating memory for a node in a linked-list:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> __node {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="dt">int</span> val;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="kw">struct</span> __node* next;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>} node;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>node* head = (node*) malloc(<span class="kw">sizeof</span>(node));</span></code></pre></div>
+<p>The size will be inferred by complier by computing the size of node, which is 8 for 32-bit machine or 16 Bytes for 64-bit machine. The returned <code>void*</code> is then converted to <code>node*</code> explictly and assigend to a pointer with type <code>node*</code>. Note that as the variable assignment, the variable <code>head</code> itself is stored in the stack, but its content is an address on the heap!</p>
+<p>When we’re done with those allocated memory, we must give them back to the operating system using <code>free</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">void</span>* free(<span class="dt">void</span> *ptr);</span></code></pre></div>
+<p>to free the node we’ve allocated, simply <code>free(head)</code>.</p>
+<h5 id="common-errors-about-c-memory-management"># Common Errors About C Memory Management</h5>
+<p>Although the API interfaces are simple, complexity arised when components interact. The most common errors when dealing with the memory are listed here:</p>
+<ol type="1">
+<li><p><strong>Forget to allocate memory</strong>. For instance,</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">char</span> *src = <span class="st">&quot;hello&quot;</span>;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="dt">char</span> *dst;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>strcpy(dst, src);</span></code></pre></div>
+<p>where the <code>det</code> has not been allocated by used.</p></li>
+<li><p><strong>Allocate inadequate memory</strong>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">char</span> *src = <span class="st">&quot;hello&quot;</span>;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="dt">char</span> *dst = (<span class="dt">char</span> *) malloc(strlen(src));</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>strcpy(dst, src);</span></code></pre></div>
+<p>which is incorrect since there is an implicit <code>\0</code> in end of the C string tail, hence you must allocate one more space for that. The program above might override the byte in adjacent address, which cause undetectable error.</p></li>
+<li><p><strong>Forget to initialize the memory</strong>. The memory returned by <code>malloc</code> is not initialized, you must filling it with zero values manually if you wish.</p></li>
+<li><p><strong>Forget to free memory</strong>. This is what we called <strong>memory leak</strong>. It may not a big deal if the program runs just for a short time since the operating system will recall memory when the process is terminated, while for those programs running for a long time (for instances, operating system or the web server), the memory leak would eventually run out the memory in system.</p>
+<p>It is very difficult to gurantee all the memory are free properly, consider such a situation:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">void</span> foo(){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    <span class="dt">int</span>* intp = (<span class="dt">int</span>*) malloc(<span class="kw">sizeof</span>(<span class="dt">int</span>));</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>    <span class="co">// program with error</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    free(intp);</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="cf">return</span>;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>}</span></code></pre></div></li>
+<li><p><strong>Freeing Improperly</strong>. This includes</p>
+<ul>
+<li>Freeing memory before done with it.</li>
+<li>Freeing memory repeatedly.</li>
+<li>Freeing memory not allocated by <code>malloc</code>.</li>
+</ul></li>
+</ol>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

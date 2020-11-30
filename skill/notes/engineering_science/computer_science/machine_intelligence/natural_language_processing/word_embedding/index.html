@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Word Embedding
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< natural_language_processing</a></p>
+
+<h1 id="word-embedding">Word Embedding</h1>
+<p><strong>Word embedding</strong> is to map words into to <span class="math inline">\(\R^n\)</span>. Words that appear in similar <strong>contexts</strong> have similar representations (and similar meanings, by the distributional hypothesis).</p>
+<p>For the term-document matrix, we use tf-idf instead of raw term counts.</p>
+<p>For the term-context matrix, <strong>positive pointwise mutual information(PPMI)</strong> is common.</p>
+<h5 id="tf-idf"># tf-idf</h5>
+<p><span class="math display">\[
+\text{tf}_{i, j} = \frac{n_{i, j}}{\displaystyle\sum n_{k,j}}
+\]</span></p>
+<p><span class="math display">\[
+\text{idf}_i = \log\frac{|D|}{|\{ d: t_i \in d\}|}
+\]</span></p>
+<p><span class="math display">\[
+\text{tfidf}_{i, j} = \text{tf}_{i, j}\cdot\text{idf}_{i}
+\]</span></p>
+<h5 id="pointwise-mutual-information"># Pointwise Mutual Information</h5>
+<p><span class="math display">\[
+\text{PMI}(X, Y) = \log_2\frac{P(x, y)}{P(x)P(y)}
+\]</span></p>
+<p><span class="math display">\[
+\text{PMI}(\text{word}_1, \text{word}_2) = \log\frac{P()}{}
+\]</span></p>
+<h5 id="cosine-similarity"># Cosine Similarity</h5>
+<h3 id="svd">3. SVD</h3>
+<p>Singular Value De</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

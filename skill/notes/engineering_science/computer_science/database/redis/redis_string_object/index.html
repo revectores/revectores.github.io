@@ -4,11 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title> Redis String Object
  </title>
-  
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
-  
 </head>
 <body>
 
@@ -66,7 +64,7 @@
 <p>Since Redis is a database, where the data can be modified frequently, the design of memory allocation must be as efficient as possible, <strong>preallocation</strong> and <strong>lazy-free</strong> mechanism are introduced for that propose, similar to the design of container in C++ STL, the core idea is the spatial locality: data that has been modified might be modified again soon, so we preallocate and defer free operation to reduce the further malloc:</p>
 <div class="sourceCode" id="cb7" data-startFrom="34" data-filename="redis-3.0.0/src/sds.h"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 33;"><span id="cb7-34"><a href="#cb7-34"></a><span class="pp">#define SDS_MAX_PREALLOC (1024*1024)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8" data-startFrom="123" data-filename="redis-3.0.0/src/sds.c"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 122;"><span id="cb8-123"><a href="#cb8-123"></a><span class="co">/* Enlarge the free space at the end of the sds string so that the caller</span></span>
-<span id="cb8-124"><a href="#cb8-124"></a><span class="co"> * is sure that after calling this function can overwrite up to addlen</span></span>
+<span id="cb8-124"><a href="#cb8-124"></a><span class="co"> * is sure that after calling thi function can overwrite up to addlen</span></span>
 <span id="cb8-125"><a href="#cb8-125"></a><span class="co"> * bytes after the end of the string, plus one more byte for nul term.</span></span>
 <span id="cb8-126"><a href="#cb8-126"></a><span class="co"> *</span></span>
 <span id="cb8-127"><a href="#cb8-127"></a><span class="co"> * Note: this does not change the *length* of the sds string as returned</span></span>

@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> tkinter
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_gui</a></p>
+
+<h1 id="tkinter">tkinter</h1>
+<h3 id="window-control">1. Window Control</h3>
+<h5 id="mainloop"># <code>mainloop</code></h5>
+<p><code>tkinter</code> is the bulit-in GUI library for Python. Here is how to create a root window:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">from</span> tkinter <span class="im">import</span> Tk</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>root <span class="op">=</span> Tk()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>root.mainloop()</span></code></pre></div>
+<p>We initialize an instance <code>root</code> from class <code>Tk</code>, which represents a window, and then use <code>mainloop</code> to keep it shown.</p>
+<h5 id="window-property"># Window Property</h5>
+<p>The title and size of the window can be reset by the <code>title</code> and <code>geometry</code> method of <code>Tk</code> object:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>root.title(<span class="st">&#39;window example&#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>root.geometry(<span class="st">&quot;500x200&quot;</span>)</span></code></pre></div>
+<p>Notice that the parameter of the size of window is a <strong>string</strong>, which is absoluately a strange old-fashion design.</p>
+<h5 id="event-bind"># Event bind</h5>
+<p>If you want to track the IO event over the window, use <code>bind</code> to active a callback function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> show_click_cord(event):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="bu">print</span>(event.x, event.y)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">def</span> show_key(event):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="bu">print</span>(event.char)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>root.bind(<span class="st">&#39;&lt;Button-1&gt;&#39;</span>, show_click_cord)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>root.bind(<span class="st">&#39;&lt;Key&gt;&#39;</span>, show_key)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="co"># Notice that the since the function is passed as a parameter, do not add tailing brackets () otherwise it will be executed.</span></span></code></pre></div>
+<p>Here we bind a left-click event(<code>&lt;Button-1&gt;</code>) and keypress event(<code>&lt;Key&gt;</code>) to function show_click_cord and show_key respectively, which receive a argument event that containing the information about the event, i.e. (x,y) coordinate for click event and key value for keyboard event.</p>
+<p>Here the 1 inside <code>&lt;Button-1&gt;</code> indicates the left-click, and 2 for middle, 3 for right respectively.</p>
+<p>There’re some more event like</p>
+<ul>
+<li><p><code>&lt;B1-Motion&gt;</code>: the movement and hold down of left-click.</p></li>
+<li><p><code>&lt;ButtonRelease-1&gt;</code>: the release of left-click.</p></li>
+<li><p><code>&lt;Enter&gt;</code>: the cursor enter the widget. Notice this doesn’t mean the <code>Enter</code> key is pressed, the <code>Enter</code> key is represented by <code>&lt;Return&gt;</code> instead!</p></li>
+</ul>
+<p>There’re more events, which cloud be referred in ==todo: url==.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

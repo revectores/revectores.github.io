@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> C++ `bitset`
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< stl</a></p>
+
+<h1 id="c-bitset">C++ <code>bitset</code></h1>
+<h5 id="initialization"># Initialization</h5>
+<ol type="1">
+<li><p><code>bitset&lt;n&gt; b</code>: Initialize a bitset with length <code>n</code> and filled with 0.</p></li>
+<li><p><code>bitset&lt;n&gt; b(u)</code>: Initialize bitset <code>b</code> by <code>unsigned long long u</code>. If <code>n</code> exceeds the bits of <code>unsigned long long</code> (that is, exceeds 64), those high bits will be filled with 0.</p></li>
+<li><p><code>bitset&lt;n&gt; b(s, pos, m, zero, one)</code>: Initialize bitset <code>b</code> by <code>string s</code>, starting from <code>pos</code>, with length <code>m</code>. <code>s</code> can only contain <code>zero</code> an <code>one</code>.</p>
+<p>By default <code>pos</code> is 0, <code>pos</code> is <code>std::string::npos</code>, and <code>zero/one</code> are <code>'0'</code> and <code>'1'</code> respectively.</p></li>
+<li><p><code>bitset&lt;n&gt; b(cp, pos, m, zero, one)</code>: Similar to (3) but given a character array instead of <code>std::string</code>. If <code>m</code> is not given, <code>cp</code> must points to a C-style array, that is, the tailing <code>\0</code> must exist.</p></li>
+</ol>
+<h5 id="c-bitset-non-modification-method"># C++ <code>bitset</code> Non-modification Method</h5>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>b.any()</code></td>
+<td>if any bit is 1</td>
+</tr>
+<tr class="even">
+<td><code>b.any()</code></td>
+<td>if all bits are 1</td>
+</tr>
+<tr class="odd">
+<td><code>b.none()</code></td>
+<td>if all bits are 0</td>
+</tr>
+<tr class="even">
+<td><code>b.count()</code></td>
+<td>count number of 1</td>
+</tr>
+<tr class="odd">
+<td><code>b.size()</code></td>
+<td>count total bits</td>
+</tr>
+<tr class="even">
+<td><code>b.test(pos)</code></td>
+<td>if position <code>pos</code> is 1</td>
+</tr>
+<tr class="odd">
+<td><code>b[pos]</code></td>
+<td>Access position <code>pos</code>.</td>
+</tr>
+<tr class="even">
+<td><code>b.to_ulong()</code><br /><code>b.to_ullong()</code></td>
+<td>return a <code>unsigned long</code> value<br />or <code>unsigned long long</code> value</td>
+</tr>
+<tr class="odd">
+<td><code>b.to_string(zero, one)</code></td>
+<td>return a string. <code>zero</code>/<code>one</code> are <code>0</code>/<code>1</code> by default</td>
+</tr>
+</tbody>
+</table>
+<h5 id="c-bitset-modification-method"># C++ <code>bitset</code> Modification Method</h5>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>b.set(pos, v)</code><br /><code>b.set()</code></td>
+<td>set <code>pos</code> to <code>v</code>, <code>v=true</code> by default.<br />If no <code>pos</code> given, set all to 1.</td>
+</tr>
+<tr class="even">
+<td><code>b.reset(pos)</code><br /><code>b.reset()</code></td>
+<td>set pos to 0.<br />If not <code>pos</code> given, set all to 0.</td>
+</tr>
+<tr class="odd">
+<td><code>os &lt;&lt; b</code></td>
+<td>print <code>b</code> as 0/1 string.</td>
+</tr>
+<tr class="even">
+<td><code>is &gt;&gt; b</code></td>
+<td>read character 0/1 into <code>b</code>, <br />stop reading if the next character is not 0/1<br />or there is no enough space in <code>b</code>.</td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

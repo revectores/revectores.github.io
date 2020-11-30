@@ -1,0 +1,210 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Spelling Correction
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< natural_language_processing</a></p>
+
+<h1 id="spelling-correction">Spelling Correction</h1>
+<p>Types of spelling errors:</p>
+<ul>
+<li>Non-word errors</li>
+<li>Real-word errors
+<ul>
+<li>Typographical errors</li>
+<li>Cognitive errors (homophones)</li>
+</ul></li>
+</ul>
+<p>Noisy channel model: We see an observation <span class="math inline">\(x\)</span> of a misspelled word, find the correct word <span class="math inline">\(w\)</span>. <span class="math display">\[
+\begin{align}
+\hat w
+&amp;= \arg\max_{w\in V} P(w|x) \\
+&amp;= \arg\max_{w\in V} \frac{P(x|w)P(w)}{P(x)} \\
+&amp;= \arg\max_{w\in V} P(x|w)P(w)
+\end{align}
+\]</span></p>
+<p>Candidate generation</p>
+<ul>
+<li>Words with similar spelling: small edit distance to error</li>
+<li>Words with similar pronunciation.</li>
+</ul>
+<p>Damerau-Levenshtein edit distance.</p>
+<p>Minimal edit distance between two string, where edits are:</p>
+<ul>
+<li>insertion</li>
+<li>deletion</li>
+<li>substitution</li>
+<li>transposition of two sadjacent letters</li>
+</ul>
+<p>For two strings, <span class="math inline">\(X\)</span> of length <span class="math inline">\(n\)</span> and <span class="math inline">\(Y\)</span> of length <span class="math inline">\(m\)</span>, we define <span class="math inline">\(D(i, j)\)</span> as the edit distance between <span class="math inline">\(X[1..i]\)</span> and <span class="math inline">\(Y[1..j]\)</span> (the first <span class="math inline">\(i\)</span> characters of <span class="math inline">\(X\)</span> and the first <span class="math inline">\(j\)</span> characters of <span class="math inline">\(Y\)</span>), then the edit distance between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is <span class="math inline">\(D(n, m)\)</span>.</p>
+<p>Dynamic programming:</p>
+<p>initialize <span class="math inline">\(D(i, 0) = i, D(0, j) = j\)</span>, <span class="math display">\[
+D(i, j) =
+\min \{D(i-1, j) + 1, D(i, j-1)+1, D(i-1, j-1)+d \} \\
+\]</span> where <span class="math display">\[
+d = \left\{\begin{array}{ll}
+2, ~~~~ X(i)\neq Y(j)  \\
+0, ~~~~ X(i) = Y(j)
+\end{array}\right.
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">N</th>
+<th style="text-align: center;">9</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">#</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">#</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">U</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">N</td>
+</tr>
+</tbody>
+</table>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
