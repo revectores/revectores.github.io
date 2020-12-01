@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Python Library pathlib
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_os</a></p>
+
+<h1 id="python-library-pathlib">Python Library pathlib</h1>
+<h3 id="pathlib-introduction"><code>pathlib</code> Introduction</h3>
+<p><code>pathlib</code> is a object-oriented interface to manipulate paths of operating system. Refer to <a href="">os.path</a> module for The underling low-level operation on paths based on string. <code>pathlib</code> is not designed for recursive directory operation such as directory copying or deleting, refer to <a href="">shutil</a> for these recursive directory operations.</p>
+<p><code>pathlib</code> construct two level hierarchy of path, the pure path and concrete path, the difference is that pure path does not aware of on the actual filesystem but only the abstract string-operating provided, and the concrete path inherit from pure path equipped with file operation support. For each type, the path under Windows and POSIX are also distinguished (but you can also leave it up to Python to decide), hence there are four classes of Path: <code>PurePath</code>, <code>PurePosixPath</code>, <code>PureWindowsPath</code>, and <code>Path</code>, <code>PosixPath</code>, <code>WindowsPath</code>.</p>
+<p>For the most common usage, just use <code>Path</code> by which you could manipulate the file system. For some special cases if you intend to avoid the actual filesystem accessing, or you want to manipulate <code>Windowspath</code> in Unix system, use pure path instead.</p>
+<p>Creating the path object of current working directory is as simple as invoking the constructor, note that when creating <code>PurePath</code> or <code>Path</code> it will be automatically converted to the corresponding specific type based on operating system.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> pathlib <span class="im">import</span> PurePath, Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> PurePath(<span class="st">&#39;.&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>PosixPurePath(<span class="st">&#39;,&#39;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> Path(<span class="st">&#39;.&#39;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>PosixPath(<span class="st">&#39;.&#39;</span>)</span></code></pre></div>
+<h3 id="pathlib.purepath"><code>pathlib.PurePath</code></h3>
+<p>The <code>PurePath</code> class provides symbolic operation on path:</p>
+<ul>
+<li><p><code>PurePath.name()</code>: the final path component.</p></li>
+<li><p><code>PurePath.suffix()</code>: the last file extension of the final component.</p></li>
+<li><p><code>PurePath.suffixes()</code>: list the file extensions of the final component.</p></li>
+<li><p><code>PurePath.stem()</code>: final path component without suffix.</p></li>
+<li><p><code>PurePath.parent()</code>: the logical parent of path.</p></li>
+<li><p><code>PurePath.parents()</code>: the list of logical ancestors of the path.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> p <span class="op">=</span> PurePath(<span class="st">&#39;/first/second/third&#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(p.parents)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>[PurePosixPath(<span class="st">&#39;/first/second&#39;</span>), PurePosixPath(<span class="st">&#39;/first&#39;</span>), PurePosixPath(<span class="st">&#39;/&#39;</span>)]</span></code></pre></div></li>
+</ul>
+<p>Note that since <code>PurePath</code> is unaware of the real filesytem, these operation are pure logical operation, for example,</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> PurePosixPath(<span class="st">&#39;foo/..&#39;</span>).parent</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>PurePosixPath(<span class="st">&#39;foo&#39;</span>)</span></code></pre></div>
+<p>to walk an arbitary path with multiple special notation included, it is recommended to first call <code>Path.resolve()</code> so as to resolve symlinks and eliminate <code>..</code> components.</p>
+<p>Refer to <a href=""><code>pure_path_asserts.py</code></a> for examples about <code>PurePath</code> properties.</p>
+<h3 id="pathlib.path"><code>pathlib.Path</code></h3>
+<p>As mentioned, <code>Path</code> inherits <code>PurePath</code> and equipped with actual filesystem.</p>
+<h5 id="pathlib.path-file-inforamtion-retriving"><code>pathlib.Path</code> File Inforamtion Retriving</h5>
+<p>Checking of seven types of Unix file type are encapsulated as dependent functions:</p>
+<ul>
+<li><code>Path.is_file()</code>: return <code>True</code> if the path points to a <a href="">regular file</a> or a <a href="">symbolic link</a> pointing to a regular file. return <code>False</code> if the path points to another kind of file, or the is a broken symlink, or doesn’t exist.</li>
+<li><code>Path.is_symlink()</code></li>
+<li><code>Path.is_dir()</code></li>
+<li><code>Path.is_fifo()</code></li>
+<li><code>Path.is_char_device()</code></li>
+<li><code>Path.is_block_device()</code></li>
+<li><code>Path.is_socket()</code></li>
+</ul>
+<p>All the seven checking functions also return <code>False</code> if the path does not exist at all. Other errors such as permission errors are propagated.</p>
+<p>Refer to <a href="">unix_file_intro</a> for the details about the file of Unix.</p>
+<p>Besides the file type checking, there are other functions that check the properties of a path:</p>
+<ul>
+<li><p><code>Path.exists()</code>: whether the path points to an existing file or directory.</p></li>
+<li><p><code>Path.is_mount()</code>: return <code>True</code> if the path is a <a href="">mount point</a>: a point in a file system where a different file system has been mounted. On POSIX, the function checks whether <code>path/..</code> is on a different device than <code>path</code>, or whether <code>path/..</code> and <code>path</code> points to the same i-node on the same device. This is not implemented on Windows.</p></li>
+<li><p><code>Path.stat()</code>. Return a <code>os.stat_result</code> object containing information about this path, like <code>os.stat()</code>.</p></li>
+<li><p><code>Path.expanduser()</code>. Return a new path with expanded <code>~</code> and <code>~user</code> constructs, as returned by <code>os.path.expanduser()</code>.</p></li>
+</ul>
+<h5 id="pathlib.path-directory-iteration"><code>pathlib.Path</code> Directory Iteration</h5>
+<p>There are several ways to iterate the directory:</p>
+<ul>
+<li><code>Path.iterdir()</code>. When the path points to a directory, yield path objects of the directory contents. The chilren are yielded in arbitary order, and the special entries <code>.</code> and <code>..</code> are not included. If a file is removed from or added to the directory after creating the iterator, whether an path object for that file be included is unspecified.</li>
+<li><code>Path.glob(pattern)</code>. Glob the given relative <code>pattern</code> in the directory represented by this path, yielding all matching files of any kind. Use <code>**</code> to iterate the directory recursively.</li>
+</ul>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
