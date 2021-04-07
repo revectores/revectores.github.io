@@ -345,7 +345,7 @@ H(x) = f(x_0) + (x-x_0)f&#39;(x_0) + \frac{f(x_1)-f(x_0)-(x_1-x_0)f&#39;(x_0)}{(
 <p>The value of high order polynomial is unstable, the shape polynomial might oscillate in a wide range in order to fit the given points, which is named as <strong>Runge phenomenon</strong>:</p>
 <blockquote>
 <p><strong>Example</strong>. Interpolate <span class="math inline">\(f(x) = \dfrac{1}{1+12x^2}\)</span> at evenly spaced poitns in <span class="math inline">\([-3, 3]\)</span>:</p>
-<p><img src="Runge_phenomenon.png" alt="Screen Shot 2020-10-29 at 10.57.31" style="zoom:25%;" /></p>
+<p><img src="__img__/Runge_phenomenon.png" alt="Screen Shot 2020-10-29 at 10.57.31" style="zoom:25%;" /></p>
 </blockquote>
 <h5 id="segmented-interpolation-steps"># Segmented Interpolation Steps</h5>
 <p>To avoid Runge’s phenomenon, the <strong>segmented interpolation</strong> is introduced. We devide the interpolation interval into multiple small intervals, and simply apply Lagrange or Newton’s method (or other complex methods) to each interval, since there will be less points in each interval, the degree of interpolation polynomial must be reduced.</p>

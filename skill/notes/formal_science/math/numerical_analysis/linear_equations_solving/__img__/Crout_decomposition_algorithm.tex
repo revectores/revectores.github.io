@@ -1,0 +1,33 @@
+\documentclass[varwidth]{standalone}
+%\documentclass[article]
+%\usepackage{xcolor}
+\usepackage{amsmath}
+%\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%\makeatletter
+%\def\BState{\State\hskip-\ALG@thistlm}
+%\makeatother
+
+\begin{document}
+%\nopagecolor
+%\begin{algorithm}
+%\caption{Crout_decomposition}
+\begin{algorithmic}[1]
+\Function{Crout\_decomposition}{$A$, $n$}
+
+\For{$k \gets 1$ to $n$}
+    \For{$i \gets k$ to $n$}
+        \State $l_{ik} \gets a_{ik} - \displaystyle\sum_{r=1}^{k-1}l_{ir}u_{rk}$
+    \EndFor
+    \For{$j \gets k+1$ to $n$}
+        \State $u_{kj} \gets \displaystyle\frac{1}{l_{kk}}\left( a_{kj} - \sum_{r=1}^{k-1}l_{kr}u_{rj} \right)$
+    \EndFor
+\EndFor
+
+\State \Return $L, U$
+
+\EndFunction
+\end{algorithmic}
+%\end{algorithm}
+\end{document}

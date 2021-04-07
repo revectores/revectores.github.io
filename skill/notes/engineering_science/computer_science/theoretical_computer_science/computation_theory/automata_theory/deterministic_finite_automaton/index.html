@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Deterministic Finite Automaton
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< automata_theory</a></p>
+
+<h1 id="deterministic-finite-automaton">Deterministic Finite Automaton</h1>
+<h5 id="dfa-definition"># DFA: Definition</h5>
+<p>A <strong>deterministic finite automaton</strong> is a five-tuple pair <span class="math inline">\(A = (Q, \Sigma, \delta, q_0, F)\)</span>:</p>
+<ol type="1">
+<li>A finite set of states <span class="math inline">\(Q\)</span>.</li>
+<li>A finite set of input symbols <span class="math inline">\(\Sigma\)</span>.</li>
+<li>A start state <span class="math inline">\(q_0 \in Q\)</span>.</li>
+<li>A set of <strong>final (accpeting) states</strong> <span class="math inline">\(F\sub Q\)</span>.</li>
+<li>A <strong>transition function</strong> <span class="math inline">\(\delta\)</span> that takes a state and an input as arguments symbol and returns a state.</li>
+</ol>
+<p><strong>Transition diagram</strong> and <strong>transition table</strong> are two preferred notations for describing automata which provides better intuitive.</p>
+<p>For instance, consider language <span class="math display">\[
+L = \{\omega \mid x01y,~ x,y\in\{0, 1\}^* \}
+\]</span> The five-tuple are <span class="math inline">\(A = (\{q_0, q_1, q_2\}, \{0, 1\}, \delta, q_0, \{q_2\})\)</span>, where the <span class="math inline">\(\delta\)</span> can be given by <span class="math display">\[
+\delta(q_0, 0) = q_1    \qquad
+\delta(q_0, 1) = q_0    \qquad \\
+\delta(q_1, 0) = q_0    \qquad
+\delta(q_1, 1) = q_2    \qquad \\
+\delta(q_2, 0) = q_2    \qquad
+\delta(q_2, 1) = q_2    \qquad \\
+\]</span></p>
+<p>This can be simplified to transition table:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;"><span class="math inline">\(0\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(q_0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(q_1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_2\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(q_2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(q_2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>and visualized as transition diagram:</p>
+<p><img src="__img__/dfa_transition_diagram_demo.png" alt="dfa_demo" style="zoom:25%;" /></p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

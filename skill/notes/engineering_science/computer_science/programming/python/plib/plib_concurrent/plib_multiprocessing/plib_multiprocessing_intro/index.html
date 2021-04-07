@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Python Library `multiprocessing`
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< plib_multiprocessing</a></p>
+
+<h1 id="python-library-multiprocessing">Python Library <code>multiprocessing</code></h1>
+<h3 id="multiprocessing-introduction"><code>multiprocessing</code> Introduction</h3>
+<p>The <code>multiprocessing</code> offers both local and remote concurreny, effectively side-stepping the global interpreter lock by using subprocesses instead of threads, which allows the programmer to fully leverage multiple processors on modern computer.</p>
+<h3 id="multiprocessing.process"><code>multiprocessing.Process</code></h3>
+<h5 id="create-a-process-by-process-instantiation">Create a process by <code>Process</code> instantiation</h5>
+<p>A process is spawned by creating a <code>Process</code> object and then invoking its <code>start()</code> method.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Process</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">def</span> f(name):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;hello&#39;</span>, name)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    p <span class="op">=</span> Process(target<span class="op">=</span>f, args<span class="op">=</span>(<span class="st">&#39;Robert&#39;</span>,))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    p.start()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    p.join()</span></code></pre></div>
+<p>We can use the <code>os</code> module to check the <code>pid</code> and <code>ppid</code> of created process:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Process</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> info(title):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="bu">print</span>(title)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;module name:&#39;</span>, <span class="va">__name__</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;ppid:&#39;</span>, os.getppid())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;pid: &#39;</span>, os.getpid())</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="bu">print</span>()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="kw">def</span> f(name):</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    info(<span class="st">&#39;function f&#39;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="bu">print</span>(<span class="st">&#39;hello&#39;</span>, name)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>    info(<span class="st">&#39;main line&#39;</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    p <span class="op">=</span> Process(target<span class="op">=</span>f, args<span class="op">=</span>(<span class="st">&#39;Robert&#39;</span>,))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    p.start()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    p.join()</span></code></pre></div>
+<p>Source codes are given in <a href="__src__multiprocessing_demo/multiprocessing_demo.py">multiprocessing_demo.py</a> and <a href="__src__multiprocessing_demo_expanded/multiprocessing_demo_expanded.py">multiprocessing_demo_expanded.py</a></p>
+<p>Note that the <code>if __name__ == '__main__'</code> must be given when using multiproessing. We’ll explain the reason soon after introducing the .</p>
+<h5 id="start-methods-of-process">Start methods of <code>Process</code></h5>
+<p>There ways to start a process are supported by <code>multiprocesing</code>:</p>
+<ul>
+<li><code>spawn</code>. The parent starts a fresh Python interpreter process. Unnecessary resources (file descriptors and handles) from the parent will not be inherited.</li>
+</ul>
+<p>Available on Unix and Windows. The default on Windows(since ) and macOS(since Python 3.8).</p>
+<ul>
+<li><code>fork</code>. The parent process uses <code>os.fork()</code> to fork the Python interpreter. All resources of the parent sare inherited by the child process.</li>
+</ul>
+<p>Available on Unix only. The default on Unix.</p>
+<ul>
+<li><code>forkserver</code>. When the program starts and selects the <code>forkserver</code> as start method, a server process is started. From then on, whenever a new process is needed, the parent process connects to the server and requests that it fork a new process.</li>
+</ul>
+<p>The fork server is single threaded so it is safe for it to use <code>os.fork()</code>. Unnecessary resources are not inherited.</p>
+<p>Avaliable on Unix which support passing file descriptors over pipes.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> $$
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< computation_theory</a></p>
+
+<p><span class="math display">\[
+\newcommand{\mF}{\mathcal F}
+\newcommand{\mP}{\mathcal P}
+\]</span></p>
+<h1 id="theory-of-computation">Theory of Computation</h1>
+<h5 id="unsolvable-problem"># Unsolvable Problem</h5>
+<p>A problem can be solved, if and only if there’s a program to correspond.</p>
+<p>A problem can be modeled as a function, here we constrain the domain on <span class="math inline">\(\mathbb{N}\)</span>, all the functions upon <span class="math inline">\(\mathbb{N}\)</span> constrcut a set <span class="math inline">\(\mF\sim2^{\mathbb{N}} = \aleph_1\)</span>. Program is a string of inputable alphabet <span class="math inline">\(\Sigma\)</span>, so all the programs construct a set <span class="math inline">\(\mP\sim\mathbb{N} = \aleph_0\)</span>. This shows that the number of programs is far less than the number of problems, which implies there must be infinite problems which got no program to correspond, i.e. there’re infinite problems unsolvable.</p>
+<h5 id="halting-problem"># Halting Problem</h5>
+<p>With a function and the inputs feed to the function given, is there a function <code>halt</code> to judge weather the program will stop?</p>
+<blockquote>
+<p>Construct a function <code>contradiction</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">void</span> contradication(<span class="dt">char</span> *prog){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="cf">if</span>(halt(prog, prog)) <span class="cf">while</span>(<span class="dv">1</span>);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>}</span></code></pre></div>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

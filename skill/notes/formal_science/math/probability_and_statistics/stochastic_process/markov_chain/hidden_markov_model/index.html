@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Hidden Markov Model
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< markov_chain</a></p>
+
+<h1 id="hidden-markov-model">Hidden Markov Model</h1>
+<h5 id="markov-chain"># Markov Chain</h5>
+<p>The <strong>(First-Order) Markov chain</strong> embodies the <strong>Markov assumption</strong> which states that each state only depends on the last state on a state sequence, in other words, to predict the future, the past doesn’t matter, only the present.</p>
+<p>Formally, the Markov assumption reduces the condition in the conditional probability expression: <span class="math display">\[
+P(q_i = a \mid q_1q_2\ldots q_{i-1}) = P(q_i = a \mid q_{i-1})
+\]</span> Formally, a Markov chain is specified by three components:</p>
+<ol type="1">
+<li><p><strong>Set of <span class="math inline">\(N\)</span> states</strong>. <span class="math inline">\(Q = \{q_1, q_2, \ldots, q_N\}\)</span>.</p></li>
+<li><p><strong>Transition probability matrix</strong> <span class="math inline">\(A = \{a_{ij}\}, 1\le i, j\le n\)</span>. <span class="math inline">\(a_{ij}\)</span> represents the probability moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>. s.t. <span class="math display">\[
+ a_{ij} \ge 0, \quad \sum_{j=1}^N a_{ij} = 1
+ \]</span></p></li>
+<li><p><strong>Initial probability distribution</strong> over states <span class="math inline">\(\pi = [\pi_1, \pi_2, \ldots, \pi_N]\)</span>. <span class="math inline">\(\pi_i\)</span> is the probability that the Markov chain will start in state <span class="math inline">\(i\)</span>. s.t. <span class="math display">\[
+ \pi_i \ge 0, \quad \sum_{i=1}^n \pi_i = 1
+ \]</span></p></li>
+<li></li>
+</ol>
+<p>The markov chain can be described as <a href="">undetermined finite state machine</a>, with probability on the arcs:</p>
+<p>==TODO: Draw undetermined FSM to represent an instance of markov chain.==</p>
+<p>Applying Markov assumption, we’re able to compute the likelihood of any given state sequence: <span class="math display">\[
+\begin{align}
+p(S_1, \cdots, S_T)
+&amp;= p(S_1) \times  p(S_2 \mid S_1) \times p(S_3 \mid S_1, S_2) \times p(S_T \mid S_1, \cdots, S_{T-1}) \\
+&amp;= p(S_1) \times p(S_2 \mid S_1) \times p(S_3 \mid S_2) \times p(S_T \mid S_{T-1}) \\
+&amp;= \pi_{S_1}\prod_{t=1}^{T-1}a_{S_iS_{i+1}}
+\end{align}
+\]</span> where the <span class="math inline">\(\Pi_{S_1}\)</span> is the probability of the initial state.</p>
+<h5 id="hidden-markov-process"># Hidden Markov Process</h5>
+<p>The hidden Markov process is a <strong>doubly stochastic process</strong>:</p>
+<ul>
+<li>Stochastic process of hidden state transition.</li>
+<li>Stochastic process of emission, from hidden state to observable result.</li>
+</ul>
+<p>In context of <a href="">part of speech tagging</a>, the tag conversion from previous word to next word can be considerred as state conversion, and the word (emitted from word tag) can be considered as emission.</p>
+<p>A hidden Markov process is specified by five components:</p>
+<ol type="1">
+<li><p>A set of <span class="math inline">\(N\)</span> states <span class="math inline">\(Q = \{q_1, q_2, \ldots, q_N\}\)</span>.</p></li>
+<li><p>A sequence of <span class="math inline">\(T\)</span> observations <span class="math inline">\(O =o_1o_2 \ldots o_T\)</span>, each one drawn from a <strong>vocabulary</strong> <span class="math inline">\(V = \{v_1, v_2, \ldots, v_V\}\)</span>.</p></li>
+<li><p>State <strong>transition probability matrix</strong> <span class="math inline">\(A = \{a_{ij}\}, 1\le i, j\le n\)</span>. <span class="math inline">\(a_{ij}\)</span> represents the probability moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>. s.t. <span class="math display">\[
+ a_{ij} \ge 0, \quad \sum_{j=1}^N a_{ij} = 1
+ \]</span></p></li>
+<li><p>The <strong>observation likelihoods</strong> or <strong>emission probability</strong> <span class="math inline">\(B = b_i(o_t)\)</span>, each represents the probability of an observation <span class="math inline">\(o_t\)</span> being generated from a state <span class="math inline">\(i\)</span>. <span class="math display">\[
+ \left\{\begin{array}{ll}
+ b_j(k) = p(O_t = v_k \mid q_t = S_j), \quad 1 \le j \le N, 1\le k \le M \\
+ b_j(k) \ge 0 \\
+ \displaystyle\sum_{k=1}^M b_j(k) = 1 
+ \end{array}\right.
+ \]</span></p></li>
+<li><p><strong>Initial probability distribution</strong> over states <span class="math inline">\(\pi = [\pi_1, \pi_2, \ldots, \pi_N]\)</span>. <span class="math inline">\(\pi_i\)</span> is the probability that the Markov chain will start in state <span class="math inline">\(i\)</span>. s.t. <span class="math display">\[
+ \pi_i \ge 0, \quad \sum_{i=1}^n \pi_i = 1
+ \]</span></p></li>
+<li></li>
+</ol>
+<p>Hence we can denote HMM as a triple <span class="math inline">\(\mu = (A, B, \pi)\)</span> or quintuple <span class="math inline">\(\mu = (Q, O, A, B, \pi)\)</span>.</p>
+<p>The hidden Markov models should be characteried by three fundamental problems:</p>
+<ol type="1">
+<li><strong>[Likelihood]</strong> Given an HMM <span class="math inline">\(\lambda\)</span> and an observation sequence <span class="math inline">\(O\)</span>, determine the likelihood <span class="math inline">\(P(O \mid \lambda)\)</span>.</li>
+<li><strong>[Decoding]</strong> Given an observation sequence <span class="math inline">\(O\)</span> and an HMM <span class="math inline">\(\lambda\)</span>, discover the best hidden state sequence <span class="math inline">\(Q\)</span>.</li>
+<li><strong>[Learning]</strong> Given an observation sequence <span class="math inline">\(O\)</span> and the set of states in the HMM, learn the HMM parameters <span class="math inline">\(A, B\)</span>.</li>
+</ol>
+<h5 id="likelihood-forward-algorithm"># Likelihood: Forward Algorithm</h5>
+<p>Problem: Given an HMM <span class="math inline">\(\lambda\)</span> and an observation sequence <span class="math inline">\(O\)</span>, determine the likelihood <span class="math inline">\(P(O \mid \lambda)\)</span>.</p>
+<p>To compute the probability of <span class="math inline">\(O\)</span>, we simply iterate all the possible state transitions sequence <span class="math inline">\(Q\)</span> then sum them up: (all of the probability is computed based on given HMM <span class="math inline">\(\lambda\)</span>, for conciseness, we omit the condition <span class="math inline">\(\lambda\)</span>) <span class="math display">\[
+P(O) = \sum_Q P(O, Q) = \sum_Q P(Q)P(O\mid Q)
+\]</span> where the <span class="math inline">\(p(Q)\)</span> and <span class="math inline">\(p(O \mid Q)\)</span> can be easily computed by the given HMM <span class="math inline">\(\lambda\)</span>: <span class="math display">\[
+\begin{align}
+p(Q) &amp;= \pi_{q_1}a_{q_1q_2}a_{{q_2}{q_3}}\cdots a_{{q_{T-1}}{q_T}}
+\\
+p(O\mid Q) &amp;= b_{q_1}(o_1)b_{q_2}(o_2)\cdots b_{q_T}(o_T)
+\end{align}
+\]</span></p>
+<p>This approach requires <span class="math inline">\(N^T\)</span> multiplication, we apply a dynamic programmin approach named <strong>forward algorithm</strong> to simplify the computation:</p>
+<p>Define <span class="math display">\[
+\alpha_t(j) = P(o_1o_2\ldots o_t, q_t = j \mid \lambda)
+\]</span> to represent the probability of being in state <span class="math inline">\(j\)</span> after seeing the first <span class="math inline">\(t\)</span> observation, which can be computed incrementally as <span class="math display">\[
+\alpha_t(j) = \sum_{i=1}^N \alpha_{t-1}(i)a_{ij}b_j(o_t)
+\]</span> where the three factors</p>
+<ul>
+<li><span class="math inline">\(\alpha_{t-1}(i)\)</span> is the previous forward path probability from previous time step.</li>
+<li><span class="math inline">\(\alpha_{ij}\)</span> is the transition probability from previous state <span class="math inline">\(q_i\)</span> to current state <span class="math inline">\(q_j\)</span>.</li>
+<li><span class="math inline">\(b_j(o_t)\)</span> is the state observation likelihood of the observation symbol <span class="math inline">\(o_t\)</span> given the current state <span class="math inline">\(j\)</span>.</li>
+</ul>
+<p>Then the final probabiltiy <span class="math inline">\(P(O \mid \lambda)\)</span> can be interpreted as <span class="math display">\[
+p(O\mid\lambda) = \sum_{S_i} p(o_1,o_2,\ldots, o_T, q_T=S_i \mid \mu) = \sum_{i=1}^N \alpha_T(i)
+\]</span></p>
+<p>In summary, the forward algorithm can be implemented by three steps:</p>
+<ol type="1">
+<li><p>Initialize: <span class="math display">\[
+ \alpha_1(j) = \pi_j b_j(o_1), 1\le i \le N
+ \]</span></p></li>
+<li><p>Recursion: <span class="math display">\[
+ \alpha_t(j) = \sum_{i=1}^N\alpha_{t-1}(i)a_{ij}b_j(o_t), \quad 1 \le j \le N, 1 &lt; t \le T
+ \]</span></p></li>
+<li><p>Termination: <span class="math display">\[
+ P(O\mid\lambda) = \sum_{i=1}^N \alpha_T(i)
+ \]</span></p></li>
+<li></li>
+</ol>
+<p>Time complexity of forward algorithm: <span class="math inline">\(O(N^2T)\)</span>.</p>
+<p><strong>Backward algorithm</strong> is a similar algorithm with different direction in computation.</p>
+<h5 id="decoding-viterbi-algorithm"># Decoding: Viterbi Algorithm</h5>
+<p>Problem: Given an observation sequence <span class="math inline">\(O\)</span> and an HMM <span class="math inline">\(\lambda\)</span>, discover the best hidden state sequence <span class="math inline">\(Q\)</span>.</p>
+<h5 id="forward-backward-procedure"># Forward-Backward procedure</h5>
+<p>Problem: Given an observation sequence <span class="math inline">\(O\)</span> and the set of states in the HMM, learn the HMM parameters <span class="math inline">\(A, B\)</span>.</p>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>

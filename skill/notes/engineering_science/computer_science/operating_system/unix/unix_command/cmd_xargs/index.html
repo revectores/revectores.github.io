@@ -13,6 +13,19 @@
 <p><a href="../"><< unix_command</a></p>
 
 <h1 id="linux-command---xargs">Linux Command - xargs</h1>
+<h5 id="motivation"># Motivation</h5>
+<p>Some shell commands are designed to accept parameters from both <a href="">stdin</a> or the parameters and can even hardly be distinguished sometimes, but this is not always the case. There is a huge difference between: The shell command is able to receive input from pipeline only if it accepts input from stdin.</p>
+<p>For instance, if you want to search for some file with specific names and add them into track, you might want something like this</p>
+<pre class="shell"><code>&gt; find * -type f -name &quot;*xargs*&quot; | git add
+Nothing specified, nothing added.
+Maybe you wanted to say &#39;git add .&#39;?</code></pre>
+<p>But this will not work since <code>git add</code> does not read from stdin. <code>xargs</code> provides help in this case, by converting the stdin to command parameters:</p>
+<pre class="shell"><code>&gt; find * -type f -name &quot;*xargs*&quot; | xargs git add</code></pre>
+<p>another example is the <code>echo</code> command:</p>
+<pre class="shell"><code>&gt; echo hello | echo
+
+&gt; echo hello | xargs echo
+hello</code></pre>
 
 
 </body>

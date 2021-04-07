@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title> Unix IPC
+  <title> Interprocess Communication
  </title>
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
   <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
@@ -12,7 +12,17 @@
 
 <p><a href="../"><< unix</a></p>
 
-<h1 id="unix-ipc">Unix IPC</h1>
+<h1 id="interprocess-communication">Interprocess Communication</h1>
+<p><strong>Interprocess communication(IPC)</strong> are required since processes are seperated different <a href="">virtual address space</a>. There are multiple IPC mechanism in modern Unix systems:</p>
+<ul>
+<li><strong>Pipe</strong>.</li>
+<li><strong>FIFO</strong> or <strong>named pipe</strong>.</li>
+<li><strong>Message Queue</strong>.</li>
+<li><strong>Signal</strong>.</li>
+<li><strong>Semaphore</strong>.</li>
+<li><strong>Shared Memory</strong>.</li>
+<li><a href=""><strong>Socket</strong></a>. Socket interface can be used to both local machine IPC and <strong>network IPC</strong>. Socket interface is a general-purpose interface which provides multiple transportation-level protocols support.</li>
+</ul>
 
 
 </body>

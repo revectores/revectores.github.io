@@ -1,0 +1,334 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> Numerical Methods for Ordinary Differential Equation Initial Value Problem
+ </title>
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/newsprint.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/blog.css"> 
+  <link rel="stylesheet" type="text/css" href="http://revectores.com/static/css/code.css"> 
+</head>
+<body>
+
+<p><a href="../"><< numerical_analysis</a></p>
+
+<h1 id="numerical-methods-for-ordinary-differential-equation-initial-value-problem">Numerical Methods for Ordinary Differential Equation Initial Value Problem</h1>
+<p><span class="math display">\[
+\newcommand{\d}{\text d}
+\newcommand{\dx}{\d x}
+\newcommand{\dy}{\d y}
+\newcommand{\dt}{\d t}
+\newcommand{\dd}[2]{\dfrac{\d #1}{\d #2}}
+\newcommand{\dyx}{\dd{y}{x}}
+\]</span></p>
+<h3 id="introduction">1. Introduction</h3>
+<h5 id="numerical-methods-for-ode-ivp"># Numerical Methods for ODE IVP</h5>
+<p>Recall the general form of initial value problem(IVP) of ODE <span class="math display">\[
+\left\{\begin{array}{ll}
+\dyx = f(x, y) \\
+y(a) = y_0
+\end{array}\right.
+\quad a\le x \le b
+\]</span> For most of the IVPs, it is impossible to determine the analytical solution, where the numerical methods must be applied.</p>
+<p>There are three primary numerical methods to solve ODE IVP:</p>
+<ul>
+<li><strong>Finite difference method(FDM)</strong> aims to give approximations for specific points <span class="math inline">\(\{(x_n, y(x_n)), n = 1, 2, \ldots, m \}\)</span>, which will be introduced in this document.</li>
+<li>Finite element method.</li>
+<li>Finite volume method.</li>
+</ul>
+<h5 id="order-of-precision"># Order of Precision</h5>
+<p>When we estimate <span class="math inline">\(y_{n+1}\)</span> using <span class="math inline">\(y_0\)</span>, the truncation error in each step (named <strong>local truncation error</strong>) will accumulate to <strong>global truncation error</strong>, which determines whether the method converges.</p>
+<p>A method with local truncation error <span class="math inline">\(T_{n+1} = O(h^{p+1})\)</span> is <strong><span class="math inline">\(p\)</span>-order</strong>, since with <span class="math inline">\(T_{n+1} = O(h^{p+1})\)</span> the method will be accurate for all polynomial functions with order is <span class="math inline">\(p\)</span> at most.</p>
+<h3 id="euler-method">2. Euler Method</h3>
+<p>Recall that derivative can be approximated by <a href="">difference quotient</a>, includes forward/backward/central difference quotients, which gives forward/backward/central Euler method respectively.</p>
+<p>Equivalently, we can also integrate the differential equation <span class="math display">\[
+\int_{x_n}^{x_{n+1}}y&#39;(x)\dx = \int_{x_n}^{x_{n+1}}f(x, y)\dx
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+y(x_{n+1}) &amp;= y(x_n) + \int_{x_n}^{x_{n+1}}f(x, y)\dx \\
+           &amp;= y(x_n) + \int_{x_n}^{x_{n+1}}y&#39;(t)\dt
+\end{align}
+\]</span></p>
+<p>By using the left rectangle/right rectangle/trapezoid to estimate the integral, it gives forward Euler method/backward Euler method/trapezoid method respectively.</p>
+<h5 id="forward-euler-method"># Forward Euler Method</h5>
+<p>Use forward difference quotient to estimate derivative: <span class="math display">\[
+f(x_n, y_n) = y&#39;(x_n) = \frac{y(x_{n+1}) - y(x_n)}{h}
+\]</span></p>
+<p><span class="math display">\[
+y_{n+1} = y_n + hf(x_n, y_n)
+\]</span> The geometric interpretation of foward euler method is evident: It use the tangent line at <span class="math inline">\((x_n, y_n)\)</span> to estimate the curve and compute <span class="math inline">\(y_{n+1}\)</span>. Apparently, it can overestimate <span class="math inline">\(y_n\)</span> if <span class="math inline">\(y&#39;&#39; &lt; 0\)</span>, or underestimate the value if <span class="math inline">\(y&#39;&#39; &gt; 0\)</span>.</p>
+<p>Since Euler method is simply the linear truncation of Taylor series, the local truncation error of Euler method is <span class="math inline">\(O(h^2)\)</span>, that is, forward Euler method is first order method.</p>
+<h5 id="backward-euler-method"># Backward Euler Method</h5>
+<p>Use backaward difference quotient to estimate derivative: <span class="math display">\[
+f(x_{n+1}, y_{n+1}) = y&#39;(x_{n+1}) = \frac{y(x_{n+1}) - y(x_n)}{h}
+\]</span></p>
+<p><span class="math display">\[
+y_{n+1} = y_n + hf(x_{n+1}, y_{n+1})
+\]</span></p>
+<p>Note that the backward Euler method is an <strong>implicit method</strong>, which requires <span class="math inline">\(y_{n+1}\)</span> to compute <span class="math inline">\(y_{n+1}\)</span>. This paradox can be resolved by providing the initial value by one explicit method (for instance, forward Euler method) and iterate until the value converges. Formally, this is what we called <strong>Picard iteration</strong>: <span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1}^{(0)} = y_n + hf(x_n, y_n) \\
+y_{n+1}^{(k+1)} = y_n + hf(x_{n+1}, y_{n+1}^{(k)})
+\end{array}\right.
+\quad k \in \N
+\]</span> It can be proved that for sufficiently small <span class="math inline">\(h\)</span> the iteration must converge, formally, for <span class="math inline">\(\varphi(y) = y_n + hf(x_{n+1}, y)\)</span>, <span class="math inline">\(\varphi&#39;(h) = hf_y(x_n, y)\)</span>, and for sufficiently small <span class="math inline">\(h\)</span> we have <span class="math inline">\(|hf_y(x_n, y)|\le hL &lt; 1\)</span>, where <span class="math inline">\(L\)</span> is the Lipschitz constant.</p>
+<p>In pratice, the result given by explicit method is close enough to actual value, and it’s acceptable to apply simple <strong>Predictor–corrector method</strong>, which only executes the implicit method once: <span class="math display">\[
+\left\{\begin{array}{ll}
+\overline{y}_{n+1} = y_n + hf(x_n, y_n) \\
+y_{n+1} = y_n + hf(x_{n+1}, \overline y_{n+1})
+\end{array}\right.
+\]</span></p>
+<h5 id="central-difference-form"># Central Difference Form</h5>
+<p>Use central difference quotient to estimate derivative: <span class="math display">\[
+f(x_n, y_n) = y&#39;(x_n) = \frac{y(x_{n+1}) - y(x_{n-1})}{2h}
+\]</span></p>
+<p><span class="math display">\[
+y_{n+1} = y_{n-1} + 2hf(x_n, y_n)
+\]</span></p>
+<p>as we’ll introduced in <a href="">Stability of Numerical Methods</a>, the central difference form is not stable and is not used in practice.</p>
+<h5 id="trapezoid-method-and-refined-euler-method"># Trapezoid Method and Refined Euler Method</h5>
+<p>Use trapezoid to estimate the integral: <span class="math display">\[
+\begin{align}
+\int_{x_n}^{x_{n+1}}y&#39;(t)\dt
+&amp;= y(x_{n+1}) - y(x_n) \\
+&amp;= \frac{1}{2}(x_{n+1} - x_n)(y&#39;(x_{n+1})  + y&#39;(x_n)) \\
+&amp;= \frac{h}{2}(f(x_n, y(x_n)) + f(x_{n+1}, y(x_{n+1})))
+\end{align}
+\]</span> That is, <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{2}(f({x_n}, y_n) + f(x_{n+1}, y_{n+1}))
+\]</span> Note that trapezoid method is implicit, by applying the explicit forward Euler as the first step, we have the <strong>refined Euler method</strong>: <span class="math display">\[
+\left\{\begin{array}{ll}
+\overline{y}_{n+1} = y_n + hf(x_n, y_n) \\
+y_{n+1} = y_n + \dfrac{h}{2}(f(x_n, y_n) + f(x_{n+1}, \overline{y}_{n+1}))
+\end{array}\right.
+\quad
+\]</span></p>
+<p>or <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{2}(f(x_n, y_n) + f(x_{n+1}, y_n + hf(x_n, y_n))
+\]</span></p>
+<h3 id="runge-kutta-method">3. Runge-Kutta Method</h3>
+<p>Taylor expand <span class="math inline">\(y(x+h)\)</span> at <span class="math inline">\(x\)</span>: <span class="math display">\[
+\begin{align}
+y(x+h)
+&amp;= y(x) + hy&#39;(x) + \frac{h^2}{2!}y&#39;&#39;(x) + \cdots + \frac{h^p}{p!}y^{(p)}(x) + \frac{h^{(p+1)}}{(p+1)!}y^{(p+1)}(x + \theta h) \\
+&amp;= y(x) + hy&#39;(x) + \frac{h^2}{2!}y&#39;&#39;(x) + \cdots + \frac{h^p}{p!}y^{(p)}(x) + T
+\end{align}
+\]</span> where <span class="math inline">\(0\le \theta \le 1, T = O(h^{p+1})\)</span>.</p>
+<p>Let <span class="math inline">\(x = x_n\)</span>, <span class="math display">\[
+y(x_{n+1}) = y(x_n) + hy&#39;(x_n) + \frac{h^2}{2!}y&#39;&#39;(x_n) + \cdots + \frac{h^p}{p!}y^{(p)}(x_n) + T_{n+1}
+\]</span> For <span class="math inline">\(p = 1\)</span>, <span class="math display">\[
+y(x_{n+1}) = y(x_n) + hf(x_n, y(x_n)) + T_{n+1}
+\]</span> which is the forward Euler formula.</p>
+<p>For <span class="math inline">\(p=2\)</span>, <span class="math display">\[
+y(x_{n+1})
+= y(x_n) + hy&#39;(x_n) + \frac{h^2}{2!}y&#39;&#39;(x_n) + T_{n+1}
+\]</span> where <span class="math display">\[
+y&#39;&#39;(x_n) = f_x(x_n, y(x_n)) + f_y(x_n, y(x_n))f(x_n, y(x_n))
+\]</span> to avoid the computation of partial derivatives, we try to use the linear combination <span class="math display">\[
+c_1f(x_n, y(x_n)) + c_2f(x_n + ah, y(x_n) + bhf(x_n, y(x_n)))
+\]</span> to approximate <span class="math inline">\(y&#39;&#39;(x_n)\)</span>.</p>
+<p>We have <span class="math display">\[
+\left\{\begin{array}{ll}
+c_1 + c_1 = 1 \\
+2c_2a = 1 \\
+2c_2b = 1
+\end{array}\right.
+\]</span> Let <span class="math inline">\(c_1 = \dfrac{1}{2}, c_2 = \dfrac{1}{2}, a = 1, b =1\)</span>, we get one of 2nd order Runge-Kutta formula: <span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{2}(k_1 + k_2) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + h, y_n + hf(x_n, y_n))
+\end{array}\right.
+\]</span> which form is the same as the <strong>refined Euler formula</strong>.</p>
+<p>Another coffecients combination <span class="math inline">\(c_1 = 0, c_2 = 0, a = \dfrac{1}{2}, b = \dfrac{1}{2}\)</span> is called the <strong>middle point formula</strong>:</p>
+<p>The truncation error of 2nd order Runge-Kutta formula is <span class="math inline">\(O(h^3)\)</span>. <span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + hk_2 \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{h}{2}, y_n + \dfrac{h}{2}k_1\right)
+\end{array}\right.
+\]</span></p>
+<p>Similarly, we have the 3rd-order and 4th-order Runge-Kutta formula:</p>
+<p>3rd-order: <span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{6}(k_1 + 4k_2 + k_3) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{h}{2}, y_n + \dfrac{h}{2}k_1\right) \\
+k_3 = f(x_n + h, y_n - hk_1 + 2hk_2)
+\end{array}\right.
+\]</span></p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{4}(k_1 + 3k_3) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{h}{3}, y_n + \dfrac{h}{3}k_1\right) \\
+k_3 = f\left(x_n + \dfrac{2}{3}h, y_n + \dfrac{2}{3}hk_2\right)
+\end{array}\right.
+\]</span></p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{9}(2k_1 + 3k_2 + 4k_3) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{h}{2}, y_n + \dfrac{h}{2}k_1\right) \\
+k_3 = f\left(x_n + \dfrac{3}{4}h, y_n + \dfrac{3}{4}hk_2\right)
+\end{array}\right.
+\]</span></p>
+<p>4th-order: <span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{1}{2}h, y_n + \dfrac{1}{2}hk_1\right) \\
+k_3 = f\left(x_n + \dfrac{1}{2}h, y_n + \dfrac{1}{2}hk_2\right) \\
+k_4 = f(x_n + h, y_n + hk_3)
+\end{array}\right.
+\]</span></p>
+<p><span class="math display">\[
+\left\{\begin{array}{ll}
+y_{n+1} = y_n + \dfrac{h}{8}(k_1 + 3k_2 + 3k_3 + k_4) \\
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \dfrac{1}{3}h, y_n + \dfrac{1}{3}hk_1\right) \\
+k_3 = f\left(x_n + \dfrac{2}{3}h, y_n + \dfrac{1}{3}hk_1 + hk_2\right) \\
+k_4 = f(x_n + h, y_n + hk_1 - hk_2 + hk_3)
+\end{array}\right.
+\]</span></p>
+<h3 id="linear-multistp-method">3. Linear Multistp Method</h3>
+<p>The IVP <span class="math inline">\(\dyx = f(x, y)\)</span> is equivalent to compute integral <span class="math display">\[
+y(x) = y(x^*) + \int_{x^*}^x f(x, y)\dx
+\]</span></p>
+<p>Specifically, in interval <span class="math inline">\([x_{n-p}, x_{n+1}]\)</span> we have <span class="math display">\[
+y(x_{n+1}) = y(x_{n-p}) + \int_{x_{n-p}}^{x_{n+1}}f(x, y)\dx
+\]</span></p>
+<p>Now we’re able to solve the IVP by computing the integral with numerical methods. This is what we called <strong>linear multistep method</strong>. As shown, <span class="math inline">\(p\)</span> specifies the interval of integral, and we introduce <span class="math inline">\(q\)</span> to denote number of integral segment (that is, <span class="math inline">\(q+1\)</span> interpolation points):</p>
+<ul>
+<li><p>For <strong>explicit form</strong>, the interpolation pointers are <span class="math display">\[
+  \{x_n, x_{n-1}, \ldots, x_{n-q}\}
+  \]</span></p></li>
+<li><p>For <strong>implicit form</strong>, the interpolation pointers are <span class="math display">\[
+  \{x_{n+1}, x_n, \ldots x_{n+1-q}\}
+  \]</span></p></li>
+</ul>
+<blockquote>
+<p><strong>Example</strong>. Construct the explicit form of linear multistep method with <span class="math inline">\(p=1, q=2\)</span>.</p>
+<p><strong>Solution</strong>. The integral interval is <span class="math inline">\([x_{n-1}, x_{n+1}]\)</span>, integral pointers are <span class="math inline">\(\{x_n, x_{n-1}, x_{n-2}\}\)</span>. <span class="math display">\[
+y_{n+1} = y_{n-1} + \int_{x_{n-1}}^{x_{n+1}}f(x, y)\dx
+\]</span> where <span class="math display">\[
+\begin{align}
+\int_{x_{n-1}}^{x_{n+1}}f(x, y)\dx
+&amp;= \int_{x_{n-1}}^{x_{n+1}} \left[l_0(x) f(x_n, y_n) + l_1(x) f(x_{n-1}, y_{n-1}) + l_2(x) f(x_{n-2}, y_{n-2})\right] \dx \\
+&amp;= \int_{x_{n-1}}^{x_{n+1}}l_0(x)f(x_n, y_n)\dx
+ + \int_{x_{n-1}}^{x_{n+1}}l_1(x)f(x_{n-1}, y_{n-1})\dx 
+ + \int_{x_{n-1}}^{x_{n+1}}l_2(x)f(x_{n-2}, y_{n-2})\dx 
+\end{align}
+\]</span></p>
+<p>Compute the cofficients: $$ <span class="math display">\[\begin{align}
+&amp; \int_{x_{n-1}}^{x_{n+1}} l_0(x)\dx
+= \int_{x_{n-1}}^{x_{n+1}} \frac{(x-x_{n-2})(x-x_{n-1})}{(x_n - x_{n-2})(x_n - x_{n-1})}\dx
+= \frac{7}{3}h \\
+
+&amp; \int_{x_{n-1}}^{x_{n+1}} l_1(x)\dx
+= \int_{x_{n-1}}^{x_{n+1}} \frac{(x-x_{n})(x-x_{n-2})}{(x_{n-1} - x_{n})(x_{n-1} - x_{n-2})}\dx
+= -\frac{2}{3}h \\
+
+&amp; \int_{x_{n-1}}^{x_{n+1}} l_2(x)\dx
+= \int_{x_{n-1}}^{x_{n+1}} \frac{(x-x_{n})(x-x_{n-1})}{(x_{n-2} - x_{n})(x_{n-2} - x_{n-1})}\dx
+= \frac{1}{3}h \\
+\end{align}\]</span> $$</p>
+<p>Hence the formula is <span class="math display">\[
+y_{n+1} = y_{n-1} + \frac{h}{3}\left[7f(x_n, y_n) - 2f(x_{n-1}, y_{n-1}) + f(x_{n-2}, y_{n-2})\right]
+\]</span> The truncation error <span class="math inline">\(R(x)\)</span> <span class="math display">\[
+R(x) = \frac{1}{6}\int_{x_{n-1}}^{x_{n+1}} y^{(4)}\eta(x)(x - x_n)(x - x_{n-1})(x - x_{n-2})\dx
+\]</span></p>
+</blockquote>
+<p>The linear multistep method form with <span class="math inline">\(p=0\)</span> is called <span class="math inline">\((q+1)\)</span>-order (explicit/implicit) Adams formula. For instances:</p>
+<p>Let <span class="math inline">\(p = 0, q = 1\)</span> in explicit form, we have 2nd-order explicit Adams formula <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{2}[3f(x_n, y_n) - f(x_{n-1}, y_{n-1})]
+\]</span> Let <span class="math inline">\(p=0, q = 2\)</span> in explicit form, we have 3rd-order explicit Adams formula <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{12}(23f(x_n, y_n) - 16f(x_{n-1}, y_{n-1}) + 5f(x_{n-2}, y_{n-2}))
+\]</span></p>
+<p>Let <span class="math inline">\(p = 0, q = 1\)</span> in implicit form, we have 2nd-order implicit Adams formula</p>
+<p><span class="math display">\[
+y_{n+1} = y_n + \frac{h}{2}(f(x_n, y_n) + f(x_{n+1}, y_{n+1}))
+\]</span> which is the trapezoid formula.</p>
+<p>Let <span class="math inline">\(p = 0, q=2\)</span> in implicit form, we have 3rd-order implicit Adams formula <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{12}[5f(x_{n+1}, y_{n+1}) + 8f(x_n, y_n) - f(x_{n-1}, y_{n-1})]
+\]</span> Let <span class="math inline">\(p = 0, q = 3\)</span> in implicit form, we have 4th-order implicit Adams formula <span class="math display">\[
+y_{n+1} = y_n + \frac{h}{24}(9f(x_{n+1}, y_{n+1} + 19f(x_n, y_n) - 5f(x_{n-1}, y_{n-1}) + f(x_{n-2}, y_{n-2})))
+\]</span></p>
+<h3 id="numerical-methods-for-ordinary-differential-euqations">4. Numerical Methods for Ordinary Differential Euqations</h3>
+<p>The equations with multiple first-order ODEs <span class="math display">\[
+\left\{\begin{array}{ll}
+\dd{y_1}{x} = f_1(x, y_1, y_2, \ldots, y_m) \\
+\dd{y_2}{x} = f_1(x, y_1, y_2, \ldots, y_m) \\
+\ldots \\
+\dd{y_m}{x} = f_1(x, y_1, y_2, \ldots, y_m) \\
+y_1(a) = \eta_1 \\
+y_2(a) = \eta_2 \\
+\ldots \\
+y_m(a) = \eta_m
+\end{array}\right.
+\]</span> can be written as vector form <span class="math display">\[
+\left\{\begin{array}{ll}
+\dd{Y}{X} = F(X, Y) \\
+Y(A) = \eta
+\end{array}\right.
+\]</span> where <span class="math display">\[
+Y(X) =
+\begin{bmatrix}
+y_1(x) \\
+y_2(x) \\
+\vdots \\
+y_m(x)
+\end{bmatrix}
+,
+F(X,Y) =
+\begin{bmatrix}
+f_1(x, y_1, y_2, \ldots, y_m) \\
+f_2(x, y_1, y_2, \ldots, y_m) \\
+\vdots \\
+f_m(x, y_1, y_2, \ldots, y_m) \\
+\end{bmatrix}
+,
+\eta =
+\begin{bmatrix}
+\eta_1 \\
+\eta_2 \\
+\vdots \\
+\eta_m
+\end{bmatrix}
+\]</span> All the methods of single ODE can be applied to the vector form.</p>
+<h3 id="stability-of-numerical-methods">5. Stability of Numerical Methods</h3>
+<p>To determine the statbility of numerical methods, we apply the method to differential equation <span class="math display">\[
+\left\{\begin{array}{ll}
+\dyx = \lambda y \\
+y(a) = y_0
+\end{array}\right.
+\quad x \in [a, b],~\mathcal{Re}(\lambda)&lt; 0
+\]</span> One method is stable, if and only if there exists an area <span class="math inline">\(\Omega\)</span> in left half plain which makes the root of character equation of difference equation less than 1 for any <span class="math inline">\(\lambda h\in \Omega\)</span>.</p>
+<blockquote>
+<p><strong>Example</strong>. Discuss the stability of forward Euler method, backward Euler method, and the central difference form.</p>
+<p><strong>Forward Euler method</strong>. Apply forward Euler formula to ODE <span class="math inline">\(\dyx = \lambda y\)</span>, we have <span class="math display">\[
+y_{n+1} = y_n + \lambda hy_n
+\]</span> The corresponding characteristic equation <span class="math display">\[
+\rho(\xi) = \xi - (1 + \lambda h ) = 0
+\]</span> the characteristic root $= 1 + h $. When <span class="math inline">\(\lambda h\)</span> located in the unit circle centered at <span class="math inline">\((-1, 0)\)</span>, <span class="math inline">\(|\xi| &lt; 1\)</span>. Hence the Euler method is absolutely stable.</p>
+<p><strong>Backward Euler method</strong>. Apply backward Euler formula <span class="math inline">\(y_{n+1} = y_n + hf(x_{n+1}, y_{n+1})\)</span> to <span class="math inline">\(\dyx = \lambda y\)</span>, we have <span class="math display">\[
+y_{n+1} = y_n + \lambda h y_{n+1}
+\]</span> The corresponding character equation <span class="math display">\[
+\rho(\xi) = (1 - \lambda h)\xi - 1 = 0
+\]</span> The characteristic root <span class="math inline">\(\xi = \dfrac{1}{1 - \lambda h}\)</span>, when <span class="math inline">\(\mathcal{Re}(\lambda) &lt; 0\)</span> we have <span class="math inline">\(|xi| &lt; 1\)</span>. Hence the Euler method is absolutely stable.</p>
+<p><strong>Central differencce form</strong>. Apply central difference form <span class="math inline">\(y_{n+1} = y_{n-1} + 2hf(x_n, y_n)\)</span> to <span class="math inline">\(\dyx = \lambda y\)</span>, we have <span class="math display">\[
+y_{n+1} = y_{n-1} + 2\lambda h y_n
+\]</span> The corresponding character equation <span class="math display">\[
+\rho(\xi) = \xi^2 + 2\lambda h + 1 = 0
+\]</span> The characteristic root <span class="math display">\[
+\xi_1 = \lambda h + \sqrt{1 + \lambda^2h^2}, \quad \xi_2 = \lambda h - \sqrt{1 + \lambda^2h^2}
+\]</span> and the general solution is <span class="math display">\[
+\rho_n = a\xi_1^n + b\xi_2^n
+\]</span> For all <span class="math inline">\(\mathcal{Re}(\lambda) &lt; 0\)</span> we have <span class="math inline">\(|\xi_2(\lambda h)| &gt; 1\)</span>. Hence the central difference form is not stable.</p>
+</blockquote>
+
+
+</body>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
