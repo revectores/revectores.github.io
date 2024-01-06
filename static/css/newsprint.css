@@ -604,3 +604,8 @@ input {
 	background: #777;
 	color: white;
 }
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
