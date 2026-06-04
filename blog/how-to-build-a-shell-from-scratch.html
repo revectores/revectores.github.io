@@ -1,0 +1,202 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How to Build A Shell From Scratch</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/code.css">
+  <script src="../static/js/copy-code.js"></script>
+</head>
+
+<body>
+  <p><a href="../index.html#blogs">&larr; Back</a></p>
+
+  <h1>How to Build A Shell From Scratch</h1>
+  <p style="text-align:center; color:#888;">October 18, 2020</p>
+
+  <h3>1. Introduction</h3>
+
+  <p>I've just hand in the homework of <a href="http://ybwu.org/ecnu-oslabs/projects/myshell/docs/shell.html">Linux Operating System</a> about creating a basic shell today. The most of functions are done two weeks ago but the requirement about details such as blank ignorance and pipe force me to reconsider the design of code structure again and again.</p>
+
+  <p>This tutorial, as a review of work, introduce how to use the fundamental Unix system call to build a useful shell with background, redirection, and pipe supporting. The source code is open at <a href="https://github.com/revectores/resh">Github</a>.</p>
+
+  <p>Why bother building a naive shell when there already are so many great shells like <a href="https://fishshell.com/">fish</a>, <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>? First, shell is a great window to learn about the fundamental Unix concepts, including process model, process communication, and file operation, to be more specific, and the usage of system call like <code>fork()</code>, <code>exec()</code>, <code>wait()</code>, <code>pipe()</code>.</p>
+
+  <p>Second, in many cases there is not practical benefit to create a general purpose shell, but a command line user interface is very common, like the interactive command interpreter provided by Python, node.js, and gdb, all of them can be regarded as the <strong>domain specific shell</strong>.</p>
+
+  <p>In summary, learning about how to make a shell is quite useful theoretically and practically, so let's build it!</p>
+
+  <h3>2. Main Loop</h3>
+
+  <p>A shell continue to consume line by line from user until exit. Hence the framework of a shell must be a loop that keep processing inputs from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> based on line:</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    // We assume the input is less than 1024 chars.
+    char input[1024];
+    char* r;
+
+    while((r = gets(input)) != NULL) {
+        printf("%s\n", r);
+    }
+
+    return 0;
+}</code></pre>
+
+  <p>where we use function <a href="https://man7.org/linux/man-pages/man3/gets.3.html"><code>gets</code></a> to read from standard input until it reaches the newline <code>\n</code> and store the string in <code>input</code> by removing <code>\n</code> beforehand. Try this by complie and run the executable:</p>
+
+<pre><code>gcc sh.c -o sh
+./sh
+some input
+some input</code></pre>
+
+  <p>For now we receive input and print it out as the same. Not quite useful, of course. Next we might try to response to some simple command, like <code>pwd</code> that prints the current working directory and <code>exit</code> to quit, this is simple by invoking the <code>getcwd</code> system call and <code>return</code>:</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(){
+    char input[1024];
+    char* r;
+
+    // use prompt to mark the executing program
+    printf("&gt; ");
+    while((r = gets(input)) != NULL) {
+        if (strcmp(r, "pwd") == 0) {
+            char cwd[80];
+            printf("%s\n", getcwd(cwd, sizeof(cwd)));
+        }
+        if (strcmp(r, "exit") == 0) {
+            return 0;
+        }
+        printf("&gt; ");
+    }
+
+    return 0;
+}</code></pre>
+
+  <p>This time we just simply ignore all other commands. We also added the prompts to mark a shell environment and distinguish the inputs from outputs (You can give your shell a name by placing it before <code>&gt; </code> like <code>resh &gt; </code>!).</p>
+
+  <h3>3. Parameters Parser</h3>
+
+  <p>For now we are only able to compare the single command, while in real world there are multiple parameters passed into a command, hence a parser that split the input into parameters is required. To organize the codes, we extract the parsing and command execting process into seperate function, named <code>parse()</code> and <code>route()</code>, and store the parameters in <code>params</code>:</p>
+
+<pre><code>int main(){
+    char input[1024];
+    char* params[128];
+    char* r;
+
+    printf("&gt; ");
+    while((r = gets(input)) != NULL) {
+        parse(input, params);
+        route(params);
+        printf("&gt; ");
+    }
+
+    return 0;
+}</code></pre>
+
+  <p>We use <code>strtok()</code> in <code>parser()</code>, which is designed to split the string into tokens by calling repeatly and returns the start pointer of one token in each call. The first call requires the start pointer of string as the first argument, while <code>NULL</code> for latter calls. Refer to the manual entry of <a href="https://man7.org/linux/man-pages/man3/strtok.3.html"><code>strtok()</code></a> for more details.</p>
+
+<pre><code>int parse(char* input, char** params){
+    int index = 0;
+
+    char* param;
+
+    params[index++] = strtok(input, " ");
+    while ((param = (strtok(NULL, " ")))){
+        params[index++] = param;
+    }
+
+    params[index] = NULL;
+    return index;
+}</code></pre>
+
+  <p>We print the parameters sequentially to build a naive <code>echo</code>:</p>
+
+<pre><code>int route(char** params){
+    char* cmd = params[0];
+
+    if (strcmp(cmd, "echo") == 0) {
+        int index = 1;
+        while(params[index]) {
+            printf("%s ", params[index]);
+            index++;
+        }
+        printf("\n");
+    }
+
+    if (strcmp(cmd, "pwd") == 0) {
+        char cwd[80];
+        printf("%s\n", getcwd(cwd, sizeof(cwd)));
+    }
+
+    if (strcmp(cmd, "exit") == 0) {
+        // exit(0) to exit from the process,
+        // instead of just return to main function.
+        exit(0);
+    }
+
+    return 0;
+}</code></pre>
+
+  <p>Notice that our <code>echo</code> does not simply print the original string but parse it first, as a result any redundant blanks between parameters will be omitted:</p>
+
+<pre><code>gcc sh.c -o sh
+./sh
+&gt; echo     1    2    3
+1 2 3</code></pre>
+
+  <p>The complete codes example can be found in <code>parameters_parser.c</code>.</p>
+
+  <p>For users, it is more common to invoke some powerful programs instead of those shell built-in, such as <code>find</code>, <code>grep</code>. That is, we must empower our shell the ability to execute other programs, which require system calls <code>fork()</code> and <code>exec()</code>. We'll introduce these in next section, and equip our shell with the ability of all executables.</p>
+
+  <h3>4. <code>fork-exec</code> Routine</h3>
+
+  <p>Besides invoking the system call directly, the more common case is to call another executable program to do the job, such as <code>ls</code>, <code>grep</code>, <code>sed</code>, and all the powerful tools. Unlike the Python's <a href="https://docs.python.org/3/library/subprocess.html"><code>subprocess</code></a> library or Go's <a href="https://golang.org/pkg/os/exec/"><code>os/exec</code></a> package, which create a different new process, the Unix system call <code>exec()</code> behaves different: It does not create a new one but just change the current process to the target, and as a result, the shell will no longer exists if we just <code>exec()</code> to another program. So what should we do to both kept the shell but also run another program?</p>
+
+  <p>The answer is we must call <code>fork()</code> to create a child process before we <code>exec()</code>, then we let the child process to <code>exec()</code>, by which the shell keeps running. The <code>fork()</code> command creates a child process that copys the parent process exactly, and starts at the next instruction right after <code>fork()</code>. To help the process distinguish which of process is executing, different return values are assigned to parent process (returns the process id of child) and child process (returns 0) of <code>fork()</code>. Here is a demo showing how it works:</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int main(){
+    int r = fork();
+    if (r &lt; 0) {
+        perror("fork failed");
+    } else if (r == 0) {
+        printf("I'm the child with pid=%d, parent pid=%d\n", getpid(), getppid());
+    } else {
+        printf("I'm the parent with pid=%d\n", getpid());
+        wait(NULL);
+    }
+}</code></pre>
+
+  <p>Branch structure is created to make different behaviours of parent and child. Here system call <code>wait(NULL)</code> is used to wait until the child completes (try to remove it to see what happens!), we're going to introduce <code>wait()</code> (and the process status model) in detail since it plays important rule in the design of background mode.</p>
+
+  <p>We can <code>exec()</code> in the child progress to execute other programs (there are several types of <code>exec()</code> in the child process with different parameters but their semantics are the same, we pick <code>execvp()</code> here, which pass the command and parameters in an array using <code>NULL</code> as mark of end):</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int main(){
+    int r = fork();
+    if (r &lt; 0) {
+        perror("fork failed");
+    } else if (r == 0) {
+        printf("I'm the child with pid=%d, parent pid=%d\n", getpid(), getppid());
+        char* params[3] = {"/bin/ls", "-l", NULL};
+        execvp(params[0], params);
+    } else {
+        printf("I'm the parent with pid=%d\n", getpid());
+        wait(NULL);
+    }
+}</code></pre>
+</body>
+
+</html>

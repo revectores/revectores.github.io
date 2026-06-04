@@ -52,8 +52,42 @@ padding-left: 3em;
 border-left: 0.5em #EEE solid;
 }
 hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
-pre, code, kbd, samp { color: #000; font-family: monospace, monospace; _font-family: 'courier new', monospace; font-size: 0.98em; }
-pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+pre, code, kbd, samp { color: #000; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; _font-family: 'courier new', monospace; font-size: 0.9em; }
+code { background-color: #f0f0f0; padding: 0.15em 0.35em; border-radius: 3px; }
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #f6f6f6;
+  border: 1px solid #ddd;
+  border-left: 3px solid #999;
+  border-radius: 3px;
+  padding: 0.9em 1.1em;
+  overflow-x: auto;
+  line-height: 1.5;
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.4em;
+  right: 0.4em;
+  padding: 0.25em;
+  font-size: 0.75em;
+  font-family: sans-serif;
+  line-height: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+pre:hover .copy-btn {
+  opacity: 1;
+}
+pre code { background: none; padding: 0; border-radius: 0; }
 
 b, strong { font-weight: bold; }
 
