@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
   <link rel="stylesheet" type="text/css" href="../static/css/code.css">
   <script src="../static/js/copy-code.js"></script>
+  <script src="../static/js/lang-switcher.js"></script>
   <style>
     table { border-collapse: collapse; width: 100%; font-size: 0.9em; margin: 1em 0; }
     th, td { border: 1px solid #ccc; padding: 0.4em 0.7em; text-align: left; }
@@ -21,43 +22,89 @@
 <body>
   <p><a href="../index.html#blogs">&larr; Back</a></p>
 
-  <h1>Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</h1>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1 data-i18n>
+    <span lang="en">Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</span>
+    <span lang="zh">Spitfire：面向易失性与非易失性内存的三层缓冲区管理器</span>
+    <span lang="ja">Spitfire：揮発性・不揮発性メモリ向け三層バッファマネージャ</span>
+  </h1>
   <p style="text-align:center; color:#888;">August 25, 2021</p>
 
   <p>Paper: <a href="https://dl.acm.org/doi/10.1145/3448016.3452819">Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</a>. SIGMOD 2021.<br>
   Arxiv: <a href="https://arxiv.org/abs/2007.08994">Multi-Tier Buffer Management and Storage System Design for Non-Volatile Memory</a>.</p>
 
-  <p>This paper introduces a buffer manager design for a DRAM/NVM/SSD three-tier storage architecture. Key contributions:</p>
-  <ul>
-    <li>A probabilistic quantification framework for three-tier buffer migration policies.</li>
-    <li>Based on this framework, a simulated annealing algorithm for workload-adaptive migration policies.</li>
-    <li>An implementation of the Spitfire buffer manager (~14,000 lines of C++), validated across workloads and compared against HYMEM, discussing how different factors affect performance and how to select an appropriate storage architecture.</li>
-  </ul>
+  <div data-i18n>
+    <ul lang="en">
+      <li>A probabilistic quantification framework for three-tier buffer migration policies.</li>
+      <li>A simulated annealing algorithm for workload-adaptive migration policy tuning.</li>
+      <li>An implementation of Spitfire (~14,000 lines C++), compared against HYMEM, with analysis of storage architecture selection.</li>
+    </ul>
+    <ul lang="zh">
+      <li>三层缓冲区管理器迁移策略的概率量化框架。</li>
+      <li>基于该框架的模拟退火自适应工作集迁移策略调整算法。</li>
+      <li>Spitfire的实现（约14000行C++），与HYMEM进行对比，分析存储架构选型。</li>
+    </ul>
+    <ul lang="ja">
+      <li>三層バッファ移行ポリシーの確率的定量化フレームワーク。</li>
+      <li>模擬焼きなまし法によるワークロード適応型移行ポリシー調整アルゴリズム。</li>
+      <li>Spitfireの実装（C++ 約14,000行）とHYMEMとの比較、ストレージアーキテクチャ選択の分析。</li>
+    </ul>
+  </div>
 
-  <h2>I. Background</h2>
+  <!-- ── I. Background ────────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">I. Background</h2>
+    <h2 lang="zh">一、背景</h2>
+    <h2 lang="ja">I. 背景</h2>
+  </div>
 
-  <p>Storage medium characteristics deeply influence database system design. Traditional DBMS design assumed a two-tier hierarchy: high-speed low-capacity volatile storage (DRAM) and low-speed high-capacity non-volatile storage (SSD/HDD). The emergence of NVM breaks this assumption and may cause profound changes to DBMS design.</p>
+  <div data-i18n>
+    <p lang="en">Storage medium characteristics deeply influence database system design. Traditional DBMS design assumed a two-tier hierarchy: high-speed low-capacity volatile storage (DRAM) and low-speed high-capacity non-volatile storage (SSD/HDD). The emergence of NVM breaks this assumption and may cause profound changes to DBMS design.</p>
+    <p lang="zh">存储介质的特性深刻影响数据库系统设计。传统DBMS基于二层存储假设：高速低容量的易失性存储（DRAM）/ 低速高容量的非易失性存储（SSD/HDD）。NVM的出现打破了这一假设，极有可能对数据库系统设计造成深远变革。</p>
+    <p lang="ja">ストレージメディアの特性はデータベースシステムの設計に深く影響します。従来のDBMSは二層階層を前提としていました：高速・低容量の揮発性ストレージ（DRAM）と低速・大容量の不揮発性ストレージ（SSD/HDD）。NVMの登場によりこの仮定が崩れ、DBMSの設計に根本的な変化をもたらす可能性があります。</p>
+  </div>
 
-  <p>NVM (Non-Volatile Memory), also called PMEM (Persistent Memory) or SCM (Storage Class Memory), sits between DRAM and SSD with the following properties:</p>
-  <ul>
-    <li><strong>Persistence:</strong> Data survives power loss. ⟹ Eliminates expensive <code>fsync</code>.</li>
-    <li><strong>CPU-accessible:</strong> CPU can read/write NVM directly. ⟹ DRAM can be bypassed.</li>
-    <li><strong>Intermediate latency/bandwidth:</strong> Between DRAM and SSD. ⟹ Can serve as high-performance SSD (DRAM/NVM), persistent DRAM (NVM/SSD), All-in-NVM, or the middle tier in DRAM/NVM/SSD.</li>
-    <li><strong>Byte addressability:</strong> Intel 3D XPoint Optane's actual access granularity is 256 bytes. ⟹ No need for page-granularity buffer loads; finer-grained scheduling is possible.</li>
-    <li><strong>Limited write endurance:</strong> Fewer write cycles than DRAM or SSD. ⟹ Migration policies must balance performance against write amplification.</li>
-  </ul>
-
-  <p>The only production-grade NVM is Intel 3D XPoint Optane (released 2017). Most NVM-related research (including this paper) is evaluated on this hardware.</p>
+  <div data-i18n>
+    <p lang="en">NVM (Non-Volatile Memory), also called PMEM or SCM, has the following properties:</p>
+    <p lang="zh">NVM（Non-Volatile Memory），又称PMEM（Persistent Memory）或SCM（Storage Class Memory），具备以下特点：</p>
+    <p lang="ja">NVM（Non-Volatile Memory）、別名PMEM（Persistent Memory）またはSCM（Storage Class Memory）は以下の特性を持ちます：</p>
+  </div>
+  <div data-i18n>
+    <ul lang="en">
+      <li><strong>Persistence:</strong> Data survives power loss. ⟹ Eliminates expensive <code>fsync</code>.</li>
+      <li><strong>CPU-accessible:</strong> CPU can read/write NVM directly. ⟹ DRAM can be bypassed.</li>
+      <li><strong>Intermediate latency/bandwidth</strong> between DRAM and SSD. ⟹ Enables DRAM/NVM, NVM/SSD, All-in-NVM, or DRAM/NVM/SSD configurations.</li>
+      <li><strong>Byte addressability:</strong> Optane's actual granularity is 256 B. ⟹ Finer-grained scheduling than page-level is possible.</li>
+      <li><strong>Limited write endurance.</strong> ⟹ Migration policies must balance performance against write amplification.</li>
+    </ul>
+    <ul lang="zh">
+      <li><strong>数据持久化：</strong>断电不丢失。⟹ 消除高开销的fsync。</li>
+      <li><strong>CPU可直接访问：</strong>CPU可直接读写NVM。⟹ 提供了架空DRAM的可能。</li>
+      <li><strong>延迟/带宽介于DRAM和SSD之间。</strong>⟹ 可构成DRAM/NVM、NVM/SSD、All-in-NVM或DRAM/NVM/SSD三层架构。</li>
+      <li><strong>字节级寻址：</strong>Optane实际访问粒度为256字节。⟹ 可采用比页粒度更细的调度方式。</li>
+      <li><strong>耐擦写性较差。</strong>⟹ 缓存策略需权衡性能与写入负载。</li>
+    </ul>
+    <ul lang="ja">
+      <li><strong>永続性：</strong>電源断でもデータが保持される。⟹ 高コストな<code>fsync</code>が不要。</li>
+      <li><strong>CPUから直接アクセス可能：</strong>CPUがNVMを直接読み書きできる。⟹ DRAMをバイパス可能。</li>
+      <li><strong>DRAMとSSDの中間のレイテンシ/帯域幅。</strong>⟹ DRAM/NVM、NVM/SSD、All-in-NVM、またはDRAM/NVM/SSD構成が可能。</li>
+      <li><strong>バイト単位アドレッサブル：</strong>Optaneの実際の粒度は256バイト。⟹ ページ粒度より細かいスケジューリングが可能。</li>
+      <li><strong>書き込み耐久性が低い。</strong>⟹ 移行ポリシーは性能と書き込み量のバランスを取る必要がある。</li>
+    </ul>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-002.png" alt="3D XPoint Technology">
-    <figcaption>Intel 3D XPoint Technology — an innovative high-density non-volatile memory design.</figcaption>
+    <figcaption>Intel 3D XPoint Technology.</figcaption>
   </figure>
 
   <table>
-    <thead>
-      <tr><th></th><th>DRAM</th><th>NVM</th><th>SSD</th></tr>
-    </thead>
+    <thead><tr><th></th><th>DRAM</th><th>NVM</th><th>SSD</th></tr></thead>
     <tbody>
       <tr><td colspan="4"><strong>Latency</strong></td></tr>
       <tr><td>Idle Sequential Read</td><td>75 ns</td><td>170 ns</td><td>10 μs</td></tr>
@@ -76,105 +123,176 @@
     </tbody>
   </table>
 
-  <p>NVM can be incorporated into the storage hierarchy in many combinations (All-in-NVM, NVM/SSD, DRAM/NVM, DRAM/NVM/SSD), and there are various DBMS write modes (in-place, copy-on-write, log-structured/LSM-tree). This paper adopts DRAM/NVM/SSD with in-place writes.</p>
-
-  <p>In a classic DRAM/SSD two-tier hierarchy the buffer manager makes two decisions: <em>which</em> pages to cache, and <em>when</em> to cache them.</p>
+  <div data-i18n>
+    <p lang="en">This paper adopts DRAM/NVM/SSD with in-place writes. In a classic DRAM/SSD two-tier hierarchy the buffer manager makes two decisions: <em>which</em> pages to cache and <em>when</em>. The most famous formulation is Jim Gray's <strong>Five Minute Rule</strong> (SIGMOD 1987). With a three-tier hierarchy it must additionally decide <em>where</em> to move pages.</p>
+    <p lang="zh">本文采用DRAM/NVM/SSD架构与in-place写入模式。经典DRAM/SSD二层架构中，缓冲区管理器只需做两个决策：缓存<em>哪些</em>页面以及<em>何时</em>缓存。最著名的量化方案是Jim Gray的<strong>五分钟规则</strong>（SIGMOD 1987）。三层架构还需额外决策：将页面移到<em>哪里</em>。</p>
+    <p lang="ja">本論文はDRAM/NVM/SSDとin-place書き込みを採用します。古典的なDRAM/SSD二層階層では、バッファマネージャは2つの決定をします：<em>どの</em>ページをキャッシュするか、<em>いつ</em>キャッシュするか。最も有名な定式化はJim GrayのFive Minute Rule（SIGMOD 1987）です。三層階層ではさらに<em>どこに</em>移動するかも決定する必要があります。</p>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-003.png" alt="Buffer Management in a DBMS">
-    <figcaption>Buffer Management in a DBMS: the replacement policy governs which frames are evicted.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Buffer Management in a DBMS: the replacement policy governs which frames are evicted.</span>
+      <span lang="zh">DBMS中的缓冲区管理：置换策略决定驱逐哪些帧。</span>
+      <span lang="ja">DBMSにおけるバッファ管理：置換ポリシーがどのフレームを退避するかを決定する。</span>
+    </figcaption>
   </figure>
-
-  <p>The most famous formulation is Jim Gray's <strong>Five Minute Rule</strong> (SIGMOD 1987):</p>
 
   <figure>
     <img src="../static/img/spitfire/img-005.png" alt="The Five Minute Rule">
   </figure>
 
-  <p>With a DRAM/NVM/SSD three-tier hierarchy, the buffer manager must additionally decide <em>where</em> to move pages, as NVM, DRAM, SSD, and CPU cache can all interact directly.</p>
+  <!-- ── II. HYMEM ─────────────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">II. Prior Work: HYMEM</h2>
+    <h2 lang="zh">二、先前工作：HYMEM</h2>
+    <h2 lang="ja">II. 先行研究：HYMEM</h2>
+  </div>
 
-  <h2>II. Prior Work: HYMEM</h2>
-
-  <p><a href="https://dl.acm.org/doi/10.1145/3183713.3183716">HYMEM</a> [SIGMOD 2018] is the first buffer manager designed for DRAM/NVM/SSD. It distributes pages by access frequency: hot pages → DRAM, warm pages → NVM, cold pages → SSD.</p>
+  <div data-i18n>
+    <p lang="en"><a href="https://dl.acm.org/doi/10.1145/3183713.3183716">HYMEM</a> [SIGMOD 2018] is the first buffer manager designed for DRAM/NVM/SSD. It distributes pages by access frequency: hot → DRAM, warm → NVM, cold → SSD. HYMEM implements two optimizations on top of a clock-based migration strategy:</p>
+    <p lang="zh"><a href="https://dl.acm.org/doi/10.1145/3183713.3183716">HYMEM</a> [SIGMOD 2018] 是首个专为DRAM/NVM/SSD设计的缓冲区管理器，根据访问频率分配页面：热页面→DRAM，温页面→NVM，冷页面→SSD。在基于时钟的迁移策略基础上实现了两项优化：</p>
+    <p lang="ja"><a href="https://dl.acm.org/doi/10.1145/3183713.3183716">HYMEM</a> [SIGMOD 2018] はDRAM/NVM/SSD向けの最初のバッファマネージャで、アクセス頻度によってページを分配します：ホット→DRAM、ウォーム→NVM、コールド→SSD。クロックベースの移行戦略の上に2つの最適化を実装しています：</p>
+  </div>
+  <div data-i18n>
+    <ul lang="en">
+      <li><strong>Cache-line-grained pages:</strong> Loads NVM pages into DRAM at cache-line granularity, exploiting NVM byte addressability. DRAM maintains <em>resident</em> and <em>dirty</em> bitmaps per page.</li>
+      <li><strong>Mini-pages:</strong> A compact form capped at 16 cache lines; auto-upgraded to a full page when the count exceeds 16, reducing DRAM waste from sparsely populated pages.</li>
+    </ul>
+    <ul lang="zh">
+      <li><strong>缓存行粒度页面（cache-line-grained page）：</strong>利用NVM字节寻址能力，以缓存行粒度将NVM页面载入DRAM。DRAM为每个页面维护resident和dirty两个位图。</li>
+      <li><strong>小页面（mini-page）：</strong>缓存行粒度页面的压缩形式，容量上限为16个缓存行；超过时自动升级为普通页面，减少稀疏页面对DRAM空间的浪费。</li>
+    </ul>
+    <ul lang="ja">
+      <li><strong>キャッシュライン粒度ページ：</strong>NVMのバイトアドレッサビリティを利用してキャッシュライン単位でNVMページをDRAMに読み込む。DRAMは各ページに<em>resident</em>および<em>dirty</em>ビットマップを維持する。</li>
+      <li><strong>ミニページ：</strong>最大16キャッシュラインのコンパクト形式。16を超えると通常サイズのページに自動昇格し、疎なページによるDRAM無駄を削減する。</li>
+    </ul>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-006.png" alt="NVM Direct vs Basic NVM BM vs Three-Tier BM">
-    <figcaption>Three NVM-aware buffer management approaches: (a) NVM Direct — all data on NVM; (b) Basic NVM BM — page-grained loading into DRAM; (c) Our NVM-Opt Three-Tier BM — cache-line-grained loading with mini-pages.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">(a) NVM Direct — all data on NVM; (b) Basic NVM BM — page-grained loading; (c) Our NVM-Opt Three-Tier BM — cache-line-grained loading with mini-pages.</span>
+      <span lang="zh">（a）NVM Direct——数据全在NVM上；（b）Basic NVM BM——页粒度加载；（c）本文的NVM-Opt三层BM——缓存行粒度加载与小页面。</span>
+      <span lang="ja">（a）NVM Direct — 全データをNVMに; (b) Basic NVM BM — ページ粒度ロード; (c) NVM-Opt三層BM — キャッシュライン粒度ロードとミニページ。</span>
+    </figcaption>
   </figure>
 
   <figure>
     <img src="../static/img/spitfire/img-007.png" alt="Estimated Throughput vs Data Size">
-    <figcaption>Estimated throughput across architectures as data size grows past DRAM then NVM capacity.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Estimated throughput across architectures as data size grows past DRAM then NVM capacity.</span>
+      <span lang="zh">数据大小分别超过DRAM和NVM容量时各架构吞吐量的估算比较。</span>
+      <span lang="ja">データサイズがDRAM・NVM容量を超えるにつれた各アーキテクチャの推定スループット。</span>
+    </figcaption>
   </figure>
 
-  <p>HYMEM implements two optimizations on top of a clock-based migration strategy:</p>
-  <ul>
-    <li><strong>Cache-line-grained pages:</strong> Exploits NVM byte addressability to load NVM pages into DRAM at cache-line granularity. DRAM maintains <em>resident</em> and <em>dirty</em> bitmaps per page.</li>
-    <li><strong>Mini-pages:</strong> A compact form with capacity of 16 cache lines; automatically upgraded to a full page when the resident line count exceeds 16. This reduces DRAM waste from sparsely populated pages.</li>
-  </ul>
+  <div data-i18n>
+    <p lang="en">HYMEM's migration policy has five data transfer paths and three critical decisions:</p>
+    <p lang="zh">HYMEM的数据迁移策略包含五条数据传输路径和三个关键决策：</p>
+    <p lang="ja">HYMEMの移行ポリシーは5つのデータ転送パスと3つの重要な決定で構成されます：</p>
+  </div>
+  <div data-i18n>
+    <ol lang="en">
+      <li>Page absent from both DRAM and NVM → read from SSD into DRAM (path 1).</li>
+      <li><strong>DRAM eviction:</strong> clock (second-chance) when DRAM is full.</li>
+      <li><strong>NVM admission:</strong> use <em>Admission Queue</em> — not in queue → evict to SSD and enqueue (path 3→5); in queue → evict to NVM (path 3→4). Only pages evicted twice enter NVM.</li>
+      <li>Page in NVM, not DRAM → load at cache-line granularity into DRAM (path 2).</li>
+      <li><strong>NVM eviction:</strong> clock when NVM is full (path 6).</li>
+    </ol>
+    <ol lang="zh">
+      <li>页面既不在DRAM也不在NVM中 → 从SSD直接读入DRAM（路径1）。</li>
+      <li><strong>DRAM驱逐：</strong>DRAM满时采用clock（second chance）算法。</li>
+      <li><strong>NVM准入：</strong>使用<em>Admission Queue</em>——不在队列中→驱逐至SSD并入队（路径3→5）；在队列中→驱逐至NVM（路径3→4）。只有被驱逐两次的页面才进入NVM。</li>
+      <li>页面在NVM不在DRAM → 以缓存行粒度载入DRAM（路径2）。</li>
+      <li><strong>NVM驱逐：</strong>NVM满时采用clock算法（路径6）。</li>
+    </ol>
+    <ol lang="ja">
+      <li>DRAMにもNVMにもページが存在しない → SSDからDRAMに読み込む（パス1）。</li>
+      <li><strong>DRAM退避：</strong>DRAMが満杯の場合にclock（second-chance）アルゴリズム。</li>
+      <li><strong>NVM受付：</strong><em>Admission Queue</em>を使用 — キューにない場合はSSDに退避してエンキュー（パス3→5）；キューにある場合はNVMに退避（パス3→4）。2回退避されたページのみNVMに入る。</li>
+      <li>ページがNVMにありDRAMにない → キャッシュライン単位でDRAMに読み込む（パス2）。</li>
+      <li><strong>NVM退避：</strong>NVMが満杯の場合にclockアルゴリズム（パス6）。</li>
+    </ol>
+  </div>
+
+  <figure>
+    <img src="../static/img/spitfire/img-008.png" alt="HYMEM page state transitions">
+    <figcaption data-i18n>
+      <span lang="en">HYMEM page state transition diagram showing all six migration paths.</span>
+      <span lang="zh">HYMEM页面状态转移图，展示全部六条迁移路径。</span>
+      <span lang="ja">HYMEMのページ状態遷移図（6つの移行パスすべてを示す）。</span>
+    </figcaption>
+  </figure>
 
   <figure>
     <img src="../static/img/spitfire/img-010.png" alt="Cache-line-grained Page">
-    <figcaption>(a) Cache-line-grained Page: DRAM tracks which cache lines from an NVM page are resident and dirty.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">(a) Cache-line-grained Page: DRAM tracks which cache lines from an NVM page are resident and dirty.</span>
+      <span lang="zh">（a）缓存行粒度页面：DRAM记录NVM页面中哪些缓存行已载入（resident）以及是否被修改（dirty）。</span>
+      <span lang="ja">（a）キャッシュライン粒度ページ：DRAMがNVMページのどのキャッシュラインがresidentかdirtyかを追跡する。</span>
+    </figcaption>
   </figure>
 
   <figure>
     <img src="../static/img/spitfire/img-011.png" alt="Mini Page">
-    <figcaption>(b) Mini Page: a compact form storing only resident cache lines, with capacity 16. A slots array records which NVM cache lines are present.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">(b) Mini Page: a compact form with capacity 16, recording resident cache lines via a slots array.</span>
+      <span lang="zh">（b）小页面（mini-page）：容量为16的压缩形式，通过slots数组记录已载入的缓存行。</span>
+      <span lang="ja">（b）ミニページ：容量16のコンパクト形式。slotsアレイで存在するキャッシュラインを記録する。</span>
+    </figcaption>
   </figure>
-
-  <p>HYMEM's migration policy involves five data transfer directions and three critical decisions:</p>
-  <ol>
-    <li>If a required page is in neither DRAM nor NVM, read it directly from SSD into DRAM (path 1).</li>
-    <li><strong>Critical Decision 1 — DRAM eviction:</strong> Use clock (second-chance) when DRAM is full.</li>
-    <li><strong>Critical Decision 2 — NVM admission:</strong> When a page is evicted from DRAM (with no NVM copy), consult the <em>Admission Queue</em>: not in queue → evict to SSD and enqueue (path 3→5); in queue → evict to NVM (path 3→4). This is an inverted clock for admission — only pages evicted twice enter NVM.</li>
-    <li>If a required page is in NVM but not DRAM, load it at cache-line granularity (path 2), exploiting byte addressability.</li>
-    <li><strong>Critical Decision 3 — NVM eviction:</strong> Use clock when NVM is full (path 6).</li>
-  </ol>
 
   <figure>
-    <img src="../static/img/spitfire/img-008.png" alt="HYMEM page state transitions">
-    <figcaption>HYMEM page state transition diagram showing all six migration paths.</figcaption>
+    <img src="../static/img/spitfire/img-012.png" alt="YCSB-RO throughput by HYMEM optimization">
+    <figcaption data-i18n>
+      <span lang="en">YCSB-RO throughput relative to traditional BM, showing cumulative effect of each HYMEM optimization. With all optimizations HYMEM surpasses NVM Direct.</span>
+      <span lang="zh">相对传统BM的YCSB-RO吞吐量，展示HYMEM各项优化的累积效果。叠加全部优化后HYMEM超越NVM Direct。</span>
+      <span lang="ja">従来BM比のYCSB-ROスループット、HYMEMの各最適化の累積効果。全最適化を加えるとNVM Directを超える。</span>
+    </figcaption>
   </figure>
 
-  <p>With these optimizations, YCSB-RO throughput surpassed NVM Direct:</p>
-
-  <figure>
-    <img src="../static/img/spitfire/img-012.png" alt="HYMEM YCSB-RO throughput breakdown">
-    <figcaption>YCSB-RO throughput relative to traditional BM, showing cumulative effect of each HYMEM optimization.</figcaption>
-  </figure>
-
-  <p>HYMEM also uses <strong>pointer swizzling</strong> — replacing page identifiers in DRAM with direct pointers to reduce page-table lookup overhead:</p>
+  <div data-i18n>
+    <p lang="en">HYMEM also uses <strong>pointer swizzling</strong> — replacing page identifiers in DRAM with direct pointers to reduce page-table lookup overhead. However, HYMEM has several known limitations: (1) SSD→NVM and NVM↔CPU direct paths are absent, causing data duplication; (2) SSD→DRAM loading easily evicts hot pages; (3) single-threaded, no concurrency support.</p>
+    <p lang="zh">HYMEM还使用了<strong>指针换用（pointer swizzling）</strong>——将DRAM中的页面标识符替换为直接指针，以减少页表查找开销。但HYMEM存在已知问题：（1）不支持SSD→NVM和NVM↔CPU直接数据流，导致数据重复；（2）SSD→DRAM直接加载容易驱逐热页面；（3）单线程设计，无并发支持。</p>
+    <p lang="ja">HYMEMは<strong>ポインタスウィズリング</strong>も使用します——DRAMのページ識別子を直接ポインタに置き換えてページテーブルルックアップのオーバーヘッドを削減します。ただしHYMEMには既知の限界があります：(1) SSD→NVMおよびNVM↔CPU直接パスが存在せずデータ重複が発生；(2) SSD→DRAMの直接ロードがホットページを退避させやすい；(3) シングルスレッド設計で並行性のサポートなし。</p>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-013.png" alt="Pointer Swizzling">
-    <figcaption>Figure 5: Pointer Swizzling — a B-tree with a swizzled leaf (pId: 7), a normal DRAM leaf (pId: 5), and a swapped-out leaf (pId: 8).</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Figure 5: Pointer Swizzling — a B-tree with a swizzled leaf (pId: 7), a normal DRAM leaf (pId: 5), and a swapped-out leaf (pId: 8).</span>
+      <span lang="zh">图5：指针换用——B树中一个已换用叶节点（pId:7）、一个普通DRAM叶节点（pId:5）和一个已换出叶节点（pId:8）。</span>
+      <span lang="ja">図5：ポインタスウィズリング — スウィズルされたリーフ（pId: 7）、通常のDRAMリーフ（pId: 5）、スワップアウトされたリーフ（pId: 8）を持つBツリー。</span>
+    </figcaption>
   </figure>
 
-  <p>However, HYMEM has several known limitations:</p>
-  <ol>
-    <li>Does not support all possible data flows — SSD→NVM and NVM↔CPU direct paths are absent, causing data duplication across DRAM and NVM and wasting inter-tier bandwidth.</li>
-    <li>SSD→DRAM direct loading easily evicts hot pages from DRAM.</li>
-    <li>Single-threaded; concurrency safety is not addressed.</li>
-  </ol>
+  <!-- ── III. Taxonomy ─────────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">III. NVM-Aware Data Migration Policy: A Taxonomy</h2>
+    <h2 lang="zh">三、NVM感知数据迁移策略分类</h2>
+    <h2 lang="ja">III. NVM対応データ移行ポリシーの分類</h2>
+  </div>
 
-  <h2>III. NVM-Aware Data Migration Policy: A Taxonomy</h2>
-
-  <p>Spitfire enables all possible data flows, resolving the issues caused by HYMEM's restricted paths. The full DRAM/NVM/SSD migration topology:</p>
+  <div data-i18n>
+    <p lang="en">Spitfire enables all possible data flows and defines a 4-tuple to probabilistically characterize migration policies:</p>
+    <p lang="zh">Spitfire开放所有可能的数据流，并定义如下四元组以概率方式刻画迁移策略：</p>
+    <p lang="ja">Spitfireはすべての可能なデータフローを有効にし、移行ポリシーを確率的に特徴付ける4タプルを定義します：</p>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-015.png" alt="DRAM/NVM/SSD data flow diagram">
-    <figcaption>All ten possible data migration paths in the DRAM/NVM/SSD hierarchy. D<sub>r</sub>/D<sub>w</sub> govern DRAM↔NVM flows; N<sub>r</sub>/N<sub>w</sub> govern NVM↔SSD flows.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">All ten possible data migration paths in the DRAM/NVM/SSD hierarchy.</span>
+      <span lang="zh">DRAM/NVM/SSD层次结构中所有十条可能的数据迁移路径。</span>
+      <span lang="ja">DRAM/NVM/SSD階層における10の可能なデータ移行パスすべて。</span>
+    </figcaption>
   </figure>
-
-  <p>To quantitatively describe and compare migration policies, Spitfire defines a 4-tuple:</p>
 
   <p style="text-align:center; font-style:italic;">P = ⟨D<sub>r</sub>, D<sub>w</sub>, N<sub>r</sub>, N<sub>w</sub>⟩</p>
 
   <table>
-    <thead>
-      <tr><th>Notation</th><th>Definition</th><th>Complement</th><th>Interpretation</th></tr>
-    </thead>
+    <thead><tr><th>Notation</th><th>Definition</th><th>Complement</th><th>Interpretation</th></tr></thead>
     <tbody>
       <tr><td><em>D<sub>r</sub></em></td><td>P(NVM → DRAM)</td><td>1 − D<sub>r</sub></td><td>P(NVM → CPU)</td></tr>
       <tr><td><em>D<sub>w</sub></em></td><td>P(CPU → DRAM)</td><td>1 − D<sub>w</sub></td><td>P(CPU → NVM)</td></tr>
@@ -183,37 +301,62 @@
     </tbody>
   </table>
 
-  <p>Each parameter is implemented via random sampling of access history. A hot page appearing N times in NVM access history is promoted to DRAM with probability:</p>
+  <div data-i18n>
+    <p lang="en">Each parameter is implemented via random sampling of access history. A hot NVM page accessed N times is promoted to DRAM with probability 1 − (1 − D<sub>r</sub>)<sup>N</sup> → 1 as N → ∞. Semantic interpretation:</p>
+    <p lang="zh">每个参数通过对访问历史的随机采样实现。访问N次的热NVM页面被提升至DRAM的概率为 1 − (1 − D<sub>r</sub>)<sup>N</sup>，当N→∞时趋于1。各参数的语义：</p>
+    <p lang="ja">各パラメータはアクセス履歴のランダムサンプリングによって実装されます。N回アクセスされたホットNVMページがDRAMに昇格する確率は 1 − (1 − D<sub>r</sub>)<sup>N</sup> で、N→∞のとき1に収束します。各パラメータの意味：</p>
+  </div>
+  <div data-i18n>
+    <ul lang="en">
+      <li><strong>D<sub>r</sub>:</strong> Probability of promoting an NVM page to DRAM on read. Use larger D<sub>r</sub> when the working set fits in DRAM; smaller otherwise.</li>
+      <li><strong>D<sub>w</sub>:</strong> Probability that a CPU write goes to DRAM. Smaller D<sub>w</sub> exploits the NVM↔CPU path and avoids evicting hot DRAM pages.</li>
+      <li><strong>N<sub>r</sub>:</strong> Probability that an SSD miss loads into NVM (vs. directly into DRAM).</li>
+      <li><strong>N<sub>w</sub>:</strong> Probability that a DRAM eviction writes through NVM before SSD. Analogous to HYMEM's Admission Queue, but probabilistic. Smaller values reduce NVM wear.</li>
+    </ul>
+    <ul lang="zh">
+      <li><strong>D<sub>r</sub>：</strong>读操作时NVM页面被提升至DRAM的概率。工作集可容纳于DRAM时用较大值，否则用较小值。</li>
+      <li><strong>D<sub>w</sub>：</strong>CPU写操作写入DRAM的概率。较小值充分利用NVM↔CPU数据通路，避免驱逐DRAM热页面。</li>
+      <li><strong>N<sub>r</sub>：</strong>SSD缺页时加载至NVM（而非直接加载至DRAM）的概率。</li>
+      <li><strong>N<sub>w</sub>：</strong>DRAM驱逐时经过NVM写入SSD的概率。类似HYMEM的Admission Queue机制，但采用概率方式。较小值减少NVM写入量，延长使用寿命。</li>
+    </ul>
+    <ul lang="ja">
+      <li><strong>D<sub>r</sub>：</strong>読み取り時にNVMページをDRAMに昇格させる確率。ワーキングセットがDRAMに収まる場合は大きく、そうでない場合は小さくする。</li>
+      <li><strong>D<sub>w</sub>：</strong>CPU書き込みがDRAMに行く確率。小さな値はNVM↔CPUパスを活用し、DRAMのホットページ退避を防ぐ。</li>
+      <li><strong>N<sub>r</sub>：</strong>SSDミス時にNVMにロードする確率（DRAMへの直接ロードではなく）。</li>
+      <li><strong>N<sub>w</sub>：</strong>DRAMの退避がNVMを経由してSSDに書き込む確率。HYMEMのAdmission Queueと類似しているが確率的。小さな値はNVMの書き込みを減らす。</li>
+    </ul>
+  </div>
 
-  <p style="text-align:center; font-style:italic;">1 − (1 − D<sub>r</sub>)<sup>N</sup> → 1 as N → ∞</p>
+  <!-- ── IV. Simulated Annealing ───────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">IV. Adaptive Data Migration: Simulated Annealing</h2>
+    <h2 lang="zh">四、自适应数据迁移：模拟退火</h2>
+    <h2 lang="ja">IV. 適応的データ移行：模擬焼きなまし法</h2>
+  </div>
 
-  <p>Using randomness rather than complex deterministic tracking simplifies the system and improves scalability — the same idea as lottery scheduling.</p>
-
-  <p>Semantic interpretation of each parameter:</p>
-  <ul>
-    <li><strong>D<sub>r</sub>:</strong> Probability of promoting an NVM page to DRAM on read. Larger D<sub>r</sub> when the working set fits in DRAM; smaller when it doesn't.</li>
-    <li><strong>D<sub>w</sub>:</strong> Probability that a CPU write goes to DRAM (vs. directly to NVM). Smaller D<sub>w</sub> avoids evicting hot DRAM pages and exploits the NVM↔CPU path.</li>
-    <li><strong>N<sub>r</sub>:</strong> Probability that an SSD miss loads into NVM (vs. directly into DRAM).</li>
-    <li><strong>N<sub>w</sub>:</strong> Probability that a DRAM eviction writes through NVM before SSD. Analogous to HYMEM's Admission Queue, but probabilistic. Smaller values reduce NVM wear.</li>
-  </ul>
-
-  <p>HYMEM maps to: D<sub>r</sub> = D<sub>w</sub> = 1, N<sub>r</sub> = 0, N<sub>w</sub> = f(|AdmQueue|).</p>
-
-  <h2>IV. Adaptive Data Migration: Simulated Annealing</h2>
-
-  <p>Spitfire tunes P adaptively using simulated annealing with cost function cost(P) = 1/T (inverse throughput):</p>
+  <div data-i18n>
+    <p lang="en">Spitfire tunes P adaptively using simulated annealing with cost function cost(P) = 1/T (inverse throughput). Starting at high temperature for broad exploration and cooling gradually, it converges to the global optimum with high probability.</p>
+    <p lang="zh">Spitfire使用模拟退火自适应调整策略P，代价函数定义为事务吞吐量的倒数：cost(P) = 1/T。从高温开始广泛探索，逐步降温，能以较高概率收敛至全局最优。</p>
+    <p lang="ja">Spitfireはコスト関数cost(P) = 1/T（スループットの逆数）で模擬焼きなまし法を使用してPを適応的に調整します。高温から広く探索し、徐々に冷却することで高確率で大域最適に収束します。</p>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-019.png" alt="Algorithm 1: Simulated Annealing">
-    <figcaption>Algorithm 1: Data Migration Policy Tuning via Simulated Annealing.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Algorithm 1: Data Migration Policy Tuning via Simulated Annealing.</span>
+      <span lang="zh">算法1：基于模拟退火的数据迁移策略调整。</span>
+      <span lang="ja">アルゴリズム1：模擬焼きなまし法によるデータ移行ポリシー調整。</span>
+    </figcaption>
   </figure>
 
-  <p>Starting at high temperature (broad exploration) and cooling gradually, the algorithm converges to the global optimum with high probability. For practical discussion, two reference policies are defined:</p>
+  <div data-i18n>
+    <p lang="en">Two reference policies:</p>
+    <p lang="zh">两个参考策略：</p>
+    <p lang="ja">2つの参照ポリシー：</p>
+  </div>
 
   <table>
-    <thead>
-      <tr><th>Policy</th><th>D<sub>r</sub></th><th>D<sub>w</sub></th><th>N<sub>r</sub></th><th>N<sub>w</sub></th></tr>
-    </thead>
+    <thead><tr><th>Policy</th><th>D<sub>r</sub></th><th>D<sub>w</sub></th><th>N<sub>r</sub></th><th>N<sub>w</sub></th></tr></thead>
     <tbody>
       <tr><td>HYMEM</td><td>1</td><td>1</td><td>0</td><td>AdmQueue</td></tr>
       <tr><td>Spitfire-Eager</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
@@ -221,106 +364,188 @@
     </tbody>
   </table>
 
-  <p><strong>Eager</strong> always follows SSD→NVM→DRAM→CPU reads and CPU→DRAM→NVM→SSD writes. <strong>Lazy</strong> routes most NVM accesses directly to CPU (D<sub>r</sub> = D<sub>w</sub> = 0.01), reads most SSD misses directly into DRAM (N<sub>r</sub> = 0.2), and writes all DRAM evictions directly to SSD (N<sub>w</sub> = 1), protecting NVM from cold writes.</p>
+  <div data-i18n>
+    <p lang="en"><strong>Eager</strong> always follows SSD→NVM→DRAM→CPU reads and CPU→DRAM→NVM→SSD writes. <strong>Lazy</strong> routes most NVM accesses directly to CPU (D<sub>r</sub>=D<sub>w</sub>=0.01), reads most SSD misses into DRAM (N<sub>r</sub>=0.2), and writes all DRAM evictions directly to SSD (N<sub>w</sub>=1), protecting NVM.</p>
+    <p lang="zh"><strong>Eager</strong>始终遵循SSD→NVM→DRAM→CPU读流程和CPU→DRAM→NVM→SSD写流程。<strong>Lazy</strong>让大多数NVM访问直接与CPU交互（D<sub>r</sub>=D<sub>w</sub>=0.01），大多数SSD缺页直接读入DRAM（N<sub>r</sub>=0.2），所有DRAM驱逐直接写SSD（N<sub>w</sub>=1），尽可能保护NVM。</p>
+    <p lang="ja"><strong>Eager</strong>は常にSSD→NVM→DRAM→CPU読み取りとCPU→DRAM→NVM→SSD書き込みに従います。<strong>Lazy</strong>はほとんどのNVMアクセスをCPUに直接ルーティングし（D<sub>r</sub>=D<sub>w</sub>=0.01）、ほとんどのSSDミスをDRAMに読み込み（N<sub>r</sub>=0.2）、すべてのDRAM退避をSSDに直接書き込みます（N<sub>w</sub>=1）、NVMを保護します。</p>
+  </div>
 
-  <h2>V. Spitfire: System Architecture</h2>
+  <!-- ── V. Architecture ───────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">V. Spitfire: System Architecture</h2>
+    <h2 lang="zh">五、Spitfire系统架构</h2>
+    <h2 lang="ja">V. Spitfireシステムアーキテクチャ</h2>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-021.png" alt="Spitfire Architecture">
-    <figcaption>Spitfire Architecture: a policy optimizer (simulated annealing) continuously tunes the migration policy; the buffer manager serves hot DRAM pages and warm NVM pages with a lock-free CLOCK replacement.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Spitfire Architecture: policy optimizer (simulated annealing) continuously tunes the migration policy.</span>
+      <span lang="zh">Spitfire架构：策略优化器（模拟退火）持续调整迁移策略。</span>
+      <span lang="ja">Spitfireアーキテクチャ：ポリシーオプティマイザ（模擬焼きなまし法）が移行ポリシーを継続的に調整する。</span>
+    </figcaption>
   </figure>
 
-  <p>Spitfire maintains a concurrent hash table (<em>mapping table</em>) in DRAM with per-page metadata including per-tier latches and tier-specific page descriptors:</p>
+  <div data-i18n>
+    <p lang="en">Spitfire maintains a concurrent hash table (<em>mapping table</em>) in DRAM storing per-tier latches and page descriptors. On a page request: page in DRAM → return DRAM frame; page in NVM and bypass permitted → return NVM frame directly; page absent → load per migration policy. Eviction uses clock. Inter-tier migration requires holding both tiers' latches simultaneously.</p>
+    <p lang="zh">Spitfire在DRAM中维护一个并发哈希表（映射表），存储每层粒度的锁和页面描述符。页面请求处理：页面在DRAM中→返回DRAM帧；页面在NVM中且策略允许旁路→直接返回NVM帧；页面不存在→按迁移策略加载。驱逐使用时钟算法。跨层迁移需同时持有两层的锁。</p>
+    <p lang="ja">SpitfireはDRAMに並行ハッシュテーブル（マッピングテーブル）を維持し、各層のラッチとページ記述子を格納します。ページリクエスト処理：DRAMにページがある場合→DRAMフレームを返す；NVMにページがありバイパスが許可されている場合→NVMフレームを直接返す；ページが存在しない場合→移行ポリシーに従ってロード。退避にはclockを使用。層間移行では両層のラッチを同時に保持する必要があります。</p>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-022.png" alt="Mapping Table">
-    <figcaption>Mapping Table structure: each entry holds shared page descriptor with latch_dram, latch_nvm, latch_ssd, and pointers to DRAM and NVM page descriptors.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Mapping Table: each entry holds latch_dram, latch_nvm, latch_ssd and pointers to DRAM/NVM page descriptors.</span>
+      <span lang="zh">映射表：每条记录包含latch_dram、latch_nvm、latch_ssd以及DRAM/NVM页面描述符的指针。</span>
+      <span lang="ja">マッピングテーブル：各エントリにlatch_dram、latch_nvm、latch_ssdとDRAM/NVMページ記述子へのポインタを保持する。</span>
+    </figcaption>
   </figure>
 
-  <p>On a page request:</p>
-  <ul>
-    <li>Page in DRAM → return DRAM buffer frame.</li>
-    <li>Page in NVM and policy permits NVM→CPU bypass → return NVM buffer frame directly.</li>
-    <li>Page absent → load into DRAM or NVM per migration policy.</li>
-  </ul>
+  <div data-i18n>
+    <p lang="en">Spitfire additionally uses a concurrent bitmap for migration tracking, MVTO for concurrency control, and a concurrent B+Tree with optimistic lock coupling for indexing. The WAL is implemented in NVM. On restart, Spitfire scans NVM to find latest page versions, rebuilds the mapping table, then executes standard DBMS recovery (analysis, redo, undo).</p>
+    <p lang="zh">Spitfire还使用并发位图跟踪迁移策略、MVTO并发控制协议和基于乐观锁耦合的并发B+树。WAL实现在NVM层。重启时，Spitfire扫描NVM识别页面最新版本，重建映射表，之后执行标准DBMS恢复流程（分析、重做、撤销）。</p>
+    <p lang="ja">Spitfireはさらに移行追跡用の並行ビットマップ、並行制御用MVTO、楽観的ロックカップリングを使用した並行B+Treeを使用します。WALはNVM層に実装されます。再起動時、SpitfireはNVMをスキャンして最新ページバージョンを特定し、マッピングテーブルを再構築した後、標準的なDBMS回復（分析、redo、undo）を実行します。</p>
+  </div>
 
-  <p>Eviction from either tier uses the clock algorithm. A thread migrating a page between tiers must hold both tiers' latches simultaneously, but another thread can still modify the DRAM copy concurrently. Spitfire additionally uses a concurrent bitmap for migration tracking, MVTO for concurrency control, and a concurrent B+Tree with optimistic lock coupling for indexing.</p>
+  <!-- ── VI. Evaluation ────────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">VI. Experimental Evaluation</h2>
+    <h2 lang="zh">六、实验评估</h2>
+    <h2 lang="ja">VI. 実験評価</h2>
+  </div>
 
-  <p>The WAL is implemented in NVM. An async thread periodically flushes the NVM log to SSD when it exceeds a size threshold. On restart, Spitfire scans NVM to identify the latest page versions, rebuilds the mapping table, appends the NVM log buffer to the SSD log file, then executes standard DBMS recovery (analysis, redo, undo).</p>
+  <div data-i18n>
+    <p lang="en">Workloads: YCSB-RO (100% reads), YCSB-BA (50% reads, 50% updates), YCSB-WH (10% reads, 90% updates), TPC-C.</p>
+    <p lang="zh">测试负载：YCSB-RO（100%读）、YCSB-BA（50%读50%更新）、YCSB-WH（10%读90%更新）、TPC-C。</p>
+    <p lang="ja">ワークロード：YCSB-RO（100%読み取り）、YCSB-BA（50%読み取り、50%更新）、YCSB-WH（10%読み取り、90%更新）、TPC-C。</p>
+  </div>
 
-  <h2>VI. Experimental Evaluation</h2>
-
-  <p>Workloads: YCSB-RO (100% reads), YCSB-BA (50% reads, 50% updates), YCSB-WH (10% reads, 90% updates), and TPC-C.</p>
-
-  <h4>NVM/SSD vs. DRAM/SSD at Equal Cost</h4>
+  <div data-i18n>
+    <h4 lang="en">NVM/SSD vs. DRAM/SSD at Equal Cost</h4>
+    <h4 lang="zh">相同成本下NVM/SSD与DRAM/SSD的性能比较</h4>
+    <h4 lang="ja">同コストでのNVM/SSD対DRAM/SSD</h4>
+  </div>
 
   <figure>
-    <img src="../static/img/spitfire/img-023.png" alt="NVM-SSD vs DRAM-SSD throughput">
-    <figcaption>Throughput comparison of NVM/SSD vs. DRAM/SSD at equal cost across workloads and database sizes.</figcaption>
+    <img src="../static/img/spitfire/img-023.png" alt="NVM-SSD vs DRAM-SSD">
+    <figcaption data-i18n>
+      <span lang="en">Throughput of NVM/SSD vs. DRAM/SSD at equal cost. As write ratio increases the gap narrows — NVM avoids dirty-page-flush overhead.</span>
+      <span lang="zh">相同成本下NVM/SSD与DRAM/SSD的吞吐量比较。随写入比例增加差距收窄——NVM避免了脏页刷盘开销。</span>
+      <span lang="ja">同コストでのNVM/SSDとDRAM/SSDのスループット比較。書き込み比率が増加するにつれてギャップが縮小 — NVMはダーティページのフラッシュオーバーヘッドを回避する。</span>
+    </figcaption>
   </figure>
 
-  <ul>
-    <li>For YCSB-RO/BA, DRAM/SSD is better when the working set fits in DRAM; throughput drops sharply once DRAM capacity is exceeded.</li>
-    <li>As write ratio increases toward TPC-C, the gap narrows — NVM avoids the dirty-page-flush-to-SSD overhead that DRAM/SSD incurs.</li>
-  </ul>
-
-  <h4>Optimal Migration Policy per Workload</h4>
+  <div data-i18n>
+    <h4 lang="en">Optimal Migration Policy per Workload</h4>
+    <h4 lang="zh">不同工作集下的最优数据迁移策略</h4>
+    <h4 lang="ja">ワークロードごとの最適移行ポリシー</h4>
+  </div>
 
   <figure>
-    <img src="../static/img/spitfire/img-026.png" alt="Figure 6: Performance Impact of Bypassing DRAM">
-    <figcaption>Figure 6: Performance Impact of Bypassing DRAM — throughput vs. D migration probability. D = 0.01 is optimal across all workloads.</figcaption>
+    <img src="../static/img/spitfire/img-026.png" alt="Figure 6: Bypassing DRAM">
+    <figcaption data-i18n>
+      <span lang="en">Figure 6: D = 0.01 (lazy) is optimal. D = 0.01 outperforms D = 1 by 58% on YCSB-RO: it reduces DRAM/NVM duplication 16×, ensures only frequently-accessed data reaches DRAM, and maximizes effective cache size.</span>
+      <span lang="zh">图6：D=0.01（lazy）在所有负载下均最优。YCSB-RO下D=0.01比D=1性能高58%：减少DRAM/NVM数据重复16倍，确保只有常访问数据进入DRAM，最大化有效缓存空间。</span>
+      <span lang="ja">図6：D=0.01（lazy）がすべてのワークロードで最適。YCSB-ROではD=0.01がD=1より58%高い：DRAM/NVM重複を16倍削減し、頻繁にアクセスされるデータのみDRAMに到達させ、有効キャッシュサイズを最大化する。</span>
+    </figcaption>
   </figure>
 
   <figure>
-    <img src="../static/img/spitfire/img-027.png" alt="Figure 7: Performance Impact of Bypassing NVM">
-    <figcaption>Figure 7: Performance Impact of Bypassing NVM — throughput vs. N migration probability. N = 0.01 is optimal; setting N = 0 hurts more than D = 0 because NVM capacity ≫ DRAM capacity.</figcaption>
+    <img src="../static/img/spitfire/img-027.png" alt="Figure 7: Bypassing NVM">
+    <figcaption data-i18n>
+      <span lang="en">Figure 7: N = 0.01 is optimal. Setting N = 0 hurts more than D = 0 because NVM capacity ≫ DRAM capacity.</span>
+      <span lang="zh">图7：N=0.01最优。设置N=0的影响远大于D=0，因为NVM容量远大于DRAM容量。</span>
+      <span lang="ja">図7：N=0.01が最適。NVM容量≫DRAM容量のため、N=0の設定はD=0より大きなダメージを与える。</span>
+    </figcaption>
   </figure>
 
   <figure>
     <img src="../static/img/spitfire/img-028.png" alt="Figure 8: NVM Write Volume">
-    <figcaption>Figure 8: Impact of Bypassing NVM on Writes to NVM — lazy strategy significantly reduces NVM write volume, extending device lifetime.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Figure 8: Lazy strategy significantly reduces NVM write volume, extending NVM device lifetime.</span>
+      <span lang="zh">图8：Lazy策略显著减少NVM写入量，延长NVM设备使用寿命。</span>
+      <span lang="ja">図8：Lazyストラテジーはすることでデバイス寿命を延ばす。NVMの書き込み量を大幅に削減する。</span>
+    </figcaption>
   </figure>
 
-  <p>Combined conclusion: lazy (D = N = 0.01) performs best. NVM read/write performance is close to DRAM, so minimizing DRAM/NVM duplication maximizes effective cache, and only the hottest pages migrate to DRAM.</p>
-
-  <h4>Simulated Annealing Convergence</h4>
+  <div data-i18n>
+    <h4 lang="en">Simulated Annealing Convergence</h4>
+    <h4 lang="zh">模拟退火的收敛性</h4>
+    <h4 lang="ja">模擬焼きなまし法の収束</h4>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-030.png" alt="Figure 10: Adaptive Data Migration">
-    <figcaption>Figure 10: Adaptive Data Migration — simulated annealing converges to near-lazy policy within ~40 epochs on both YCSB-RO and YCSB-BA.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Figure 10: Simulated annealing converges to near-lazy policy within ~40 epochs on both YCSB-RO and YCSB-BA.</span>
+      <span lang="zh">图10：模拟退火在约40个epoch后收敛至接近lazy的策略（YCSB-RO和YCSB-BA均如此）。</span>
+      <span lang="ja">図10：模擬焼きなまし法はYCSB-ROとYCSB-BAの両方で約40エポック以内にlazyポリシーに近い状態に収束する。</span>
+    </figcaption>
   </figure>
 
-  <h4>HYMEM vs. Spitfire</h4>
+  <div data-i18n>
+    <h4 lang="en">HYMEM vs. Spitfire</h4>
+    <h4 lang="zh">HYMEM与Spitfire对比</h4>
+    <h4 lang="ja">HYMEM対Spitfire</h4>
+  </div>
 
   <figure>
-    <img src="../static/img/spitfire/img-031.png" alt="Figure 11: Optimal NVM Loading Granularity">
-    <figcaption>Figure 11: Optimal Granularity for Loading Data on NVM — 256 B is optimal on Optane DC PMMs, not HYMEM's assumed 64 B.</figcaption>
+    <img src="../static/img/spitfire/img-031.png" alt="Figure 11: NVM Loading Granularity">
+    <figcaption data-i18n>
+      <span lang="en">Figure 11: Optimal NVM loading granularity is 256 B on Optane DC PMMs, not HYMEM's assumed 64 B.</span>
+      <span lang="zh">图11：Optane DC PMMs上的最优NVM数据加载粒度为256B，而非HYMEM假设的64B。</span>
+      <span lang="ja">図11：Optane DC PMMs上の最適NVMロード粒度は、HYMEMが想定する64Bではなく256Bである。</span>
+    </figcaption>
   </figure>
 
   <figure>
-    <img src="../static/img/spitfire/img-032.png" alt="Figure 12: Ablation Study of HYMEM and Spitfire">
-    <figcaption>Figure 12: Ablation Study — Spitfire-Lazy significantly outperforms HYMEM across all conditions, showing that migration policy choice matters more than fine-grained loading optimizations.</figcaption>
+    <img src="../static/img/spitfire/img-032.png" alt="Figure 12: Ablation Study">
+    <figcaption data-i18n>
+      <span lang="en">Figure 12: Spitfire-Lazy significantly outperforms HYMEM — migration policy choice dominates over fine-grained loading optimizations.</span>
+      <span lang="zh">图12：Spitfire-Lazy显著超越HYMEM——迁移策略的选择比细粒度加载优化对性能的影响更大。</span>
+      <span lang="ja">図12：Spitfire-LazyがHYMEMを大幅に上回る — 移行ポリシーの選択が細粒度ロード最適化より支配的。</span>
+    </figcaption>
   </figure>
 
-  <blockquote>We demonstrate that the choice of the migration policy is more important than the fine-grained loading and mini-page optimizations. — Spitfire</blockquote>
+  <div data-i18n>
+    <blockquote lang="en">We demonstrate that the choice of the migration policy is more important than the fine-grained loading and mini-page optimizations. — Spitfire</blockquote>
+    <blockquote lang="zh">我们证明，迁移策略的选择比细粒度加载和小页面优化更为重要。——Spitfire</blockquote>
+    <blockquote lang="ja">移行ポリシーの選択は、細粒度ロードおよびミニページ最適化よりも重要であることを示す。— Spitfire</blockquote>
+  </div>
 
-  <h4>Impact of Database Size</h4>
+  <div data-i18n>
+    <h4 lang="en">Impact of Database Size</h4>
+    <h4 lang="zh">数据库大小对性能的影响</h4>
+    <h4 lang="ja">データベースサイズの影響</h4>
+  </div>
 
   <figure>
     <img src="../static/img/spitfire/img-036.png" alt="Figure 15: Impact of Database Size">
-    <figcaption>Figure 15: Impact of Database Size — Spitfire-Lazy leads on DRAM/NVM/SSD for read-heavy and small workloads; NVM/SSD leads for write-heavy and large workloads.</figcaption>
+    <figcaption data-i18n>
+      <span lang="en">Figure 15: Spitfire-Lazy leads on DRAM/NVM/SSD for read-heavy and small workloads; NVM/SSD leads for write-heavy and large workloads.</span>
+      <span lang="zh">图15：读密集型或小工作集下Spitfire-Lazy在DRAM/NVM/SSD上表现最佳；写密集型或大工作集下NVM/SSD更优。</span>
+      <span lang="ja">図15：読み取り集中型・小規模ワークロードではSpitfire-LazyがDRAM/NVM/SSDでリード；書き込み集中型・大規模ワークロードではNVM/SSDがリード。</span>
+    </figcaption>
   </figure>
 
-  <p>Three design principles from the storage architecture analysis:</p>
-  <ul>
-    <li>For maximum absolute performance, architecture must include DRAM.</li>
-    <li>For read-intensive workloads, DRAM/NVM/SSD achieves the best performance/price ratio.</li>
-    <li>For write-intensive workloads, NVM/SSD achieves the best performance/price ratio — NVM persistence reduces recovery protocol overhead.</li>
-  </ul>
+  <div data-i18n>
+    <p lang="en">Three storage architecture design principles: (1) For maximum absolute performance, architecture must include DRAM. (2) For read-intensive workloads, DRAM/NVM/SSD achieves the best performance/price ratio. (3) For write-intensive workloads, NVM/SSD is best — NVM persistence reduces recovery overhead.</p>
+    <p lang="zh">三条存储架构设计原则：（1）要达到最高绝对性能，架构必须包含DRAM；（2）读密集型负载下DRAM/NVM/SSD的性价比最优；（3）写密集型负载下NVM/SSD的性价比最优——NVM持久化降低了恢复协议开销。</p>
+    <p lang="ja">3つのストレージアーキテクチャ設計原則：(1) 最高の絶対性能のためには、アーキテクチャにDRAMが必要；(2) 読み取り集中型ワークロードではDRAM/NVM/SSDが最良の性能/価格比を達成；(3) 書き込み集中型ワークロードではNVM/SSDが最良 — NVMの永続性により回復オーバーヘッドが削減される。</p>
+  </div>
 
-  <h2>VII. Conclusion</h2>
+  <!-- ── VII. Conclusion ───────────────────────────────────── -->
+  <div data-i18n>
+    <h2 lang="en">VII. Conclusion</h2>
+    <h2 lang="zh">七、结论</h2>
+    <h2 lang="ja">VII. 結論</h2>
+  </div>
 
-  <p>HYMEM, the first DBMS buffer manager for DRAM/NVM/SSD, achieves performance beyond NVM Direct via clock-based hot/warm/cold page distribution combined with NVM byte-addressability optimizations. Spitfire introduces a probabilistic vector representation of migration policies that enables simulated annealing-based workload adaptation. Its key finding: migration policy selection dominates performance, outweighing HYMEM's fine-grained cache-line and mini-page optimizations. The Spitfire-Lazy policy, which minimizes DRAM/NVM data duplication, consistently outperforms HYMEM across diverse workloads.</p>
+  <div data-i18n>
+    <p lang="en">HYMEM, the first DBMS buffer manager for DRAM/NVM/SSD, achieves performance beyond NVM Direct via clock-based hot/warm/cold page distribution and NVM byte-addressability optimizations. Spitfire introduces a probabilistic vector representation of migration policies enabling simulated annealing-based workload adaptation. Its key finding: migration policy selection dominates performance, outweighing fine-grained cache-line and mini-page optimizations. The Spitfire-Lazy policy consistently outperforms HYMEM across diverse workloads.</p>
+    <p lang="zh">HYMEM是首个面向DRAM/NVM/SSD三层架构的DBMS缓冲区管理器，通过时钟算法将热/温/冷页面分发至合适存储层，并利用NVM字节寻址能力实现了超越NVM Direct的性能。Spitfire通过概率向量刻画迁移策略，使模拟退火能够在运行时自适应调整。核心结论：迁移策略的选择对性能的决定性影响超过缓存行和小页面等细粒度优化。Spitfire-Lazy策略在各类负载下均持续优于HYMEM。</p>
+    <p lang="ja">HYMEMはDRAM/NVM/SSD向けの最初のDBMSバッファマネージャで、クロックベースのホット/ウォーム/コールドページ分配とNVMバイトアドレッサビリティ最適化によりNVM Directを超える性能を達成しました。Spitfireは移行ポリシーの確率的ベクトル表現を導入し、模擬焼きなまし法によるワークロード適応を実現します。主な知見：移行ポリシーの選択が性能を支配し、キャッシュラインとミニページの細粒度最適化を上回ります。Spitfire-Lazyポリシーは多様なワークロードを通じてHYMEMを一貫して上回ります。</p>
+  </div>
+
 </body>
-
 </html>

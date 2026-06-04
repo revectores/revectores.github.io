@@ -119,6 +119,13 @@ body{font-size:14px;}
 body{font-size:16px;}
 }
 
+/* Language switcher */
+.lang-switcher { display: flex; gap: 0.3em; justify-content: flex-end; margin-bottom: 0.8em; }
+.lang-btn { background: none; border: 1px solid #ccc; border-radius: 3px; padding: 0.15em 0.55em; font-size: 0.78em; cursor: pointer; color: #666; font-family: sans-serif; }
+.lang-btn:hover { border-color: #888; color: #111; }
+.lang-btn.active { background: #333; border-color: #333; color: #fff; }
+[data-i18n] > [lang]:not([lang="en"]) { display: none; }
+
 @media print {
   * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
   body{font-size:12pt; max-width:100%;}

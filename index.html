@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -8,51 +8,98 @@
   <link rel="stylesheet" type="text/css" href="static/css/blog.css">
   <link rel="stylesheet" type="text/css" href="static/css/code.css">
   <script src="static/js/copy-code.js"></script>
+  <script src="static/js/lang-switcher.js"></script>
 </head>
 
 <body>
-  <h1>Lingyang Zeng</h1>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1>Lingyang Zeng &nbsp;<span style="font-size:0.5em;font-weight:normal;color:#888;">曾令扬</span></h1>
 
   <nav class="tabs">
-    <button class="tab-btn active" data-tab="home">Home</button>
-    <button class="tab-btn" data-tab="blogs">Blogs</button>
+    <button class="tab-btn active" data-tab="home"><span data-i18n><span lang="en">Home</span><span lang="zh">主页</span><span lang="ja">ホーム</span></span></button>
+    <button class="tab-btn" data-tab="blogs"><span data-i18n><span lang="en">Blogs</span><span lang="zh">博客</span><span lang="ja">ブログ</span></span></button>
   </nav>
 
   <div id="tab-home" class="tab-panel active">
-    <p>
-      I am a PhD student at East China Normal University, under the supervision of <a href="https://scholar.google.com/citations?user=iJtZsaQAAAAJ&hl=en">Prof. Rong Zhang</a> in the <a href="https://dbhammer.github.io/">DBHammer Lab</a>.
-      My current research focuses on multimodal/multimodel databases, semantic operator processing systems, and large language model memory.
-    </p>
+    <div data-i18n>
+      <p lang="en">
+        I am a PhD student at East China Normal University, under the supervision of <a href="https://scholar.google.com/citations?user=iJtZsaQAAAAJ&hl=en">Prof. Rong Zhang</a> in the <a href="https://dbhammer.github.io/">DBHammer Lab</a>.
+        My current research focuses on multimodal/multimodel databases, semantic operator processing systems, and large language model memory.
+      </p>
+      <p lang="zh">
+        我是华东师范大学博士研究生，在<a href="https://dbhammer.github.io/">DBHammer实验室</a>，师从<a href="https://scholar.google.com/citations?user=iJtZsaQAAAAJ&hl=en">张蓉教授</a>。当前研究方向为多模态/多模型数据库、语义算子处理系统与大语言模型记忆。
+      </p>
+      <p lang="ja">
+        東華師範大学（ECNU）の博士課程学生で、<a href="https://dbhammer.github.io/">DBHammerラボ</a>にて<a href="https://scholar.google.com/citations?user=iJtZsaQAAAAJ&hl=en">張蓉教授</a>の指導のもと研究を行っています。現在の研究テーマはマルチモーダル・マルチモデルデータベース、セマンティックオペレータ処理システム、大規模言語モデルのメモリです。
+      </p>
+    </div>
 
-    <h4>Bibliography</h4>
+    <h4 data-i18n>
+      <span lang="en">Bibliography</span>
+      <span lang="zh">经历</span>
+      <span lang="ja">経歴</span>
+    </h4>
     <table class="center" style="width: 100%; font-size: 0.9em;">
       <tr>
-        <td>School of Computer Science and Technology, ECNU.</td>
+        <td data-i18n>
+          <span lang="en">School of Computer Science and Technology, ECNU</span>
+          <span lang="zh">华东师范大学 计算机科学与技术学院</span>
+          <span lang="ja">華東師範大学 コンピュータ科学技術学部</span>
+        </td>
         <td>2018.09 ~ 2022.06</td>
       </tr>
       <tr>
-        <td>Database Dev. Database Kernel Group, Meituan. (Intern)</td>
+        <td data-i18n>
+          <span lang="en">Database Dev. Database Kernel Group, Meituan (Intern)</span>
+          <span lang="zh">美团 数据库内核组 数据库开发（实习）</span>
+          <span lang="ja">美団 データベースカーネルグループ データベース開発（インターン）</span>
+        </td>
         <td>2021.07 ~ 2021.08</td>
       </tr>
       <tr>
-        <td>Backend Dev. WeChat Game, Tencent.</td>
+        <td data-i18n>
+          <span lang="en">Backend Dev. WeChat Game, Tencent</span>
+          <span lang="zh">腾讯 微信游戏 后端开发</span>
+          <span lang="ja">テンセント WeChat Game バックエンド開発</span>
+        </td>
         <td>2022.07 ~ 2022.12</td>
       </tr>
       <tr>
-        <td>Backend Dev. TikTok Live, ByteDance.</td>
+        <td data-i18n>
+          <span lang="en">Backend Dev. TikTok Live, ByteDance</span>
+          <span lang="zh">字节跳动 TikTok直播 后端开发</span>
+          <span lang="ja">ByteDance TikTok Live バックエンド開発</span>
+        </td>
         <td>2023.03 ~ 2023.12</td>
       </tr>
       <tr>
-        <td>Backend Dev. Doubao, ByteDance.</td>
+        <td data-i18n>
+          <span lang="en">Backend Dev. Doubao, ByteDance</span>
+          <span lang="zh">字节跳动 豆包 后端开发</span>
+          <span lang="ja">ByteDance 豆包（Doubao） バックエンド開発</span>
+        </td>
         <td>2023.12 ~ 2024.04</td>
       </tr>
       <tr>
-        <td>School of Data Science and Engineering, ECNU.</td>
+        <td data-i18n>
+          <span lang="en">School of Data Science and Engineering, ECNU</span>
+          <span lang="zh">华东师范大学 数据科学与工程学院</span>
+          <span lang="ja">華東師範大学 データサイエンス・エンジニアリング学部</span>
+        </td>
         <td>2024.09 ~ </td>
       </tr>
     </table>
 
-    <h4>Publications</h4>
+    <h4 data-i18n>
+      <span lang="en">Publications</span>
+      <span lang="zh">论文</span>
+      <span lang="ja">論文</span>
+    </h4>
     <ol style="font-size: 0.9em;">
       <li>
       Lingyang Zeng, Xuhua Huang, Hongyu Yang, Siyang Weng, Zirui Hu, Hailin He, Chengcheng Yang, Rong Zhang, Peng Cai, Xuan Zhou, Qiang Yin. A Survey of Multi-modal Database Query Processing. Journal of Software.
@@ -63,12 +110,20 @@
       </li>
     </ol>
 
-    <h4>Patents</h4>
+    <h4 data-i18n>
+      <span lang="en">Patents</span>
+      <span lang="zh">专利</span>
+      <span lang="ja">特許</span>
+    </h4>
     <ol style="font-size: 0.9em;">
       <li>Xiangyun Du, Lingyang Zeng, Rong Zhang. A Joint Generation Method for Labeled Vector Data. (<em>Under review</em>)</li>
     </ol>
 
-    <h4>Friends</h4>
+    <h4 data-i18n>
+      <span lang="en">Friends</span>
+      <span lang="zh">友链</span>
+      <span lang="ja">リンク</span>
+    </h4>
     <ul style="font-size: 0.9em;">
       <li><a href="https://dingcuiyu.github.io">Dingcui Yu</a></li>
       <li><a href="https://kingnobro.github.io">Ronghuan Wu</a></li>
@@ -79,9 +134,9 @@
 
   <div id="tab-blogs" class="tab-panel">
     <ul style="font-size: 0.9em;">
-      <li><a href="blog/netpoll-source-code-analysis.html">Netpoll Source Code Analysis</a> <span style="color:#888;">— May 13, 2023</span></li>
-      <li><a href="blog/spitfire-three-tier-buffer-manager.html">Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</a> <span style="color:#888;">— Aug 25, 2021</span></li>
-      <li><a href="blog/how-to-build-a-shell-from-scratch.html">How to Build A Shell From Scratch</a> <span style="color:#888;">— Oct 18, 2020</span></li>
+      <li><a href="blog/netpoll-source-code-analysis.html"><span data-i18n><span lang="en">Netpoll Source Code Analysis</span><span lang="zh">Netpoll 源码分析</span><span lang="ja">Netpoll ソースコード解析</span></span></a> <span style="color:#888;">— May 13, 2023</span></li>
+      <li><a href="blog/spitfire-three-tier-buffer-manager.html"><span data-i18n><span lang="en">Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</span><span lang="zh">Spitfire：面向易失与非易失内存的三层缓冲区管理器</span><span lang="ja">Spitfire：揮発性・不揮発性メモリのための三層バッファマネージャ</span></span></a> <span style="color:#888;">— Aug 25, 2021</span></li>
+      <li><a href="blog/how-to-build-a-shell-from-scratch.html"><span data-i18n><span lang="en">How to Build A Shell From Scratch</span><span lang="zh">如何从零构建一个 Shell</span><span lang="ja">シェルをゼロから作る方法</span></span></a> <span style="color:#888;">— Oct 18, 2020</span></li>
     </ul>
   </div>
 
@@ -95,7 +150,7 @@
       if (panel) panel.classList.add('active');
     }
 
-    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn) {
       btn.addEventListener('click', function() { activateTab(btn.dataset.tab); });
     });
 

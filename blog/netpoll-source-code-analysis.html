@@ -1,27 +1,49 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Netpoll Source Code Analysis (1)</title>
+  <title>Netpoll Source Code Analysis</title>
   <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
   <link rel="stylesheet" type="text/css" href="../static/css/code.css">
   <script src="../static/js/copy-code.js"></script>
+  <script src="../static/js/lang-switcher.js"></script>
 </head>
 
 <body>
   <p><a href="../index.html#blogs">&larr; Back</a></p>
 
-  <h1>Netpoll Source Code Analysis</h1>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1 data-i18n>
+    <span lang="en">Netpoll Source Code Analysis</span>
+    <span lang="zh">Netpoll 源码分析</span>
+    <span lang="ja">Netpoll ソースコード解析</span>
+  </h1>
   <p style="text-align:center; color:#888;">May 13, 2023</p>
 
-  <p><a href="https://github.com/cloudwego/netpoll">Netpoll</a> is ByteDance's proprietary networking library, serving as the network communication layer for their self-developed RPC framework <a href="https://github.com/cloudwego/kitex">KiteX</a>. Here we briefly analyze its code module by module. This analysis is based on commit <a href="https://github.com/cloudwego/netpoll/tree/cdac6f0c9014d7f8da1fb91e101969b623e89871"><code>cdac6f0c</code></a>.</p>
+  <div data-i18n>
+    <p lang="en"><a href="https://github.com/cloudwego/netpoll">Netpoll</a> is ByteDance's proprietary networking library, serving as the network communication layer for their self-developed RPC framework <a href="https://github.com/cloudwego/kitex">KiteX</a>. Here we briefly analyze its code module by module. This analysis is based on commit <a href="https://github.com/cloudwego/netpoll/tree/cdac6f0c9014d7f8da1fb91e101969b623e89871"><code>cdac6f0c</code></a>. This post traces the core execution pathway.</p>
+    <p lang="zh"><a href="https://github.com/cloudwego/netpoll">Netpoll</a> 是字节跳动自研网络库，被作为自研RPC框架 <a href="https://github.com/cloudwego/kitex">KiteX</a> 的网络通信层。这里我们分模块对其代码作一简要分析，本分析基于 commit <a href="https://github.com/cloudwego/netpoll/tree/cdac6f0c9014d7f8da1fb91e101969b623e89871"><code>cdac6f0c</code></a>。本篇分析其核心执行链路。</p>
+    <p lang="ja"><a href="https://github.com/cloudwego/netpoll">Netpoll</a> はByteDance独自のネットワークライブラリで、自社開発RPCフレームワーク <a href="https://github.com/cloudwego/kitex">KiteX</a> のネットワーク通信層です。ここではモジュールごとにコードを簡単に分析します。この分析はcommit <a href="https://github.com/cloudwego/netpoll/tree/cdac6f0c9014d7f8da1fb91e101969b623e89871"><code>cdac6f0c</code></a> に基づきます。この記事ではコアの実行パスを追います。</p>
+  </div>
 
-  <p>This post traces the core execution pathway.</p>
+  <!-- ── 1. Echo Server ──────────────────────────────────── -->
+  <div data-i18n>
+    <h3 lang="en">1. Echo Server Example</h3>
+    <h3 lang="zh">1. Echo Server 示例</h3>
+    <h3 lang="ja">1. エコーサーバーの例</h3>
+  </div>
 
-  <h3>1. Echo Server Example</h3>
-
-  <p>Let's start with a simple echo server:</p>
+  <div data-i18n>
+    <p lang="en">Let's start with a simple echo server:</p>
+    <p lang="zh">首先观察一个简单的 echo server：</p>
+    <p lang="ja">まず、シンプルなエコーサーバーを見てみましょう：</p>
+  </div>
 
 <pre><code>package main
 
@@ -62,20 +84,36 @@ func handle(ctx context.Context, connection netpoll.Connection) error {
     return nil
 }</code></pre>
 
-  <p>The two initialization interfaces are:</p>
+  <div data-i18n>
+    <p lang="en">The two initialization interfaces are:</p>
+    <p lang="zh">两个初始化接口：</p>
+    <p lang="ja">2つの初期化インターフェース：</p>
+  </div>
 
 <pre><code>func NewEventLoop(onRequest OnRequest, ops ...Option) (EventLoop, error)
 func CreateListener(network, addr string) (l Listener, err error)</code></pre>
 
-  <p>They create an <strong>event loop</strong> and a <strong>listener</strong> respectively. The listener is passed as an argument to the event loop's serve call. Note that a native <code>net.Listener</code> can be used here as well.</p>
+  <div data-i18n>
+    <p lang="en">They create an <strong>event loop</strong> and a <strong>listener</strong> respectively. The listener is passed as an argument to the event loop's serve call. A native <code>net.Listener</code> can also be used here.</p>
+    <p lang="zh">分别用于创建<strong>事件循环</strong>和<strong>监听器</strong>对象，listener 作为参数参与事件循环的服务启动调用。注意这里也可以直接使用原生的 <code>net.Listener</code>。</p>
+    <p lang="ja">それぞれ<strong>イベントループ</strong>と<strong>リスナー</strong>を作成します。リスナーはイベントループのserve呼び出しに引数として渡されます。ネイティブの<code>net.Listener</code>も使用できます。</p>
+  </div>
 
 <pre><code>func (evl *eventLoop) Serve(ln net.Listener) error</code></pre>
 
-  <p>The event loop is essentially what we normally think of as a Server object — naming it <code>eventLoop</code> more clearly reflects the underlying epoller nature. The required parameter <code>onRequest</code> specifies the handler for processing requests. Its signature is:</p>
+  <div data-i18n>
+    <p lang="en">The event loop is essentially what we normally think of as a Server object — naming it <code>eventLoop</code> more clearly reflects the underlying epoller nature. The required parameter <code>onRequest</code> specifies the handler for processing requests. Its signature is:</p>
+    <p lang="zh">这里的事件循环实质就是通常理解的 Server 对象，采用 eventLoop 的名称可以比较清晰地体现其底层 epoller 的本质。eventLoop 对象创建时的必选参数 <code>onRequest</code> 用于指定处理请求的 handler，其函数签名为：</p>
+    <p lang="ja">イベントループは通常Serverオブジェクトと考えるものの本質で、<code>eventLoop</code>という名前は基礎となるepollernatureをより明確に反映します。必須パラメータ<code>onRequest</code>はリクエスト処理ハンドラを指定します。そのシグネチャは：</p>
+  </div>
 
 <pre><code>type OnRequest func(ctx context.Context, connection Connection) error</code></pre>
 
-  <p>It receives a <code>Connection</code> object representing a network connection. The most important interface methods are <code>Reader()</code> and <code>Writer()</code>, which expose the underlying read/write operations:</p>
+  <div data-i18n>
+    <p lang="en">It receives a <code>Connection</code> object representing a network connection. The most important interface methods are <code>Reader()</code> and <code>Writer()</code>, which expose the underlying read/write operations:</p>
+    <p lang="zh">其传递一个表征网络连接的 Connection 对象用于读写单个连接实例，其最重要的接口方法是通过 <code>Reader()</code> 和 <code>Writer()</code> 以暴露出底层读写操作：</p>
+    <p lang="ja">ネットワーク接続を表す<code>Connection</code>オブジェクトを受け取ります。最も重要なインターフェースメソッドは<code>Reader()</code>と<code>Writer()</code>で、基礎となる読み書き操作を公開します：</p>
+  </div>
 
 <pre><code>type Connection interface {
     net.Conn
@@ -84,20 +122,45 @@ func CreateListener(network, addr string) (l Listener, err error)</code></pre>
     // ...
 }</code></pre>
 
-  <p>In the echo server above, we read and write through:</p>
+  <div data-i18n>
+    <p lang="en">In the echo server above, we read and write through:</p>
+    <p lang="zh">在上述 echo server 的例子中，我们通过以下方法对连接执行读写：</p>
+    <p lang="ja">上記のエコーサーバーでは、次のメソッドで読み書きします：</p>
+  </div>
 
 <pre><code>Reader.ReadString(n int) (s string, err error)
 Writer.WriteString(s string) (n int, err error)</code></pre>
 
-  <p>This section introduced the core components of a simple echo server: <code>EventLoop</code>, <code>Listener</code>, and the connection management and I/O primitives <code>Connection</code>, <code>Reader</code>, and <code>Writer</code>.</p>
+  <div data-i18n>
+    <p lang="en">This section introduced the core components of a simple echo server: <code>EventLoop</code>, <code>Listener</code>, and the connection management and I/O primitives <code>Connection</code>, <code>Reader</code>, and <code>Writer</code>.</p>
+    <p lang="zh">以上，本节介绍了一个简单的 echo server 的组分，涉及构建服务器的核心对象 <code>EventLoop</code>、<code>Listener</code>，以及连接管理和读写相关装置 <code>Connection</code>、<code>Reader</code>、<code>Writer</code>。</p>
+    <p lang="ja">このセクションでは、シンプルなエコーサーバーのコアコンポーネントを紹介しました：<code>EventLoop</code>、<code>Listener</code>、および接続管理とI/Oプリミティブ<code>Connection</code>、<code>Reader</code>、<code>Writer</code>。</p>
+  </div>
 
-  <h3>2. Creating the <code>epoll_wait</code> Loop</h3>
+  <!-- ── 2. epoll_wait Loop ──────────────────────────────── -->
+  <div data-i18n>
+    <h3 lang="en">2. Creating the <code>epoll_wait</code> Loop</h3>
+    <h3 lang="zh">2. <code>epoll_wait</code> 循环的创建</h3>
+    <h3 lang="ja">2. <code>epoll_wait</code> ループの作成</h3>
+  </div>
 
-  <p>We know that <code>eventLoop.Serve</code> starts the service — from here we can trace netpoll's core call chain. As preparation, section 2.1 covers module initialization and 2.2 covers <code>FDOperator</code>, an important abstraction in netpoll.</p>
+  <div data-i18n>
+    <p lang="en">We know that <code>eventLoop.Serve</code> starts the service — from here we can trace netpoll's core call chain. Section 2.1 covers module initialization and 2.2 covers <code>FDOperator</code>, an important abstraction in netpoll.</p>
+    <p lang="zh">我们已经知道，<code>eventLoop.Serve</code> 方法实现了服务启动，我们可以由此出发观测 netpoll 的核心调用链路。2.1 先讨论模块初始化，2.2 讨论 netpoll 中一个重要的抽象 <code>FDOperator</code>。</p>
+    <p lang="ja"><code>eventLoop.Serve</code>がサービスを開始することはわかっています。ここからnetpollのコアコールチェーンをトレースします。2.1ではモジュール初期化、2.2ではnetpollの重要な抽象概念<code>FDOperator</code>を扱います。</p>
+  </div>
 
-  <h4>2.1 Initialization</h4>
+  <div data-i18n>
+    <h4 lang="en">2.1 Initialization</h4>
+    <h4 lang="zh">2.1 初始化</h4>
+    <h4 lang="ja">2.1 初期化</h4>
+  </div>
 
-  <p>During module <code>init()</code>, netpoll creates a <code>pollmanager</code> to manage a pool of pollers:</p>
+  <div data-i18n>
+    <p lang="en">During module <code>init()</code>, netpoll creates a <code>pollmanager</code> to manage a pool of pollers:</p>
+    <p lang="zh">在模块 <code>init()</code> 时，netpoll 就创建了一个 <code>pollmanager</code> 对象管理 poll 池：</p>
+    <p lang="ja">モジュールの<code>init()</code>で、netpollはpollerのプールを管理する<code>pollmanager</code>を作成します：</p>
+  </div>
 
 <pre><code>func init() {
     var loops = runtime.GOMAXPROCS(0)/20 + 1
@@ -108,7 +171,11 @@ Writer.WriteString(s string) (n int, err error)</code></pre>
     setLoggerOutput(os.Stderr)
 }</code></pre>
 
-  <p>The netpoll developers found through experimentation that a single epoller can handle up to 20 CPU cores, so the poll count is preset to <code>CoreNum/20 + 1</code>. <code>manager.SetNumLoops</code> also allows the poll count to be modified dynamically at runtime:</p>
+  <div data-i18n>
+    <p lang="en">The netpoll developers found through experimentation that a single epoller can handle up to 20 CPU cores, so the poll count is preset to <code>CoreNum/20 + 1</code>. <code>manager.SetNumLoops</code> also allows the poll count to be modified dynamically at runtime:</p>
+    <p lang="zh">netpoll 开发者通过实验发现单个 epoller 最高能够负载 20 Core，因此在初始化时将 poll 预先设定为 CoreNum/20+1。<code>manager.SetNumLoops</code> 也提供了运行时动态修改 poll 数量的能力：</p>
+    <p lang="ja">netpollの開発者は実験を通じて、単一のepollが最大20 CPUコアを処理できることを発見し、poll数を<code>CoreNum/20+1</code>に設定しています。<code>manager.SetNumLoops</code>はランタイムでpoll数を動的に変更する機能も提供します：</p>
+  </div>
 
 <pre><code>// SetNumLoops will return error when set numLoops &lt; 1
 func (m *manager) SetNumLoops(numLoops int) error {
@@ -137,11 +204,11 @@ func (m *manager) SetNumLoops(numLoops int) error {
     return m.Run()
 }</code></pre>
 
-  <p>Note that <code>SetNumLoops</code> only sets the count and allocates storage. The actual work happens in <code>manager.Run()</code>, which:</p>
-  <ul>
-    <li>Calls <code>openPoll()</code> to create actual poll objects.</li>
-    <li>Calls <code>poll.Wait()</code> to launch the core <code>epoll_wait</code> loop.</li>
-  </ul>
+  <div data-i18n>
+    <p lang="en">Note that <code>SetNumLoops</code> only sets the count and allocates storage. The actual work happens in <code>manager.Run()</code>, which calls <code>openPoll()</code> to create actual poll objects and <code>poll.Wait()</code> to launch the core <code>epoll_wait</code> loop:</p>
+    <p lang="zh">注意 <code>SetNumLoops</code> 实际上只是设定了 poll 数量并创建了存储空间，之后 <code>manager.Run()</code> 以 <code>openPoll()</code> 创建实际的 poll 对象，以 <code>poll.Wait()</code> 启动核心 epollWait 循环：</p>
+    <p lang="ja"><code>SetNumLoops</code>はカウントを設定してストレージを確保するだけです。実際の処理は<code>manager.Run()</code>で行われ、<code>openPoll()</code>で実際のpollオブジェクトを作成し、<code>poll.Wait()</code>でコアの<code>epoll_wait</code>ループを起動します：</p>
+  </div>
 
 <pre><code>// Run all pollers.
 func (m *manager) Run() error {
@@ -156,13 +223,17 @@ func (m *manager) Run() error {
     return nil
 }</code></pre>
 
-  <p>The key behaviors inside <code>openPoll()</code> are:</p>
-  <ul>
-    <li>Call <code>EPOLL_CREATE</code> to create an epoll fd.</li>
-    <li>Create an <a href="https://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd</a> for the poll itself and bind it (without starting the epoll loop yet), enabling it to respond to user-triggered activations via <code>poll.Trigger()</code> and poll close events via <code>poll.Close()</code>.</li>
-  </ul>
+  <div data-i18n>
+    <p lang="en">The key behaviors inside <code>openPoll()</code> are: calling <code>EPOLL_CREATE</code> to create an epoll fd; and creating an <a href="https://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd</a> for the poll itself (without starting the epoll loop yet), enabling it to respond to <code>poll.Trigger()</code> and <code>poll.Close()</code>.</p>
+    <p lang="zh"><code>openPoll()</code> 内部的关键行为是：调用 <code>EPOLL_CREATE</code> 创建 epoll fd；为 poll 本身创建一个 <a href="https://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd</a> 并绑定到自身（此时还没有真正启动 epoll 循环），从而能够响应用户对事件循环的主动触发 <code>poll.Trigger()</code> 和 poll 关闭事件 <code>poll.Close()</code>。</p>
+    <p lang="ja"><code>openPoll()</code>の主要な動作：<code>EPOLL_CREATE</code>でepoll fdを作成し、poll自体の<a href="https://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd</a>を作成（まだepollループを開始しない）して、<code>poll.Trigger()</code>と<code>poll.Close()</code>に応答できるようにします。</p>
+  </div>
 
-  <p><code>defaultPoll.Wait()</code> is the server's core epoll loop:</p>
+  <div data-i18n>
+    <p lang="en"><code>defaultPoll.Wait()</code> is the server's core epoll loop:</p>
+    <p lang="zh"><code>defaultPoll.Wait()</code>，服务器的核心 epoll 循环：</p>
+    <p lang="ja"><code>defaultPoll.Wait()</code>はサーバーのコアepollループです：</p>
+  </div>
 
 <pre><code>// Wait implements Poll.
 func (p *defaultPoll) Wait() (err error) {
@@ -192,13 +263,29 @@ func (p *defaultPoll) Wait() (err error) {
     }
 }</code></pre>
 
-  <p>The method does some performance-oriented timeout tuning that is not immediately obvious (to be discussed in a later post). The core is <code>EpollWait()</code> and <code>p.Handler()</code>, which dispatches concrete events when they arrive.</p>
+  <div data-i18n>
+    <p lang="en">The method does some performance-oriented timeout tuning that is not immediately obvious (to be discussed later). The core is <code>EpollWait()</code> and <code>p.Handler()</code>, which dispatches concrete events when they arrive.</p>
+    <p lang="zh">该方法为了性能做了一些不太容易理解的超时设定工作（在之后的分析中再详细讨论）。核心在于 <code>EpollWait()</code> 以及在有可用事件时执行 <code>p.Handler()</code> 来对具体事件作出响应。</p>
+    <p lang="ja">このメソッドはわかりにくい性能指向のタイムアウト調整を行っています（後の分析で詳細に説明します）。コアは<code>EpollWait()</code>と、イベントが到着したときに具体的なイベントをディスパッチする<code>p.Handler()</code>です。</p>
+  </div>
 
-  <p>Therefore, the actual epoll loop (reactor) completes as early as the <code>init</code> phase (i.e., on <code>import netpoll</code>). The <code>eventLoop.Serve</code> method itself is merely the process of binding the listener's file descriptor to one of the already-running pollers.</p>
+  <div data-i18n>
+    <p lang="en">Therefore, the actual epoll loop (reactor) completes as early as the <code>init</code> phase (i.e., on <code>import netpoll</code>). The <code>eventLoop.Serve</code> method itself is merely the process of binding the listener's file descriptor to one of the already-running pollers.</p>
+    <p lang="zh">因此，真正意义上的 epoll 循环（reactor）早在 <code>init</code> 阶段（即 <code>import netpoll</code> 时）就已经执行完毕了，而实际的 <code>eventLoop.Serve</code> 方法，则只不过是将 Listener 的文件描述符绑定到某一个已运行 poll 的过程。</p>
+    <p lang="ja">したがって、実際のepollループ（reactor）は<code>init</code>フェーズ（つまり<code>import netpoll</code>時）にすでに完了しています。<code>eventLoop.Serve</code>メソッド自体は、リスナーのファイルディスクリプタをすでに実行中のpollerの1つにバインドするプロセスに過ぎません。</p>
+  </div>
 
-  <h4>2.2 FDOperator</h4>
+  <div data-i18n>
+    <h4 lang="en">2.2 FDOperator</h4>
+    <h4 lang="zh">2.2 FDOperator</h4>
+    <h4 lang="ja">2.2 FDOperator</h4>
+  </div>
 
-  <p><code>FDOperator</code> (file descriptor operator) abstracts file descriptor management for <code>Server</code>, <code>Connection</code>, and even <code>Poll</code> objects in netpoll. All three establish the association between an FD and a poll through <code>FDOperator</code>:</p>
+  <div data-i18n>
+    <p lang="en"><code>FDOperator</code> (file descriptor operator) abstracts file descriptor management for <code>Server</code>, <code>Connection</code>, and even <code>Poll</code> objects in netpoll. All three establish the association between an FD and a poll through <code>FDOperator</code>:</p>
+    <p lang="zh"><code>FDOperator</code>（file descriptor operator）抽象了 netpoll 中的 <code>Server</code>、<code>Connection</code>，甚至 <code>Poll</code> 对象本身的文件描述符管理，三者均通过 <code>FDOperator</code> 建立 FD 和 poll 之间的关联：</p>
+    <p lang="ja"><code>FDOperator</code>（ファイルディスクリプタオペレーター）は、netpollの<code>Server</code>、<code>Connection</code>、さらには<code>Poll</code>オブジェクト自体のファイルディスクリプタ管理を抽象化します。3つはすべて<code>FDOperator</code>を通じてFDとpollの関連付けを確立します：</p>
+  </div>
 
 <pre><code>// FDOperator is a collection of operations on file descriptors.
 type FDOperator struct {
@@ -207,13 +294,21 @@ type FDOperator struct {
     // ...
 }</code></pre>
 
-  <p><code>FDOperator</code>'s most important method, <code>Control</code>, binds a specified <code>PollEvent</code> to the poll:</p>
+  <div data-i18n>
+    <p lang="en"><code>FDOperator</code>'s most important method, <code>Control</code>, binds a specified <code>PollEvent</code> to the poll:</p>
+    <p lang="zh"><code>FDOperator</code> 最重要的方法 <code>Control</code> 将指定的 poll 事件 <code>PollEvent</code> 绑定到 poll：</p>
+    <p lang="ja"><code>FDOperator</code>の最も重要なメソッド<code>Control</code>は、指定された<code>PollEvent</code>をpollにバインドします：</p>
+  </div>
 
 <pre><code>func (op *FDOperator) Control(event PollEvent) error {
     return op.poll.Control(op, event)
 }</code></pre>
 
-  <p>The underlying binding calls <code>syscall.SYS_EPOLL_CTL</code>:</p>
+  <div data-i18n>
+    <p lang="en">The underlying binding calls <code>syscall.SYS_EPOLL_CTL</code>:</p>
+    <p lang="zh">最终调用的绑定过程即 <code>syscall.SYS_EPOLL_CTL</code>：</p>
+    <p lang="ja">基礎となるバインディングは<code>syscall.SYS_EPOLL_CTL</code>を呼び出します：</p>
+  </div>
 
 <pre><code>// Control implements Poll.
 func (p *defaultPoll) Control(operator *FDOperator, event PollEvent) error {
@@ -240,11 +335,24 @@ func EpollCtl(epfd int, op int, fd int, event *epollevent) (err error) {
     return err
 }</code></pre>
 
-  <h3>3. Listening and Responding to New Connection Events</h3>
+  <!-- ── 3. New Connection ───────────────────────────────── -->
+  <div data-i18n>
+    <h3 lang="en">3. Listening and Responding to New Connection Events</h3>
+    <h3 lang="zh">3. 新建连接事件的监听和响应</h3>
+    <h3 lang="ja">3. 新規接続イベントの監視と応答</h3>
+  </div>
 
-  <h4>3.1 <code>eventLoop.Serve</code></h4>
+  <div data-i18n>
+    <h4 lang="en">3.1 <code>eventLoop.Serve</code></h4>
+    <h4 lang="zh">3.1 <code>eventLoop.Serve</code></h4>
+    <h4 lang="ja">3.1 <code>eventLoop.Serve</code></h4>
+  </div>
 
-  <p><code>Serve</code> creates a <code>Server</code> object via <code>newServer</code> to store the listener and user-specified options:</p>
+  <div data-i18n>
+    <p lang="en"><code>Serve</code> creates a <code>Server</code> object via <code>newServer</code> to store the listener and user-specified options:</p>
+    <p lang="zh"><code>Serve</code> 中通过 <code>newServer</code> 创建一个 <code>Server</code> 对象存储 Listener 和用户指定的 options：</p>
+    <p lang="ja"><code>Serve</code>は<code>newServer</code>を通じてリスナーとユーザー指定オプションを格納する<code>Server</code>オブジェクトを作成します：</p>
+  </div>
 
 <pre><code>// Serve implements EventLoop.
 func (evl *eventLoop) Serve(ln net.Listener) error {
@@ -263,7 +371,11 @@ func (evl *eventLoop) Serve(ln net.Listener) error {
     return err
 }</code></pre>
 
-  <p><code>Server.Run()</code> then calls <code>pollmanager.Pick()</code> to bind to a poll, and registers readable event monitoring on the listener's fd via <code>FDOperator.Control</code>:</p>
+  <div data-i18n>
+    <p lang="en"><code>Server.Run()</code> then calls <code>pollmanager.Pick()</code> to bind to a poll, and registers readable event monitoring on the listener's fd via <code>FDOperator.Control</code>:</p>
+    <p lang="zh"><code>Server</code> 随即 <code>Run()</code> 启动——本质上是调用 <code>pollmanager.Pick()</code> 方法绑定到一个 poll 上，并通过 <code>FDOperator.Control</code> 为 Listener 对应的文件描述符绑定 Readable 事件监听：</p>
+    <p lang="ja"><code>Server.Run()</code>は<code>pollmanager.Pick()</code>を呼び出してpollにバインドし、<code>FDOperator.Control</code>を通じてリスナーのfdに読み取り可能イベントの監視を登録します：</p>
+  </div>
 
 <pre><code>// Run this server.
 func (s *server) Run() (err error) {
@@ -280,12 +392,20 @@ func (s *server) Run() (err error) {
     return err
 }</code></pre>
 
-  <p>When a new connection arrives, the handler branch fires:</p>
+  <div data-i18n>
+    <p lang="en">When a new connection arrives, the handler branch fires:</p>
+    <p lang="zh">新连接建立事件所对应的 handler 分支为：</p>
+    <p lang="ja">新しい接続が到着すると、ハンドラブランチが発火します：</p>
+  </div>
 
 <pre><code>// for non-connection
 operator.OnRead(p)</code></pre>
 
-  <p>This calls <code>server.OnRead</code>, which accepts the connection and initializes a <code>connection</code> object for it:</p>
+  <div data-i18n>
+    <p lang="en">This calls <code>server.OnRead</code>, which accepts the connection and initializes a <code>connection</code> object for it:</p>
+    <p lang="zh">其中调用 <code>server.OnRead</code>，接受连接并为其初始化一个 <code>connection</code> 对象：</p>
+    <p lang="ja">これは<code>server.OnRead</code>を呼び出し、接続を受け入れてそのための<code>connection</code>オブジェクトを初期化します：</p>
+  </div>
 
 <pre><code>func (s *server) OnRead(p Poll) error {
     // accept socket
@@ -321,11 +441,24 @@ operator.OnRead(p)</code></pre>
     return nil
 }</code></pre>
 
-  <p>The key call here is <code>connection.init()</code>, which initializes the connection object and registers it for read/write event monitoring (see the next section).</p>
+  <div data-i18n>
+    <p lang="en">The key call here is <code>connection.init()</code>, which initializes the connection object and registers it for read/write event monitoring (see the next section).</p>
+    <p lang="zh">其中的关键调用是通过 <code>connection.init()</code> 初始化连接对象，并监听该连接上发生的读写事件（见下节）。</p>
+    <p lang="ja">ここでの重要な呼び出しは<code>connection.init()</code>で、接続オブジェクトを初期化し、読み書きイベントの監視に登録します（次のセクションを参照）。</p>
+  </div>
 
-  <h3>4. Listening and Responding to Connection Read/Write Events</h3>
+  <!-- ── 4. Read/Write Events ───────────────────────────── -->
+  <div data-i18n>
+    <h3 lang="en">4. Listening and Responding to Connection Read/Write Events</h3>
+    <h3 lang="zh">4. 连接读写事件的监听和响应</h3>
+    <h3 lang="ja">4. 接続の読み書きイベントの監視と応答</h3>
+  </div>
 
-  <p>During <code>connection.init()</code>, the <code>FDOperator</code> is initialized and <code>connection.register()</code> is triggered through <code>connection.onPrepare()</code>:</p>
+  <div data-i18n>
+    <p lang="en">During <code>connection.init()</code>, the <code>FDOperator</code> is initialized and <code>connection.register()</code> is triggered through <code>connection.onPrepare()</code>:</p>
+    <p lang="zh"><code>connection.init()</code> 时，初始化 FDOperator，并通过 <code>connection.onPrepare()</code> 触发 <code>connection.register()</code>：</p>
+    <p lang="ja"><code>connection.init()</code>では、<code>FDOperator</code>が初期化され、<code>connection.onPrepare()</code>を通じて<code>connection.register()</code>がトリガーされます：</p>
+  </div>
 
 <pre><code>// init initialize the connection with options
 func (c *connection) init(conn Conn, opts *options) (err error) {
@@ -355,7 +488,11 @@ func (c *connection) init(conn Conn, opts *options) (err error) {
     return c.onPrepare(opts)
 }</code></pre>
 
-  <p><code>connection.register()</code> performs the final fd event binding:</p>
+  <div data-i18n>
+    <p lang="en"><code>connection.register()</code> performs the final fd event binding:</p>
+    <p lang="zh"><code>connection.register()</code> 中则最终进行了连接对应文件描述符的事件绑定：</p>
+    <p lang="ja"><code>connection.register()</code>で最終的なfdイベントバインディングが行われます：</p>
+  </div>
 
 <pre><code>// register only use for connection register into poll.
 func (c *connection) register() (err error) {
@@ -375,7 +512,11 @@ func (c *connection) register() (err error) {
     return nil
 }</code></pre>
 
-  <p>The handler branch for connection read events is:</p>
+  <div data-i18n>
+    <p lang="en">The handler branch for connection read events is:</p>
+    <p lang="zh">连接读事件对应的 handler 分支为：</p>
+    <p lang="ja">接続読み取りイベントのハンドラブランチは：</p>
+  </div>
 
 <pre><code>// for connection
 var bs = operator.Inputs(p.barriers[i].bs)
@@ -388,13 +529,29 @@ if len(bs) &gt; 0 {
     }
 }</code></pre>
 
-  <ul>
-    <li><code>operator.Inputs()</code> allocates memory for the read buffer.</li>
-    <li><code>ioread</code> calls <code>SYS_READV</code> at the syscall level for the actual read.</li>
-    <li><code>operator.InputAck</code> confirms completion and releases the buffer.</li>
-  </ul>
+  <div data-i18n>
+    <ul lang="en">
+      <li><code>operator.Inputs()</code> allocates memory for the read buffer.</li>
+      <li><code>ioread</code> calls <code>SYS_READV</code> at the syscall level for the actual read.</li>
+      <li><code>operator.InputAck</code> confirms completion and releases the buffer.</li>
+    </ul>
+    <ul lang="zh">
+      <li><code>operator.Inputs()</code> 方法为读缓冲区分配内存。</li>
+      <li><code>ioread</code> 底层调用 <code>SYS_READV</code> 进行实际的读操作。</li>
+      <li><code>operator.InputAck</code> 确认读操作完成以释放缓冲区。</li>
+    </ul>
+    <ul lang="ja">
+      <li><code>operator.Inputs()</code>は読み取りバッファのメモリを確保します。</li>
+      <li><code>ioread</code>はシステムコールレベルで<code>SYS_READV</code>を呼び出して実際の読み取りを行います。</li>
+      <li><code>operator.InputAck</code>は完了を確認してバッファを解放します。</li>
+    </ul>
+  </div>
 
-  <p>Write events follow the same pattern:</p>
+  <div data-i18n>
+    <p lang="en">Write events follow the same pattern:</p>
+    <p lang="zh">写事件也是类似的过程：</p>
+    <p lang="ja">書き込みイベントも同じパターンに従います：</p>
+  </div>
 
 <pre><code>// for connection
 var bs, supportZeroCopy = operator.Outputs(p.barriers[i].bs)
@@ -408,7 +565,11 @@ if len(bs) &gt; 0 {
     }
 }</code></pre>
 
-  <p>At this point we have completed tracing netpoll's overall core call chain.</p>
-</body>
+  <div data-i18n>
+    <p lang="en">At this point we have completed tracing netpoll's overall core call chain.</p>
+    <p lang="zh">至此我们完成了对 netpoll 整体核心调用链路的一个跟踪。</p>
+    <p lang="ja">以上で、netpollのコアコールチェーン全体のトレースが完了しました。</p>
+  </div>
 
+</body>
 </html>
