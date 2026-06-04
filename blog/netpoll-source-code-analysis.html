@@ -1,0 +1,414 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Netpoll Source Code Analysis (1)</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/code.css">
+  <script src="../static/js/copy-code.js"></script>
+</head>
+
+<body>
+  <p><a href="../index.html#blogs">&larr; Back</a></p>
+
+  <h1>Netpoll Source Code Analysis</h1>
+  <p style="text-align:center; color:#888;">May 13, 2023</p>
+
+  <p><a href="https://github.com/cloudwego/netpoll">Netpoll</a> is ByteDance's proprietary networking library, serving as the network communication layer for their self-developed RPC framework <a href="https://github.com/cloudwego/kitex">KiteX</a>. Here we briefly analyze its code module by module. This analysis is based on commit <a href="https://github.com/cloudwego/netpoll/tree/cdac6f0c9014d7f8da1fb91e101969b623e89871"><code>cdac6f0c</code></a>.</p>
+
+  <p>This post traces the core execution pathway.</p>
+
+  <h3>1. Echo Server Example</h3>
+
+  <p>Let's start with a simple echo server:</p>
+
+<pre><code>package main
+
+import (
+    "context"
+    "time"
+
+    "github.com/cloudwego/netpoll"
+)
+
+func main() {
+    network, address := "tcp", ":8080"
+    listener, _ := netpoll.CreateListener(network, address)
+
+    eventLoop, _ := netpoll.NewEventLoop(
+        handle,
+        netpoll.WithOnPrepare(prepare),
+        netpoll.WithReadTimeout(time.Second),
+    )
+    eventLoop.Serve(listener)
+}
+
+var _ netpoll.OnPrepare = prepare
+var _ netpoll.OnRequest = handle
+
+func prepare(connection netpoll.Connection) context.Context {
+    return context.Background()
+}
+
+func handle(ctx context.Context, connection netpoll.Connection) error {
+    reader := connection.Reader()
+    writer := connection.Writer()
+    defer reader.Release()
+    msg, _ := reader.ReadString(reader.Len())
+    writer.WriteString(msg)
+    writer.Flush()
+    println(msg)
+    return nil
+}</code></pre>
+
+  <p>The two initialization interfaces are:</p>
+
+<pre><code>func NewEventLoop(onRequest OnRequest, ops ...Option) (EventLoop, error)
+func CreateListener(network, addr string) (l Listener, err error)</code></pre>
+
+  <p>They create an <strong>event loop</strong> and a <strong>listener</strong> respectively. The listener is passed as an argument to the event loop's serve call. Note that a native <code>net.Listener</code> can be used here as well.</p>
+
+<pre><code>func (evl *eventLoop) Serve(ln net.Listener) error</code></pre>
+
+  <p>The event loop is essentially what we normally think of as a Server object — naming it <code>eventLoop</code> more clearly reflects the underlying epoller nature. The required parameter <code>onRequest</code> specifies the handler for processing requests. Its signature is:</p>
+
+<pre><code>type OnRequest func(ctx context.Context, connection Connection) error</code></pre>
+
+  <p>It receives a <code>Connection</code> object representing a network connection. The most important interface methods are <code>Reader()</code> and <code>Writer()</code>, which expose the underlying read/write operations:</p>
+
+<pre><code>type Connection interface {
+    net.Conn
+    Reader() Reader
+    Writer() Writer
+    // ...
+}</code></pre>
+
+  <p>In the echo server above, we read and write through:</p>
+
+<pre><code>Reader.ReadString(n int) (s string, err error)
+Writer.WriteString(s string) (n int, err error)</code></pre>
+
+  <p>This section introduced the core components of a simple echo server: <code>EventLoop</code>, <code>Listener</code>, and the connection management and I/O primitives <code>Connection</code>, <code>Reader</code>, and <code>Writer</code>.</p>
+
+  <h3>2. Creating the <code>epoll_wait</code> Loop</h3>
+
+  <p>We know that <code>eventLoop.Serve</code> starts the service — from here we can trace netpoll's core call chain. As preparation, section 2.1 covers module initialization and 2.2 covers <code>FDOperator</code>, an important abstraction in netpoll.</p>
+
+  <h4>2.1 Initialization</h4>
+
+  <p>During module <code>init()</code>, netpoll creates a <code>pollmanager</code> to manage a pool of pollers:</p>
+
+<pre><code>func init() {
+    var loops = runtime.GOMAXPROCS(0)/20 + 1
+    pollmanager = &amp;manager{}
+    pollmanager.SetLoadBalance(RoundRobin)
+    pollmanager.SetNumLoops(loops)
+
+    setLoggerOutput(os.Stderr)
+}</code></pre>
+
+  <p>The netpoll developers found through experimentation that a single epoller can handle up to 20 CPU cores, so the poll count is preset to <code>CoreNum/20 + 1</code>. <code>manager.SetNumLoops</code> also allows the poll count to be modified dynamically at runtime:</p>
+
+<pre><code>// SetNumLoops will return error when set numLoops &lt; 1
+func (m *manager) SetNumLoops(numLoops int) error {
+    if numLoops &lt; 1 {
+        return fmt.Errorf("set invalid numLoops[%d]", numLoops)
+    }
+    if numLoops &lt; m.NumLoops {
+        // if less than, close the redundant pollers
+        var polls = make([]Poll, numLoops)
+        for idx := 0; idx &lt; m.NumLoops; idx++ {
+            if idx &lt; numLoops {
+                polls[idx] = m.polls[idx]
+            } else {
+                if err := m.polls[idx].Close(); err != nil {
+                    logger.Printf("NETPOLL: poller close failed: %v\n", err)
+                }
+            }
+        }
+        m.NumLoops = numLoops
+        m.polls = polls
+        m.balance.Rebalance(m.polls)
+        return nil
+    }
+
+    m.NumLoops = numLoops
+    return m.Run()
+}</code></pre>
+
+  <p>Note that <code>SetNumLoops</code> only sets the count and allocates storage. The actual work happens in <code>manager.Run()</code>, which:</p>
+  <ul>
+    <li>Calls <code>openPoll()</code> to create actual poll objects.</li>
+    <li>Calls <code>poll.Wait()</code> to launch the core <code>epoll_wait</code> loop.</li>
+  </ul>
+
+<pre><code>// Run all pollers.
+func (m *manager) Run() error {
+    // new poll to fill delta.
+    for idx := len(m.polls); idx &lt; m.NumLoops; idx++ {
+        var poll = openPoll()
+        m.polls = append(m.polls, poll)
+        go poll.Wait()
+    }
+    // LoadBalance must be set before calling Run, otherwise it will panic.
+    m.balance.Rebalance(m.polls)
+    return nil
+}</code></pre>
+
+  <p>The key behaviors inside <code>openPoll()</code> are:</p>
+  <ul>
+    <li>Call <code>EPOLL_CREATE</code> to create an epoll fd.</li>
+    <li>Create an <a href="https://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd</a> for the poll itself and bind it (without starting the epoll loop yet), enabling it to respond to user-triggered activations via <code>poll.Trigger()</code> and poll close events via <code>poll.Close()</code>.</li>
+  </ul>
+
+  <p><code>defaultPoll.Wait()</code> is the server's core epoll loop:</p>
+
+<pre><code>// Wait implements Poll.
+func (p *defaultPoll) Wait() (err error) {
+    // init
+    var caps, msec, n = barriercap, -1, 0
+    p.Reset(128, caps)
+    // wait
+    for {
+        if n == p.size &amp;&amp; p.size &lt; 128*1024 {
+            p.Reset(p.size&lt;&lt;1, caps)
+        }
+        n, err = EpollWait(p.fd, p.events, msec)
+        if err != nil &amp;&amp; err != syscall.EINTR {
+            return err
+        }
+        if n &lt;= 0 {
+            msec = -1
+            runtime.Gosched()
+            continue
+        }
+        msec = 0
+        if p.Handler(p.events[:n]) {
+            return nil
+        }
+        // we can make sure that there is no op remaining if Handler finished
+        p.opcache.free()
+    }
+}</code></pre>
+
+  <p>The method does some performance-oriented timeout tuning that is not immediately obvious (to be discussed in a later post). The core is <code>EpollWait()</code> and <code>p.Handler()</code>, which dispatches concrete events when they arrive.</p>
+
+  <p>Therefore, the actual epoll loop (reactor) completes as early as the <code>init</code> phase (i.e., on <code>import netpoll</code>). The <code>eventLoop.Serve</code> method itself is merely the process of binding the listener's file descriptor to one of the already-running pollers.</p>
+
+  <h4>2.2 FDOperator</h4>
+
+  <p><code>FDOperator</code> (file descriptor operator) abstracts file descriptor management for <code>Server</code>, <code>Connection</code>, and even <code>Poll</code> objects in netpoll. All three establish the association between an FD and a poll through <code>FDOperator</code>:</p>
+
+<pre><code>// FDOperator is a collection of operations on file descriptors.
+type FDOperator struct {
+    FD   int
+    poll Poll
+    // ...
+}</code></pre>
+
+  <p><code>FDOperator</code>'s most important method, <code>Control</code>, binds a specified <code>PollEvent</code> to the poll:</p>
+
+<pre><code>func (op *FDOperator) Control(event PollEvent) error {
+    return op.poll.Control(op, event)
+}</code></pre>
+
+  <p>The underlying binding calls <code>syscall.SYS_EPOLL_CTL</code>:</p>
+
+<pre><code>// Control implements Poll.
+func (p *defaultPoll) Control(operator *FDOperator, event PollEvent) error {
+    var op int
+    var evt epollevent
+    p.setOperator(unsafe.Pointer(&amp;evt.data), operator)
+    switch event {
+    case PollReadable: // server accept a new connection and wait read
+        operator.inuse()
+        op, evt.events = syscall.EPOLL_CTL_ADD, syscall.EPOLLIN|syscall.EPOLLRDHUP|syscall.EPOLLERR
+    case PollWritable: // client create a new connection and wait connect finished
+        operator.inuse()
+        op, evt.events = syscall.EPOLL_CTL_ADD, EPOLLET|syscall.EPOLLOUT|syscall.EPOLLRDHUP|syscall.EPOLLERR
+    }
+    return EpollCtl(p.fd, op, operator.FD, &amp;evt)
+}</code></pre>
+
+<pre><code>// EpollCtl implements epoll_ctl.
+func EpollCtl(epfd int, op int, fd int, event *epollevent) (err error) {
+    _, _, err = syscall.RawSyscall6(syscall.SYS_EPOLL_CTL, uintptr(epfd), uintptr(op), uintptr(fd), uintptr(unsafe.Pointer(event)), 0, 0)
+    if err == syscall.Errno(0) {
+        err = nil
+    }
+    return err
+}</code></pre>
+
+  <h3>3. Listening and Responding to New Connection Events</h3>
+
+  <h4>3.1 <code>eventLoop.Serve</code></h4>
+
+  <p><code>Serve</code> creates a <code>Server</code> object via <code>newServer</code> to store the listener and user-specified options:</p>
+
+<pre><code>// Serve implements EventLoop.
+func (evl *eventLoop) Serve(ln net.Listener) error {
+    npln, err := ConvertListener(ln)
+    if err != nil {
+        return err
+    }
+    evl.Lock()
+    evl.svr = newServer(npln, evl.opts, evl.quit)
+    evl.svr.Run()
+    evl.Unlock()
+
+    err = evl.waitQuit()
+    // ensure evl will not be finalized until Serve returns
+    runtime.SetFinalizer(evl, nil)
+    return err
+}</code></pre>
+
+  <p><code>Server.Run()</code> then calls <code>pollmanager.Pick()</code> to bind to a poll, and registers readable event monitoring on the listener's fd via <code>FDOperator.Control</code>:</p>
+
+<pre><code>// Run this server.
+func (s *server) Run() (err error) {
+    s.operator = FDOperator{
+        FD:     s.ln.Fd(),
+        OnRead: s.OnRead,
+        OnHup:  s.OnHup,
+    }
+    s.operator.poll = pollmanager.Pick()
+    err = s.operator.Control(PollReadable)
+    if err != nil {
+        s.onQuit(err)
+    }
+    return err
+}</code></pre>
+
+  <p>When a new connection arrives, the handler branch fires:</p>
+
+<pre><code>// for non-connection
+operator.OnRead(p)</code></pre>
+
+  <p>This calls <code>server.OnRead</code>, which accepts the connection and initializes a <code>connection</code> object for it:</p>
+
+<pre><code>func (s *server) OnRead(p Poll) error {
+    // accept socket
+    conn, err := s.ln.Accept()
+    if err != nil {
+        // shut down
+        if strings.Contains(err.Error(), "closed") {
+            s.operator.Control(PollDetach)
+            s.onQuit(err)
+            return err
+        }
+        logger.Println("NETPOLL: accept conn failed:", err.Error())
+        return err
+    }
+    if conn == nil {
+        return nil
+    }
+    // store &amp; register connection
+    var connection = &amp;connection{}
+    connection.init(conn.(Conn), s.opts)
+    if !connection.IsActive() {
+        return nil
+    }
+    var fd = conn.(Conn).Fd()
+    connection.AddCloseCallback(func(connection Connection) error {
+        s.connections.Delete(fd)
+        return nil
+    })
+    s.connections.Store(fd, connection)
+
+    // trigger onConnect asynchronously
+    connection.onConnect()
+    return nil
+}</code></pre>
+
+  <p>The key call here is <code>connection.init()</code>, which initializes the connection object and registers it for read/write event monitoring (see the next section).</p>
+
+  <h3>4. Listening and Responding to Connection Read/Write Events</h3>
+
+  <p>During <code>connection.init()</code>, the <code>FDOperator</code> is initialized and <code>connection.register()</code> is triggered through <code>connection.onPrepare()</code>:</p>
+
+<pre><code>// init initialize the connection with options
+func (c *connection) init(conn Conn, opts *options) (err error) {
+    // init buffer, barrier, finalizer
+    c.readTrigger = make(chan struct{}, 1)
+    c.writeTrigger = make(chan error, 1)
+    c.bookSize, c.maxSize = block1k/2, pagesize
+    c.inputBuffer, c.outputBuffer = NewLinkBuffer(pagesize), NewLinkBuffer()
+    c.inputBarrier, c.outputBarrier = barrierPool.Get().(*barrier), barrierPool.Get().(*barrier)
+
+    c.initNetFD(conn) // conn must be *netFD{}
+    c.initFDOperator()
+    c.initFinalizer()
+
+    syscall.SetNonblock(c.fd, true)
+    // enable TCP_NODELAY by default
+    switch c.network {
+    case "tcp", "tcp4", "tcp6":
+        setTCPNoDelay(c.fd, true)
+    }
+    // check zero-copy
+    if setZeroCopy(c.fd) == nil &amp;&amp; setBlockZeroCopySend(c.fd, defaultZeroCopyTimeoutSec, 0) == nil {
+        c.supportZeroCopy = true
+    }
+
+    // connection initialized and prepare options
+    return c.onPrepare(opts)
+}</code></pre>
+
+  <p><code>connection.register()</code> performs the final fd event binding:</p>
+
+<pre><code>// register only use for connection register into poll.
+func (c *connection) register() (err error) {
+    if c.operator.isUnused() {
+        // operator is not registered
+        err = c.operator.Control(PollReadable)
+    } else {
+        // operator is already registered
+        // change event to wait read new data
+        err = c.operator.Control(PollModReadable)
+    }
+    if err != nil {
+        logger.Printf("NETPOLL: connection register failed: %v", err)
+        c.Close()
+        return Exception(ErrConnClosed, err.Error())
+    }
+    return nil
+}</code></pre>
+
+  <p>The handler branch for connection read events is:</p>
+
+<pre><code>// for connection
+var bs = operator.Inputs(p.barriers[i].bs)
+if len(bs) &gt; 0 {
+    var n, err = ioread(operator.FD, bs, p.barriers[i].ivs)
+    operator.InputAck(n)
+    if err != nil {
+        p.appendHup(operator)
+        continue
+    }
+}</code></pre>
+
+  <ul>
+    <li><code>operator.Inputs()</code> allocates memory for the read buffer.</li>
+    <li><code>ioread</code> calls <code>SYS_READV</code> at the syscall level for the actual read.</li>
+    <li><code>operator.InputAck</code> confirms completion and releases the buffer.</li>
+  </ul>
+
+  <p>Write events follow the same pattern:</p>
+
+<pre><code>// for connection
+var bs, supportZeroCopy = operator.Outputs(p.barriers[i].bs)
+if len(bs) &gt; 0 {
+    // TODO: Let the upper layer pass in whether to use ZeroCopy.
+    var n, err = iosend(operator.FD, bs, p.barriers[i].ivs, false &amp;&amp; supportZeroCopy)
+    operator.OutputAck(n)
+    if err != nil {
+        p.appendHup(operator)
+        continue
+    }
+}</code></pre>
+
+  <p>At this point we have completed tracing netpoll's overall core call chain.</p>
+</body>
+
+</html>
