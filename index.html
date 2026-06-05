@@ -24,6 +24,7 @@
     <button class="tab-btn active" data-tab="home"><span data-i18n><span lang="en">Home</span><span lang="zh">主页</span><span lang="ja">ホーム</span></span></button>
     <button class="tab-btn" data-tab="blogs"><span data-i18n><span lang="en">Blogs</span><span lang="zh">博客</span><span lang="ja">ブログ</span></span></button>
     <button class="tab-btn" data-tab="projects"><span data-i18n><span lang="en">Projects</span><span lang="zh">项目</span><span lang="ja">プロジェクト</span></span></button>
+    <button class="tab-btn" data-tab="notes"><span data-i18n><span lang="en">Notes</span><span lang="zh">笔记</span><span lang="ja">ノート</span></span></button>
   </nav>
 
   <div id="tab-home" class="tab-panel active">
@@ -149,6 +150,10 @@
   <div id="tab-projects" class="tab-panel">
   </div>
 
+  <div id="tab-notes" class="tab-panel">
+    <p style="color: #888; font-size: 0.9em;">No notes yet.</p>
+  </div>
+
   <div id="tab-blogs" class="tab-panel">
     <div class="tag-filters">
       <button class="tag-filter active" data-tag="all">All</button>
@@ -156,6 +161,7 @@
       <button class="tag-filter" data-tag="paper">paper</button>
     </div>
     <ul style="font-size: 0.9em;">
+      <li data-tags="cs"><a href="blog/go-generics-from-theory-to-practice.html"><span data-i18n><span lang="en">Go Generics: From Theory to Practice</span><span lang="zh">Go 泛型：从理论到实践</span><span lang="ja">Go ジェネリクス：理論から実践へ</span></span></a><span class="tag">cs</span> <span style="color:#888;">— 2023</span></li>
       <li data-tags="cs"><a href="blog/partial-quicksort-for-paging.html"><span data-i18n><span lang="en">Partial Quicksort for Paging</span><span lang="zh">分页场景下的部分快速排序</span><span lang="ja">ページング向け部分クイックソート</span></span></a><span class="tag">cs</span> <span style="color:#888;">— Nov 1, 2023</span></li>
       <li data-tags="cs"><a href="blog/netpoll-source-code-analysis.html"><span data-i18n><span lang="en">Netpoll Source Code Analysis</span><span lang="zh">Netpoll 源码分析</span><span lang="ja">Netpoll ソースコード解析</span></span></a><span class="tag">cs</span> <span style="color:#888;">— May 13, 2023</span></li>
       <li data-tags="cs paper"><a href="blog/spitfire-three-tier-buffer-manager.html"><span data-i18n><span lang="en">Spitfire: A Three-Tier Buffer Manager for Volatile and Non-Volatile Memory</span><span lang="zh">Spitfire：面向易失与非易失内存的三层缓冲区管理器</span><span lang="ja">Spitfire：揮発性・不揮発性メモリのための三層バッファマネージャ</span></span></a><span class="tag">cs</span><span class="tag">paper</span> <span style="color:#888;">— Aug 25, 2021</span></li>
