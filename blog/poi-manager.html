@@ -1,0 +1,186 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>poi-manager: Map-First Personal POI Footprint Tracker</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/blog.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/code.css">
+  <script src="../static/js/copy-code.js"></script>
+  <script src="../static/js/lang-switcher.js"></script>
+</head>
+
+<body>
+  <p><a href="../index.html#projects">&larr; Back</a></p>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1 data-i18n>
+    <span lang="en">poi-manager: Map-First Personal POI Tracker</span>
+    <span lang="zh">poi-manager：以地图为主入口的个人 POI 足迹记录工具</span>
+    <span lang="ja">poi-manager：地図ファーストの個人 POI 足跡記録ツール</span>
+  </h1>
+  <p style="text-align:center; color:#888;"><a href="https://github.com/revectores/poi-manager">github.com/revectores/poi-manager</a> &nbsp;·&nbsp; TypeScript · Next.js</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. Overview
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">1. Overview</h2>
+    <h2 lang="zh">1. 概述</h2>
+    <h2 lang="ja">1. 概要</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      poi-manager is a personal place-tracking tool built around a map interface.
+      The idea is simple: keep a private library of places you've been — or want to go — searchable and browsable
+      on a full-screen map, with per-place visit logs (date + notes) and visual distinction between
+      visited and not-yet-visited markers.
+    </p>
+    <p lang="zh">
+      poi-manager 是一个以地图为核心入口的个人地点记录工具。
+      设计思路简单：维护一个私有的地点库，记录你去过或想去的地方，支持在全屏地图上搜索和浏览，
+      为每个地点记录多次到访（时间 + 备注），并用视觉区分"已去过"和"未去过"的标记。
+    </p>
+    <p lang="ja">
+      poi-manager は地図インターフェースを中心に据えた個人スポット管理ツールです。
+      コンセプトはシンプルです。訪れた場所や行きたい場所のプライベートライブラリを持ち、
+      フルスクリーンの地図で検索・ブラウズでき、スポットごとに複数回の訪問ログ（日時＋メモ）を記録し、
+      訪問済みと未訪問のマーカーを視覚的に区別します。
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. Features
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">2. Features</h2>
+    <h2 lang="zh">2. 功能</h2>
+    <h2 lang="ja">2. 機能</h2>
+  </div>
+
+  <div data-i18n>
+    <ul lang="en">
+      <li><strong>Map main view</strong> — full-screen Amap (高德地图) showing all imported places as markers.</li>
+      <li><strong>POI search</strong> — search any location via the Amap API; results appear as pins on the map before importing.</li>
+      <li><strong>One-click import</strong> — add a search result to your personal library with a single action.</li>
+      <li><strong>Visit log</strong> — record multiple visits per place, each with a timestamp and optional notes.</li>
+      <li><strong>Status filter</strong> — toggle the map to show only visited, only unvisited, or all places.</li>
+      <li><strong>Visual distinction</strong> — visited places shown in blue, unvisited in red.</li>
+    </ul>
+    <ul lang="zh">
+      <li><strong>地图主界面</strong> — 全屏高德地图，以标记点展示所有已导入的地点。</li>
+      <li><strong>POI 搜索</strong> — 通过高德地图 API 搜索任意地点，搜索结果在导入前以图钉形式显示在地图上。</li>
+      <li><strong>一键导入</strong> — 单次操作即可将搜索结果添加到个人库。</li>
+      <li><strong>到访记录</strong> — 为每个地点记录多次到访，每次含时间戳和可选备注。</li>
+      <li><strong>状态筛选</strong> — 切换地图显示：仅已去过、仅未去过，或全部显示。</li>
+      <li><strong>视觉区分</strong> — 已去过的地点显示为蓝色，未去过的显示为红色。</li>
+    </ul>
+    <ul lang="ja">
+      <li><strong>地図メイン画面</strong> — フルスクリーンの高德地図（Amap）にインポートしたすべてのスポットをマーカー表示。</li>
+      <li><strong>POI 検索</strong> — Amap API で任意のスポットを検索し、インポート前に地図上にピンとして表示。</li>
+      <li><strong>ワンクリックインポート</strong> — 検索結果を1操作でパーソナルライブラリに追加。</li>
+      <li><strong>訪問ログ</strong> — スポットごとに複数回の訪問を記録。各訪問にタイムスタンプと任意メモを付与。</li>
+      <li><strong>ステータスフィルタ</strong> — 訪問済みのみ・未訪問のみ・全件表示を地図上で切り替え。</li>
+      <li><strong>視覚的区別</strong> — 訪問済みは青、未訪問は赤で表示。</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. Tech Stack
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">3. Tech Stack</h2>
+    <h2 lang="zh">3. 技术栈</h2>
+    <h2 lang="ja">3. 技術スタック</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">The stack is deliberately minimal for a personal tool — local SQLite means no server to run or database to host:</p>
+    <p lang="zh">作为个人工具，技术栈有意保持精简——本地 SQLite 意味着无需运行额外服务，也无需托管数据库：</p>
+    <p lang="ja">個人ツールとしてスタックは意図的にミニマルに設計されています。ローカル SQLite を使うため、サーバーもデータベースのホスティングも不要です：</p>
+  </div>
+
+  <div data-i18n>
+    <table lang="en" style="font-size:0.9em; width:100%;">
+      <tr><th>Layer</th><th>Technology</th></tr>
+      <tr><td>Framework</td><td>Next.js 16 (App Router) + TypeScript</td></tr>
+      <tr><td>Styling</td><td>Tailwind CSS + shadcn/ui</td></tr>
+      <tr><td>Map</td><td>Amap (高德地图) JS API v2</td></tr>
+      <tr><td>ORM</td><td>Drizzle ORM</td></tr>
+      <tr><td>Database</td><td>SQLite (better-sqlite3)</td></tr>
+      <tr><td>Data fetching</td><td>TanStack Query</td></tr>
+    </table>
+    <table lang="zh" style="font-size:0.9em; width:100%;">
+      <tr><th>层次</th><th>技术</th></tr>
+      <tr><td>框架</td><td>Next.js 16 (App Router) + TypeScript</td></tr>
+      <tr><td>样式</td><td>Tailwind CSS + shadcn/ui</td></tr>
+      <tr><td>地图</td><td>高德地图 JS API v2</td></tr>
+      <tr><td>ORM</td><td>Drizzle ORM</td></tr>
+      <tr><td>数据库</td><td>SQLite (better-sqlite3)</td></tr>
+      <tr><td>数据获取</td><td>TanStack Query</td></tr>
+    </table>
+    <table lang="ja" style="font-size:0.9em; width:100%;">
+      <tr><th>レイヤー</th><th>技術</th></tr>
+      <tr><td>フレームワーク</td><td>Next.js 16 (App Router) + TypeScript</td></tr>
+      <tr><td>スタイリング</td><td>Tailwind CSS + shadcn/ui</td></tr>
+      <tr><td>地図</td><td>高德地図（Amap）JS API v2</td></tr>
+      <tr><td>ORM</td><td>Drizzle ORM</td></tr>
+      <tr><td>データベース</td><td>SQLite (better-sqlite3)</td></tr>
+      <tr><td>データ取得</td><td>TanStack Query</td></tr>
+    </table>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      The REST API lives under <code>src/app/api/pois/</code> as Next.js route handlers.
+      The SQLite file is at <code>data/poi.db</code> (gitignored), managed through Drizzle's schema-push workflow.
+    </p>
+    <p lang="zh">
+      REST API 位于 <code>src/app/api/pois/</code>，以 Next.js 路由处理器实现。
+      SQLite 文件存放在 <code>data/poi.db</code>（已加入 .gitignore），通过 Drizzle 的 schema-push 工作流管理。
+    </p>
+    <p lang="ja">
+      REST API は <code>src/app/api/pois/</code> に Next.js ルートハンドラとして実装されています。
+      SQLite ファイルは <code>data/poi.db</code>（gitignore 済み）に置かれ、Drizzle の schema-push ワークフローで管理します。
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. Getting Started
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">4. Getting Started</h2>
+    <h2 lang="zh">4. 快速开始</h2>
+    <h2 lang="ja">4. はじめ方</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">You need an Amap JS API key from the <a href="https://console.amap.com/dev/key/app">Amap developer console</a>. Then:</p>
+    <p lang="zh">你需要在<a href="https://console.amap.com/dev/key/app">高德开放平台</a>申请 JS API Key，然后：</p>
+    <p lang="ja"><a href="https://console.amap.com/dev/key/app">Amap デベロッパーコンソール</a>から JS API キーを取得してから：</p>
+  </div>
+
+  <pre><code>cp .env.local.example .env.local
+# fill in NEXT_PUBLIC_AMAP_KEY and NEXT_PUBLIC_AMAP_SECURITY_CODE
+
+npm install
+npm run db:push   # sync schema to SQLite
+npm run dev       # http://localhost:3000</code></pre>
+
+  <div data-i18n>
+    <p lang="en">To inspect the database visually:</p>
+    <p lang="zh">可视化查看数据库：</p>
+    <p lang="ja">データベースをビジュアルで確認するには：</p>
+  </div>
+
+  <pre><code>npm run db:studio</code></pre>
+
+</body>
+</html>
