@@ -1,0 +1,324 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Merodis: Redis Data Structures on LevelDB</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/blog.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/code.css">
+  <script src="../static/js/copy-code.js"></script>
+  <script src="../static/js/lang-switcher.js"></script>
+</head>
+
+<body>
+  <p><a href="../index.html#projects">&larr; Back</a></p>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1 data-i18n>
+    <span lang="en">Merodis: Redis Data Structures on LevelDB</span>
+    <span lang="zh">Merodis：基于 LevelDB 的 Redis 数据结构实现</span>
+    <span lang="ja">Merodis：LevelDB 上の Redis データ構造実装</span>
+  </h1>
+  <p style="text-align:center; color:#888;"><a href="https://github.com/revectores/merodis">github.com/revectores/merodis</a> &nbsp;·&nbsp; C++17</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. Overview
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">1. Overview</h2>
+    <h2 lang="zh">1. 概述</h2>
+    <h2 lang="ja">1. 概要</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      Merodis is an embeddable C++ library that implements the Redis data-structure API on top of LevelDB or RocksDB.
+      Instead of running a separate Redis server, you link against <code>libmerodis</code> and issue familiar commands —
+      <code>Get</code>, <code>LPush</code>, <code>ZAdd</code> — directly from your application, with data durably
+      persisted in an LSM-tree storage engine.
+    </p>
+    <p lang="zh">
+      Merodis 是一个可嵌入的 C++ 库，在 LevelDB 或 RocksDB 之上实现了 Redis 数据结构 API。
+      无需单独运行 Redis 服务进程，只需链接 <code>libmerodis</code>，即可在应用程序中直接调用熟悉的命令——
+      <code>Get</code>、<code>LPush</code>、<code>ZAdd</code>——并将数据持久化到 LSM 树存储引擎中。
+    </p>
+    <p lang="ja">
+      Merodis は LevelDB または RocksDB 上に Redis データ構造 API を実装した組み込み可能な C++ ライブラリです。
+      別途 Redis サーバーを立ち上げる必要はなく、<code>libmerodis</code> をリンクするだけで
+      <code>Get</code>・<code>LPush</code>・<code>ZAdd</code> などのおなじみのコマンドをアプリケーションから直接呼び出せ、
+      データは LSM ツリーのストレージエンジンに永続化されます。
+    </p>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      The motivation is straightforward: Redis keeps its entire dataset in memory and requires a standalone server process.
+      LevelDB and RocksDB offer disk-backed persistence with efficient compaction, but expose only a raw byte key-value
+      interface. Merodis bridges the gap — encoding each Redis data type into LevelDB's key space so you get the
+      semantics of Redis with the durability and memory footprint of an LSM engine.
+    </p>
+    <p lang="zh">
+      设计动机很简单：Redis 将全部数据保存在内存中，且需要独立的服务进程。
+      LevelDB 和 RocksDB 提供基于磁盘的持久化存储与高效 Compaction，但仅暴露原始的字节键值接口。
+      Merodis 填补了这一空缺——将每种 Redis 数据类型编码到 LevelDB 的键空间中，
+      使你在享受 Redis 语义的同时，获得 LSM 引擎的持久性与内存效率。
+    </p>
+    <p lang="ja">
+      設計の動機はシンプルです。Redis はデータセット全体をメモリに保持し、スタンドアロンのサーバープロセスを必要とします。
+      LevelDB と RocksDB はディスクバックの永続化と効率的なコンパクションを提供しますが、
+      インターフェースは生のバイト列のキーバリューに過ぎません。
+      Merodis はその橋渡しをします。各 Redis データ型を LevelDB のキー空間にエンコードすることで、
+      Redis のセマンティクスと LSM エンジンの耐久性・メモリ効率を両立させます。
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. Architecture
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">2. Architecture</h2>
+    <h2 lang="zh">2. 架构</h2>
+    <h2 lang="ja">2. アーキテクチャ</h2>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">2.1 Pluggable Storage Engine</h3>
+    <h3 lang="zh">2.1 可插拔存储引擎</h3>
+    <h3 lang="ja">2.1 プラグイン可能なストレージエンジン</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      The storage engine is selected at build time via the <code>ENGINE</code> CMake option. LevelDB is the default;
+      RocksDB can be swapped in without changing any application code, since both expose the same internal adapter
+      interface. This makes it straightforward to evaluate trade-offs — LevelDB for simplicity and low overhead,
+      RocksDB for tunable write amplification and column families.
+    </p>
+    <p lang="zh">
+      存储引擎通过 CMake 的 <code>ENGINE</code> 选项在构建时指定。默认使用 LevelDB；
+      也可切换为 RocksDB，无需修改任何应用代码，因为两者共享同一套内部适配器接口。
+      这使得评估二者的权衡变得简单——LevelDB 更轻量简洁，RocksDB 则提供可调节的写放大参数与列族支持。
+    </p>
+    <p lang="ja">
+      ストレージエンジンは CMake の <code>ENGINE</code> オプションでビルド時に選択します。デフォルトは LevelDB で、
+      RocksDB に切り替えてもアプリケーションコードの変更は不要です。両エンジンが同じ内部アダプターインターフェースを
+      共有しているためです。これにより、シンプルで低オーバーヘッドな LevelDB か、
+      書き込み増幅の調整やカラムファミリーをサポートする RocksDB かのトレードオフを気軽に評価できます。
+    </p>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">2.2 Swappable Per-Type Implementations</h3>
+    <h3 lang="zh">2.2 可替换的按类型实现</h3>
+    <h3 lang="ja">2.2 型別の交換可能な実装</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      Beyond the engine, each Redis data type has its own <em>impl enum</em>, letting you choose the storage layout
+      independently per type. For example, String supports both <code>kStringBasicImpl</code> (plain key-value) and
+      <code>kStringTypedImpl</code> (type-tagged). This design allows experimentation with different key-encoding
+      strategies while keeping the public API surface identical.
+    </p>
+    <p lang="zh">
+      除存储引擎外，每种 Redis 数据类型都有独立的 <em>impl 枚举</em>，允许你为每种类型单独选择存储布局。
+      例如，String 支持 <code>kStringBasicImpl</code>（纯键值）和 <code>kStringTypedImpl</code>（类型标记）两种实现。
+      这种设计支持在不改变公开 API 的前提下，试验不同的键编码策略。
+    </p>
+    <p lang="ja">
+      エンジンのほか、各 Redis データ型には独自の <em>impl 列挙型</em> があり、型ごとにストレージレイアウトを
+      個別に選択できます。たとえば String は <code>kStringBasicImpl</code>（素のキーバリュー）と
+      <code>kStringTypedImpl</code>（型タグ付き）の両方をサポートします。
+      この設計により、公開 API を変えることなく異なるキーエンコード戦略を試すことができます。
+    </p>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">2.3 Key-Space Encoding</h3>
+    <h3 lang="zh">2.3 键空间编码</h3>
+    <h3 lang="ja">2.3 キー空間エンコーディング</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      The core challenge is mapping multi-element Redis types (List, Hash, Set, ZSet) onto a flat ordered key-value
+      store. Merodis uses structured key prefixes to namespace each type and key name, then appends element-specific
+      suffixes. For ordered structures like ZSet, scores are encoded into the key so that a range scan over LevelDB's
+      sorted iterator directly yields results in score order — no in-memory sort needed.
+    </p>
+    <p lang="zh">
+      核心挑战在于将多元素的 Redis 类型（List、Hash、Set、ZSet）映射到一个扁平的有序键值存储上。
+      Merodis 采用结构化键前缀对类型和键名进行命名空间划分，并在末尾附加元素特定的后缀。
+      对于 ZSet 这类有序结构，分数被编码到键中，从而通过对 LevelDB 有序迭代器的范围扫描，
+      即可直接按分数顺序返回结果——无需内存排序。
+    </p>
+    <p lang="ja">
+      核心的な課題は、複数要素を持つ Redis 型（List・Hash・Set・ZSet）をフラットな順序付きキーバリューストアに
+      マッピングすることです。Merodis は構造化されたキープレフィックスを使って型とキー名を名前空間化し、
+      末尾に要素固有のサフィックスを付加します。ZSet のような順序構造では、スコアをキーに
+      エンコードすることで、LevelDB のソート済みイテレータのレンジスキャンにより
+      スコア順に結果を直接取得できます——メモリ内ソートは不要です。
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. API Usage
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">3. API Usage</h2>
+    <h2 lang="zh">3. API 使用</h2>
+    <h2 lang="ja">3. API の使い方</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">The public interface is a single header. Every method returns a <code>merodis::Status</code>.</p>
+    <p lang="zh">公开接口只需包含一个头文件。每个方法均返回 <code>merodis::Status</code>。</p>
+    <p lang="ja">公開インターフェースはヘッダー1つです。すべてのメソッドは <code>merodis::Status</code> を返します。</p>
+  </div>
+
+  <pre><code>#include &lt;merodis/merodis.h&gt;
+
+merodis::Merodis db;
+merodis::Options opts;
+opts.create_if_missing = true;
+db.Open(opts, "/tmp/mydb");
+
+// Strings
+db.Set("hello", "world");
+std::string val;
+db.Get("hello", &amp;val);   // val == "world"
+
+// Lists
+db.RPush("mylist", "a");
+db.RPush("mylist", "b");
+uint64_t len;
+db.LLen("mylist", &amp;len); // len == 2
+
+// Hashes
+uint64_t count;
+db.HSet("myhash", "field", "value", &amp;count);
+
+// Sets
+db.SAdd("myset", "member", &amp;count);
+
+// Sorted Sets
+db.ZAdd("ranking", {{"alice", 100}}, &amp;count);</code></pre>
+
+  <div data-i18n>
+    <p lang="en">Building is straightforward — just clone with submodules and run CMake:</p>
+    <p lang="zh">构建非常简单——只需克隆仓库（含子模块）并运行 CMake：</p>
+    <p lang="ja">ビルドは簡単です。サブモジュールごとクローンして CMake を実行するだけです：</p>
+  </div>
+
+  <pre><code>git clone --recurse-submodules https://github.com/revectores/merodis
+cd merodis
+cmake -B build
+cmake --build build -j$(nproc)</code></pre>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. Supported Commands
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">4. Supported Commands</h2>
+    <h2 lang="zh">4. 支持的命令</h2>
+    <h2 lang="ja">4. サポートコマンド</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">Merodis covers the full core command set for all five Redis data types:</p>
+    <p lang="zh">Merodis 覆盖了全部五种 Redis 数据类型的核心命令集：</p>
+    <p lang="ja">Merodis は Redis の5つすべてのデータ型に対してコアコマンドセット全体をカバーしています：</p>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">String</h3>
+    <h3 lang="zh">String（字符串）</h3>
+    <h3 lang="ja">String（文字列）</h3>
+  </div>
+  <p><code>Get</code> · <code>Set</code> · <code>Incr</code> · <code>IncrBy</code> · <code>Decr</code> · <code>DecrBy</code></p>
+
+  <div data-i18n>
+    <h3 lang="en">List</h3>
+    <h3 lang="zh">List（列表）</h3>
+    <h3 lang="ja">List（リスト）</h3>
+  </div>
+  <p>
+    <code>LLen</code> · <code>LIndex</code> · <code>LPos</code> · <code>LRange</code> · <code>LSet</code> · <code>LInsert</code> · <code>LRem</code> · <code>LMove</code> · <code>LTrim</code><br>
+    <code>LPush</code> · <code>LPushX</code> · <code>LPop</code> · <code>RPush</code> · <code>RPushX</code> · <code>RPop</code>
+  </p>
+
+  <div data-i18n>
+    <h3 lang="en">Hash</h3>
+    <h3 lang="zh">Hash（哈希）</h3>
+    <h3 lang="ja">Hash（ハッシュ）</h3>
+  </div>
+  <p>
+    <code>HLen</code> · <code>HGet</code> · <code>HMGet</code> · <code>HGetAll</code> · <code>HKeys</code> · <code>HVals</code> · <code>HExists</code><br>
+    <code>HSet</code> · <code>HDel</code>
+  </p>
+
+  <div data-i18n>
+    <h3 lang="en">Set</h3>
+    <h3 lang="zh">Set（集合）</h3>
+    <h3 lang="ja">Set（集合）</h3>
+  </div>
+  <p>
+    <code>SCard</code> · <code>SIsMember</code> · <code>SMIsMember</code> · <code>SMembers</code> · <code>SRandMember</code><br>
+    <code>SAdd</code> · <code>SRem</code> · <code>SPop</code> · <code>SMove</code><br>
+    <code>SUnion</code> · <code>SInter</code> · <code>SDiff</code> · <code>SUnionStore</code> · <code>SInterStore</code> · <code>SDiffStore</code>
+  </p>
+
+  <div data-i18n>
+    <h3 lang="en">Sorted Set (ZSet)</h3>
+    <h3 lang="zh">Sorted Set（有序集合）</h3>
+    <h3 lang="ja">Sorted Set（ソート済み集合）</h3>
+  </div>
+  <p>
+    <code>ZCard</code> · <code>ZScore</code> · <code>ZMScore</code> · <code>ZRank</code> · <code>ZRevRank</code> · <code>ZCount</code> · <code>ZLexCount</code><br>
+    <code>ZRange</code> · <code>ZRangeByScore</code> · <code>ZRangeByLex</code> · <code>ZRevRange</code> · <code>ZRevRangeByScore</code> · <code>ZRevRangeByLex</code><br>
+    <code>ZRangeWithScores</code> · <code>ZRangeByScoreWithScores</code> · <code>ZRangeByLexWithScores</code> <span data-i18n><span lang="en">(and <code>ZRev*</code> variants)</span><span lang="zh">（及 <code>ZRev*</code> 变体）</span><span lang="ja">（および <code>ZRev*</code> 系）</span></span><br>
+    <code>ZAdd</code> · <code>ZRem</code> · <code>ZPopMin</code> · <code>ZPopMax</code><br>
+    <code>ZRemRangeByRank</code> · <code>ZRemRangeByScore</code> · <code>ZRemRangeByLex</code><br>
+    <code>ZUnion</code> · <code>ZInter</code> · <code>ZDiff</code> · <code>ZUnionStore</code> · <code>ZInterStore</code> · <code>ZDiffStore</code> <span data-i18n><span lang="en">(with <code>WithScores</code> variants)</span><span lang="zh">（含 <code>WithScores</code> 变体）</span><span lang="ja">（<code>WithScores</code> 系も含む）</span></span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       5. Testing & Benchmarks
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">5. Testing &amp; Benchmarks</h2>
+    <h2 lang="zh">5. 测试与基准</h2>
+    <h2 lang="ja">5. テストとベンチマーク</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      The repository ships with a comprehensive GoogleTest suite covering all command variants, and Google Benchmark
+      microbenchmarks for performance measurement. Run them after building:
+    </p>
+    <p lang="zh">
+      仓库内置了覆盖全部命令变体的 GoogleTest 测试套件，以及用于性能测量的 Google Benchmark 微基准。
+      构建完成后运行：
+    </p>
+    <p lang="ja">
+      リポジトリにはすべてのコマンドバリアントをカバーする GoogleTest スイートと、
+      パフォーマンス測定用の Google Benchmark マイクロベンチマークが同梱されています。
+      ビルド後に実行します：
+    </p>
+  </div>
+
+  <pre><code># Tests
+cd build && ctest --output-on-failure
+
+# Benchmarks (results saved as JSON under bench_results/)
+cd ..
+python3 bench.py</code></pre>
+
+</body>
+</html>

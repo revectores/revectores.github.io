@@ -1,0 +1,271 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>arxiv-tracker: LLM-Filtered arXiv Paper Tracking Pipeline</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/markdown.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/blog.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/code.css">
+  <script src="../static/js/copy-code.js"></script>
+  <script src="../static/js/lang-switcher.js"></script>
+</head>
+
+<body>
+  <p><a href="../index.html#projects">&larr; Back</a></p>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
+  <h1 data-i18n>
+    <span lang="en">arxiv-tracker: LLM-Filtered arXiv Paper Tracking</span>
+    <span lang="zh">arxiv-tracker：基于 LLM 过滤的 arXiv 论文追踪流水线</span>
+    <span lang="ja">arxiv-tracker：LLM フィルタリングによる arXiv 論文追跡パイプライン</span>
+  </h1>
+  <p style="text-align:center; color:#888;"><a href="https://github.com/revectores/arxiv-tracker">github.com/revectores/arxiv-tracker</a> &nbsp;·&nbsp; Python</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. Overview
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">1. Overview</h2>
+    <h2 lang="zh">1. 概述</h2>
+    <h2 lang="ja">1. 概要</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      arxiv-tracker is a Python pipeline for staying on top of arXiv papers in specific research areas.
+      It harvests paper metadata daily via the OAI-PMH API, applies a two-stage LLM filter to surface
+      the most relevant papers, and provides tools to download, translate, and summarise them.
+      The result is a browsable local collection that grows automatically — no manual trawling of arXiv required.
+    </p>
+    <p lang="zh">
+      arxiv-tracker 是一个 Python 流水线，用于持续追踪特定研究领域的 arXiv 论文。
+      它每天通过 OAI-PMH API 抓取论文元数据，经过两阶段 LLM 过滤筛选出最相关的论文，
+      并提供下载、翻译和生成摘要的工具。
+      最终形成一个可浏览的本地论文集，自动持续增长，无需手动检索 arXiv。
+    </p>
+    <p lang="ja">
+      arxiv-tracker は特定の研究分野の arXiv 論文を継続的に追跡するための Python パイプラインです。
+      OAI-PMH API を通じて毎日論文メタデータを収集し、二段階の LLM フィルタリングで
+      最も関連性の高い論文を抽出し、ダウンロード・翻訳・要約のツールも提供します。
+      結果として自動的に蓄積されるブラウザブルなローカルコレクションが構築され、
+      手動で arXiv を巡回する必要がなくなります。
+    </p>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">Active collections include: <code>LLM_MEMORY</code>, <code>LLM_PSYCHOLOGY</code>, <code>MMaDB</code>, <code>SEMANTIC_OPS</code>, <code>VECTOR_DB</code>.</p>
+    <p lang="zh">当前活跃的论文集包括：<code>LLM_MEMORY</code>、<code>LLM_PSYCHOLOGY</code>、<code>MMaDB</code>、<code>SEMANTIC_OPS</code>、<code>VECTOR_DB</code>。</p>
+    <p lang="ja">現在アクティブなコレクション：<code>LLM_MEMORY</code>・<code>LLM_PSYCHOLOGY</code>・<code>MMaDB</code>・<code>SEMANTIC_OPS</code>・<code>VECTOR_DB</code>。</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. Pipeline
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">2. Pipeline</h2>
+    <h2 lang="zh">2. 流水线</h2>
+    <h2 lang="ja">2. パイプライン</h2>
+  </div>
+
+  <pre><code>fetch.py  →  paper_collect.py  →  introduce_papers.py
+                               →  batch_download_translate.py</code></pre>
+
+  <div data-i18n>
+    <p lang="en">
+      The pipeline has four stages, orchestrated daily by <code>daily_run.sh</code>:
+    </p>
+    <p lang="zh">
+      流水线共分四个阶段，由 <code>daily_run.sh</code> 每日调度：
+    </p>
+    <p lang="ja">
+      パイプラインは4つのステージで構成され、<code>daily_run.sh</code> が毎日オーケストレーションします：
+    </p>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">Stage 1 — Fetch</h3>
+    <h3 lang="zh">第一阶段 — 抓取</h3>
+    <h3 lang="ja">ステージ 1 — フェッチ</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      <code>fetch.py</code> pulls arXiv paper metadata (title, abstract, authors, categories, date) via the
+      OAI-PMH protocol and stores it in a local SQLite database (<code>papers.db</code>).
+      Incremental runs are efficient — only new records since the last fetch are downloaded.
+    </p>
+    <p lang="zh">
+      <code>fetch.py</code> 通过 OAI-PMH 协议拉取 arXiv 论文元数据（标题、摘要、作者、分类、日期），
+      并存入本地 SQLite 数据库（<code>papers.db</code>）。
+      增量运行效率高——每次只下载上次抓取之后的新记录。
+    </p>
+    <p lang="ja">
+      <code>fetch.py</code> は OAI-PMH プロトコルを通じて arXiv の論文メタデータ（タイトル・アブストラクト・著者・カテゴリ・日付）を取得し、
+      ローカルの SQLite データベース（<code>papers.db</code>）に保存します。
+      差分実行により効率的で、前回のフェッチ以降の新しいレコードのみダウンロードします。
+    </p>
+  </div>
+
+  <pre><code>python fetch.py --sets cs.AI cs.CL --from-date 2026-05-01 --until-date 2026-05-31 --db papers.db</code></pre>
+
+  <div data-i18n>
+    <h3 lang="en">Stage 2 — Two-Stage LLM Filter</h3>
+    <h3 lang="zh">第二阶段 — 两阶段 LLM 过滤</h3>
+    <h3 lang="ja">ステージ 2 — 二段階 LLM フィルタリング</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      <code>paper_collect.py</code> reads from <code>papers.db</code> and applies a three-step filter to each paper:
+    </p>
+    <p lang="zh">
+      <code>paper_collect.py</code> 从 <code>papers.db</code> 读取数据，对每篇论文依次执行三步过滤：
+    </p>
+    <p lang="ja">
+      <code>paper_collect.py</code> は <code>papers.db</code> から読み込み、各論文に3ステップのフィルタリングを適用します：
+    </p>
+  </div>
+
+  <div data-i18n>
+    <ol lang="en">
+      <li><strong>Keyword pre-filter</strong> — fast in-process check against <code>abstract_keywords</code> to skip clearly irrelevant papers without an LLM call.</li>
+      <li><strong>Coarse LLM pass</strong> — a cheaper, faster model scores the abstract for relevance. Papers below <code>coarse_min_confidence</code> are dropped.</li>
+      <li><strong>Refine LLM pass</strong> — a stronger model re-evaluates the survivors with the full topic description, producing the final relevance score written to <code>collections/NAME.json</code>.</li>
+    </ol>
+    <ol lang="zh">
+      <li><strong>关键词预过滤</strong> — 对 <code>abstract_keywords</code> 进行快速进程内匹配，跳过明显无关的论文，无需调用 LLM。</li>
+      <li><strong>粗粒度 LLM 过滤</strong> — 使用更便宜、更快速的模型对摘要的相关性进行评分，低于 <code>coarse_min_confidence</code> 的论文被丢弃。</li>
+      <li><strong>细粒度 LLM 精炼</strong> — 使用更强的模型结合完整主题描述对候选论文进行二次评估，生成最终相关性分数并写入 <code>collections/NAME.json</code>。</li>
+    </ol>
+    <ol lang="ja">
+      <li><strong>キーワード事前フィルタ</strong> — <code>abstract_keywords</code> に対してプロセス内で高速チェックを行い、明らかに無関係な論文を LLM 呼び出しなしにスキップします。</li>
+      <li><strong>粗粒度 LLM パス</strong> — より安価で高速なモデルがアブストラクトの関連性をスコアリング。<code>coarse_min_confidence</code> 未満の論文は除外されます。</li>
+      <li><strong>精密 LLM パス</strong> — より強力なモデルがトピック全文で候補を再評価し、最終スコアを <code>collections/NAME.json</code> に書き込みます。</li>
+    </ol>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      Runs are resumable: progress fields (<code>checked_base_ids</code>, <code>missing_base_ids</code>) are
+      appended directly to the filter config JSON, so an interrupted run picks up exactly where it left off.
+    </p>
+    <p lang="zh">
+      运行可中断恢复：进度字段（<code>checked_base_ids</code>、<code>missing_base_ids</code>）直接追加到过滤配置 JSON 中，
+      因此中断后可从上次中断处精确继续。
+    </p>
+    <p lang="ja">
+      実行は再開可能です。進捗フィールド（<code>checked_base_ids</code>・<code>missing_base_ids</code>）が
+      フィルタ設定 JSON に直接追記されるため、中断後も正確に中断箇所から再開できます。
+    </p>
+  </div>
+
+  <pre><code>export OPENAI_API_KEY="..."
+python paper_collect.py --filter ./collections/LLM_MEMORY.filter.json</code></pre>
+
+  <div data-i18n>
+    <h3 lang="en">Stage 3 — Summaries and Translations</h3>
+    <h3 lang="zh">第三阶段 — 摘要生成与翻译</h3>
+    <h3 lang="ja">ステージ 3 — 要約と翻訳</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      <code>introduce_papers.py</code> generates a Markdown summary for each matched paper, using web search to
+      augment the abstract with any follow-up context. <code>batch_download_translate.py</code> downloads PDFs from
+      arXiv and produces Chinese translations in parallel.
+    </p>
+    <p lang="zh">
+      <code>introduce_papers.py</code> 为每篇匹配的论文生成 Markdown 摘要，并通过网络搜索补充摘要之外的背景信息。
+      <code>batch_download_translate.py</code> 并行地从 arXiv 下载 PDF 并生成中文翻译。
+    </p>
+    <p lang="ja">
+      <code>introduce_papers.py</code> は各マッチ論文の Markdown 要約を生成し、ウェブ検索でアブストラクト以外の
+      文脈情報を補完します。<code>batch_download_translate.py</code> は arXiv から PDF を並行ダウンロードし、
+      中国語翻訳を生成します。
+    </p>
+  </div>
+
+  <div data-i18n>
+    <h3 lang="en">Stage 4 — Browse</h3>
+    <h3 lang="zh">第四阶段 — 浏览</h3>
+    <h3 lang="ja">ステージ 4 — ブラウズ</h3>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      <code>render_html.py</code> builds an interactive HTML viewer from the collected JSON, and <code>serve.py</code>
+      runs a local HTTP server with <code>PUT</code> support so that read-state (which papers you've already seen)
+      is persisted across sessions.
+    </p>
+    <p lang="zh">
+      <code>render_html.py</code> 从收集到的 JSON 构建交互式 HTML 查看器，<code>serve.py</code> 提供支持
+      <code>PUT</code> 的本地 HTTP 服务，使已读状态（哪些论文已阅读）可跨会话持久化。
+    </p>
+    <p lang="ja">
+      <code>render_html.py</code> は収集した JSON からインタラクティブな HTML ビューアを構築し、
+      <code>serve.py</code> は <code>PUT</code> サポート付きのローカル HTTP サーバーを提供することで、
+      既読状態（どの論文を読んだか）をセッション間で永続化します。
+    </p>
+  </div>
+
+  <pre><code>python serve.py    # open http://localhost:8765/collections/LLM_MEMORY.html</code></pre>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. Filter Configuration
+       ═══════════════════════════════════════════════════════ -->
+  <div data-i18n>
+    <h2 lang="en">3. Filter Configuration</h2>
+    <h2 lang="zh">3. 过滤器配置</h2>
+    <h2 lang="ja">3. フィルター設定</h2>
+  </div>
+
+  <div data-i18n>
+    <p lang="en">
+      Each research topic is defined by a <code>NAME.filter.json</code> file in <code>collections/</code>.
+      The key fields are:
+    </p>
+    <p lang="zh">
+      每个研究主题由 <code>collections/</code> 目录下的 <code>NAME.filter.json</code> 文件定义。核心字段包括：
+    </p>
+    <p lang="ja">
+      各研究トピックは <code>collections/</code> 内の <code>NAME.filter.json</code> で定義されます。主要フィールドは以下のとおりです：
+    </p>
+  </div>
+
+  <pre><code>{
+  "from_date": "2026-01-01",
+  "to_date": "2026-05-31",
+  "categories": ["cs.AI", "cs.CL"],
+  "focus": "Detailed description of what's in/out of scope...",
+  "abstract_keywords": ["memory", "retrieval", "RAG"],
+  "coarse_model": "gpt-4o-mini",
+  "refine_model": "gpt-4o",
+  "coarse_min_confidence": 0.5
+}</code></pre>
+
+  <div data-i18n>
+    <p lang="en">
+      The <code>focus</code> field is a free-text description of the research area passed verbatim to the LLM,
+      allowing precise scoping without rewriting code. Progress fields are appended automatically as the run proceeds,
+      so the same file serves as both configuration and checkpoint.
+    </p>
+    <p lang="zh">
+      <code>focus</code> 字段是研究领域的自然语言描述，将直接传递给 LLM，
+      无需修改代码即可精确调整关注范围。进度字段在运行过程中自动追加，
+      使同一文件兼具配置和断点续传的功能。
+    </p>
+    <p lang="ja">
+      <code>focus</code> フィールドは研究領域の自由記述で、そのまま LLM に渡されます。
+      コードを変更せずに対象範囲を精密に調整できます。進捗フィールドは実行中に自動追記されるため、
+      同じファイルが設定とチェックポイントの両方を兼ねます。
+    </p>
+  </div>
+
+</body>
+</html>
